@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Vault, Coins, ArrowRight, Send } from "lucide-react";
-import { siteConfig, links, assets, contractAddress, totalSupply } from "@/content/site";
+import { ShieldCheck, Vault, Coins, ArrowRight, Send, Lock } from "lucide-react";
+import { siteConfig, links, assets, totalSupply } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
-import { ContractAddress } from "@/components/ui/ContractAddress";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { EmberField } from "@/components/ui/EmberField";
 import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributionChart";
@@ -12,11 +11,12 @@ import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributio
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "DOM token distribution, max supply, and contract details for Dungeon of Miners — a Pre-TGE, fully transparent idle-mining economy.",
+    "DOM token distribution and max supply for Dungeon of Miners — a Pre-TGE, fully transparent idle-mining economy. No contract is deployed yet.",
 };
 
 const keyFacts = [
   { label: "Ticker", value: siteConfig.ticker },
+  { label: "Network", value: "BNB Chain (BEP-20)" },
   { label: "Max Supply", value: totalSupply },
   { label: "Status", value: "Pre-TGE" },
   { label: "Allocation Model", value: "100% Mined" },
@@ -36,7 +36,7 @@ export default function TokenomicsPage() {
           <SectionHeading
             eyebrow="Tokenomics"
             title="DOM Token & Distribution"
-            description="Every DOM in existence is mined, not pre-sold. Here's the full supply, the contract, and exactly how it's split across the six dungeon floors."
+            description="Every DOM in existence is mined, not pre-sold. Here's the full supply and exactly how it's split across the six dungeon floors."
           />
 
           {/* Token identity card */}
@@ -59,12 +59,16 @@ export default function TokenomicsPage() {
                     ranked by holding, and spent through the Pool Wallet.
                   </p>
                   <div className="mt-4 flex justify-center sm:justify-start">
-                    <ContractAddress address={contractAddress} />
+                    <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs">
+                      <Lock className="h-3.5 w-3.5 text-ink-faint" />
+                      <span className="text-ink-faint">Contract</span>
+                      <span className="font-semibold text-gold">Not Deployed Yet</span>
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-6 sm:grid-cols-4">
+              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-6 sm:grid-cols-3 lg:grid-cols-5">
                 {keyFacts.map((fact) => (
                   <div key={fact.label} className="text-center sm:text-left">
                     <p className="text-xs uppercase tracking-wider text-ink-faint">{fact.label}</p>

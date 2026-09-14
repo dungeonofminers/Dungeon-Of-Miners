@@ -9,8 +9,8 @@ export function Floors() {
       <div className="section-shell">
         <SectionHeading
           eyebrow={`Total Supply · ${totalSupply}`}
-          title="Six floors. One shrinking supply."
-          description="Each floor holds its own DOM allocation and its own atmosphere. The deeper you go, the scarcer — and more valuable — progress becomes."
+          title="Six floors. Every allocation, every rate."
+          description="What exists on each floor: its DOM allocation, its mining rate, and how scarce it gets. The deeper you go, the scarcer — and slower — mining becomes."
         />
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -21,13 +21,13 @@ export function Floors() {
                   <PlaceholderImage
                     src={floor.image}
                     alt={`${floor.name} floor`}
-                    label={`Floor ${floor.index} · ${floor.name}`}
+                    label={`Floor ${floor.roman} · ${floor.name}`}
                     aspect="aspect-[4/3]"
                     className="w-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-100 via-void-100/10 to-transparent" />
                   <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-void-300/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold backdrop-blur">
-                    Floor {floor.index}
+                    Floor {floor.roman}
                   </span>
                 </div>
                 <div className="p-6">
@@ -36,9 +36,15 @@ export function Floors() {
                     <ScarcityDots level={floor.scarcity} />
                   </div>
                   <p className="body-lg mt-2 text-sm">{floor.vibe}</p>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-4">
-                    <span className="text-xs uppercase tracking-wider text-ink-faint">Allocation</span>
-                    <span className="text-sm font-semibold text-ink">{floor.allocation}</span>
+                  <div className="mt-4 grid grid-cols-2 gap-3 border-t border-white/[0.06] pt-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-ink-faint">Allocation</p>
+                      <p className="mt-1 text-sm font-semibold text-ink">{floor.allocation}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wider text-ink-faint">Mining Rate</p>
+                      <p className="mt-1 text-sm font-semibold text-torch">{floor.rateMultiplier}</p>
+                    </div>
                   </div>
                 </div>
               </div>

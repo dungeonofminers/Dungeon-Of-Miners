@@ -12,9 +12,6 @@ export const siteConfig = {
   url: "https://dungeonofminers.com",
 };
 
-// Replace with the real deployed address once the DOM token contract goes live.
-export const contractAddress = "0x000000000000000000000000000000000";
-
 // Replace these with your real links.
 export const links = {
   miniApp: "https://t.me/DungeonOfMinersBot/play",
@@ -109,53 +106,70 @@ export const coreLoop = [
 // ---------------------------------------------------------------------------
 // Floors
 // ---------------------------------------------------------------------------
+// `rateMultiplier` = the global mining-rate multiplier active on that floor
+// (×1.00 on Floor I, halving on each floor after). "Halving" is the
+// internal/technical name for this mechanic only — it must never appear in
+// user-facing copy. The public-facing name for the event that drops the
+// multiplier and opens the next floor is always "The Descent".
 export const floors = [
   {
     index: 1,
+    roman: "I",
     name: "Rubble",
     image: assets.floorRubble,
-    allocation: "1,500,000,000 DOM",
+    allocation: "3,000,000,000 DOM",
     scarcity: 1,
+    rateMultiplier: "×1.00",
     vibe: "The surface tunnels. Loose stone, easy air, and the first taste of the dark.",
   },
   {
     index: 2,
+    roman: "II",
     name: "Hollow",
     image: assets.floorHollow,
-    allocation: "1,200,000,000 DOM",
+    allocation: "1,500,000,000 DOM",
     scarcity: 2,
+    rateMultiplier: "×0.50",
     vibe: "Empty caverns swallow sound. The walls narrow and the crowd thins out.",
   },
   {
     index: 3,
+    roman: "III",
     name: "Gloom",
     image: assets.floorGloom,
-    allocation: "1,000,000,000 DOM",
+    allocation: "750,000,000 DOM",
     scarcity: 3,
+    rateMultiplier: "×0.25",
     vibe: "Torchlight barely holds the dark back. Only committed miners make it this far.",
   },
   {
     index: 4,
+    roman: "IV",
     name: "Ember",
     image: assets.floorEmber,
-    allocation: "800,000,000 DOM",
+    allocation: "375,000,000 DOM",
     scarcity: 4,
+    rateMultiplier: "×0.125",
     vibe: "Heat rises from the deep rock. Yields are richer, and so is the risk of falling behind.",
   },
   {
     index: 5,
+    roman: "V",
     name: "Cinder",
     image: assets.floorCinder,
-    allocation: "800,000,000 DOM",
+    allocation: "187,500,000 DOM",
     scarcity: 5,
+    rateMultiplier: "×0.0625",
     vibe: "Ash drifts through cracked tunnels. Scarcity is no longer a warning — it's the reality.",
   },
   {
     index: 6,
+    roman: "VI",
     name: "The Abyss",
     image: assets.floorAbyss,
-    allocation: "700,000,000 DOM",
+    allocation: "187,500,000 DOM",
     scarcity: 6,
+    rateMultiplier: "×0.03125",
     vibe: "The final floor. What's left of the supply lives here, guarded by the deepest Descent.",
   },
 ];
@@ -163,13 +177,26 @@ export const floors = [
 export const totalSupply = "6,000,000,000 DOM";
 
 // ---------------------------------------------------------------------------
+// Dungeon Status Strip — illustrative preview data only (no live backend
+// yet). Every value the strip renders comes from this one object, so wiring
+// in a real API later means replacing this export, not hunting through JSX.
+// ---------------------------------------------------------------------------
+export const dungeonStatusPreview = {
+  currentFloorIndex: 2,
+  percentMined: 62,
+  daysRemaining: 47,
+  minersActive: "12,482",
+  nextMultiplier: "×0.25",
+};
+
+// ---------------------------------------------------------------------------
 // Ranks
 // ---------------------------------------------------------------------------
 export const ranks = [
   { name: "Novice", holding: "0 DOM", rate: "10 DOM/hr", accent: "from-stone-800 to-stone-900" },
-  { name: "Bronze", holding: "2,500 DOM", rate: "50 DOM/hr", accent: "from-[#8a5a3c] to-[#5a3822]" },
-  { name: "Silver", holding: "10,000 DOM", rate: "150 DOM/hr", accent: "from-[#9aa4b2] to-[#5c6472]" },
-  { name: "Gold", holding: "40,000 DOM", rate: "300 DOM/hr", accent: "from-gold-light to-gold-dark" },
+  { name: "Bronze", holding: "5,000 DOM", rate: "50 DOM/hr", accent: "from-[#8a5a3c] to-[#5a3822]" },
+  { name: "Silver", holding: "15,000 DOM", rate: "150 DOM/hr", accent: "from-[#9aa4b2] to-[#5c6472]" },
+  { name: "Gold", holding: "50,000 DOM", rate: "300 DOM/hr", accent: "from-gold-light to-gold-dark" },
   { name: "Diamond", holding: "150,000 DOM", rate: "600 DOM/hr", accent: "from-[#9fe8e0] to-[#3fa9a0]" },
   { name: "Legend", holding: "500,000 DOM", rate: "1000 DOM/hr", accent: "from-torch to-torch-ember" },
 ];
@@ -185,7 +212,7 @@ export const features = [
   },
   {
     title: "The Descent",
-    description: "A global halving event that resets mining speed as floors empty out.",
+    description: "A global event that drops mining speed and opens the next floor when a floor's supply runs out.",
     icon: "flame",
   },
   {
@@ -230,7 +257,7 @@ export const features = [
   },
   {
     title: "Referral Bonus",
-    description: "Invite friends into the dungeon and earn a share of their progress.",
+    description: "+2% permanent hashrate per qualified friend (up to 50, +100% max). They start with a +50 DOM bonus.",
     icon: "user-plus",
   },
   {
@@ -257,7 +284,7 @@ export const faqs = [
   {
     question: "What is The Descent?",
     answer:
-      "The Descent is our signature event. Each floor has a limited DOM allocation. When that allocation runs out — or 90 days pass, whichever comes first — the world descends to the next floor and global mining speed is cut in half. It's a permanent, public scarcity mechanic, not a marketing gimmick.",
+      "The Descent is our signature event, split across all 6 floors. Every floor carries a finite allocation of DOM. When its supply is exhausted — or 90 days pass — the entire dungeon descends: mining becomes scarcer, a new floor opens, and the next chapter begins. It's a permanent, public scarcity mechanic, not a marketing gimmick.",
   },
   {
     question: "What's the difference between the Holding Wallet and the Pool Wallet?",
@@ -288,6 +315,11 @@ export const faqs = [
     question: "How do Watch & Earn and tasks work?",
     answer:
       "Watch & Earn lets you view rewarded ads in exchange for DOM. Daily tasks include check-ins, joining or boosting our Telegram channel, and inviting friends — each contributing small, steady rewards toward your Pool Wallet.",
+  },
+  {
+    question: "How does the referral program work?",
+    answer:
+      "Each qualified referral gives you +2% permanent hashrate, up to 50 referrals (+100% max). A referral only qualifies once your friend claims on 3 different days, and they get a +50 DOM starter bonus for joining. This isn't revenue sharing — it's a permanent mining-rate boost.",
   },
 ];
 

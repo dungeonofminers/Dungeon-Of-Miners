@@ -14,7 +14,7 @@ const pillars = [
     image: assets.iconScarcityWatch,
     title: "Scarcity You Can Watch",
     description:
-      "The Descent isn't a whitepaper promise — it's a public countdown. When a floor's supply runs dry or 90 days pass, the whole community feels it together.",
+      "The Descent isn't a whitepaper promise — it's a public event split across 6 floors. The moment a floor's supply is fully mined, or 90 days pass, mining speed drops for everyone and the dungeon moves on.",
   },
   {
     image: assets.iconHonestPretge,

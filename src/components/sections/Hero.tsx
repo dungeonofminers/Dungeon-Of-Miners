@@ -3,11 +3,10 @@
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Flame, Users, Gauge } from "lucide-react";
-import { links, assets, totalSupply, floors, ranks, contractAddress } from "@/content/site";
+import { links, assets, totalSupply, floors, ranks } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
-import { truncateAddress } from "@/components/ui/ContractAddress";
 
 const DungeonHeroBanner = dynamic(() => import("@/components/hero/DungeonHeroBanner"), {
   ssr: false,
@@ -107,8 +106,9 @@ export function Hero() {
                 href="/tokenomics"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs transition-colors hover:border-gold/30 hover:bg-white/[0.06]"
               >
-                <span className="text-ink-faint">DOM Contract</span>
-                <span className="font-mono text-ink">{truncateAddress(contractAddress)}</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                <span className="text-ink-faint">Token Status</span>
+                <span className="font-semibold text-gold">Pre-TGE</span>
                 <ArrowRight className="h-3 w-3 text-gold" />
               </a>
             </motion.div>
@@ -168,7 +168,7 @@ export function Hero() {
             delay={0.6}
             icon={<Flame className="h-4 w-4 text-torch" />}
             label="The Descent"
-            value="Floor 2 · Hollow"
+            value="Floor II · Hollow"
           />
           <FloatingCard
             className="-right-4 top-4 hidden sm:flex lg:-right-10"

@@ -16,7 +16,7 @@ const points = [
   {
     icon: XCircle,
     title: "No Fake Payouts",
-    description: "No manufactured transaction proofs, no fabricated payout screenshots — ever.",
+    description: "No manufactured transaction proofs, no fake \"processing\" status, no fabricated payout screenshots — ever.",
   },
 ];
 
@@ -54,10 +54,12 @@ export function Honesty() {
               <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-glow" />
               <p className="text-sm text-ink-muted">
                 <span className="font-semibold text-ink">
-                  Revenue comes from rewarded ads and Telegram Stars — 100% operator revenue.
+                  Dungeon of Miners is funded through optional rewarded advertising and future
+                  Telegram Stars purchases.
                 </span>{" "}
-                There is currently no prize pool and no live payout to users. This will always be
-                stated plainly, not buried in terms.
+                DOM does not represent revenue sharing or ownership of platform revenue. There is
+                currently no prize pool and no live payout to users — stated plainly, not buried
+                in terms.
               </p>
             </div>
           </div>

@@ -93,7 +93,7 @@ export function TokenDistributionChart() {
                 />
                 <div>
                   <p className="text-sm font-semibold text-ink">
-                    Floor {seg.index} · {seg.name}
+                    Floor {seg.roman} · {seg.name}
                   </p>
                   <p className="text-xs text-ink-faint">{seg.allocation}</p>
                 </div>
