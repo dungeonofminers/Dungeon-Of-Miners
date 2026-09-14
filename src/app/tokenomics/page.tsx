@@ -19,7 +19,7 @@ const keyFacts = [
   { label: "Network", value: "BNB Chain (BEP-20)" },
   { label: "Max Supply", value: totalSupply },
   { label: "Status", value: "Pre-TGE" },
-  { label: "Allocation Model", value: "100% Mined" },
+  { label: "Allocation Model", value: "100% Community Mined" },
 ];
 
 export default function TokenomicsPage() {
@@ -157,10 +157,11 @@ export default function TokenomicsPage() {
           <Reveal>
             <div className="surface-panel mx-auto max-w-2xl px-8 py-14 text-center sm:px-12">
               <h2 className="heading-lg">
-                Start mining your share of <span className="text-gradient-gold">DOM</span>
+                Prepare to mine your share of <span className="text-gradient-gold">DOM</span>
               </h2>
               <p className="body-lg mx-auto mt-4 max-w-lg">
-                Every DOM you hold today is real, mined supply — no shortcuts, no presale bags.
+                Genesis Mining has not started — every DOM you&apos;ll hold is real, mined supply, with
+                no shortcuts and no presale bags.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a

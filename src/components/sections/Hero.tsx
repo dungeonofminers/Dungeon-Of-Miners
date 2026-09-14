@@ -2,11 +2,12 @@
 
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Flame, Users, Gauge } from "lucide-react";
+import { ArrowRight, Sparkles, Lock, Users, Compass } from "lucide-react";
 import { links, assets, totalSupply, floors, ranks } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
+import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
 const DungeonHeroBanner = dynamic(() => import("@/components/hero/DungeonHeroBanner"), {
   ssr: false,
@@ -64,11 +65,34 @@ export function Hero() {
               their tools, and descend deeper as the global community unlocks new floors.
             </motion.p>
 
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25 }}
+              className="mt-3 max-w-lg text-sm text-ink-muted"
+            >
+              Mining has not started yet. Prepare your miner, join the community, and secure your
+              place before the first descent begins.
+            </motion.p>
+
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-7 flex flex-wrap justify-center gap-2.5 lg:justify-start"
+              className="mt-6 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start"
+            >
+              <GenesisStatusBadge />
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-ink-faint">
+                <Lock className="h-3 w-3" />
+                Floor I: Locked
+              </span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.32 }}
+              className="mt-4 flex flex-wrap justify-center gap-2.5 lg:justify-start"
             >
               {heroStats.map((stat) => (
                 <div
@@ -88,11 +112,11 @@ export function Hero() {
               className="mt-8 flex flex-col gap-4 sm:flex-row"
             >
               <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Start Mining
+                Enter Mini App
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#features" className="btn-secondary">
-                View Features
+              <a href="#the-descent" className="btn-secondary">
+                Explore The Descent
               </a>
             </motion.div>
 
@@ -162,27 +186,27 @@ export function Hero() {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-300 via-transparent to-transparent" />
           </div>
 
-          {/* Floating UI cards */}
+          {/* Floating UI cards — game rules and Genesis facts, never fake live stats */}
           <FloatingCard
             className="-left-4 top-8 hidden sm:flex lg:-left-10"
             delay={0.6}
-            icon={<Flame className="h-4 w-4 text-torch" />}
-            label="The Descent"
-            value="Floor II · Hollow"
+            icon={<Lock className="h-4 w-4 text-torch" />}
+            label="Current Floor"
+            value="Floor I · Rubble"
           />
           <FloatingCard
             className="-right-4 top-4 hidden sm:flex lg:-right-10"
             delay={0.7}
-            icon={<Gauge className="h-4 w-4 text-gold" />}
-            label="DOM / hr"
-            value="150.0"
+            icon={<Compass className="h-4 w-4 text-gold" />}
+            label="Genesis"
+            value="Not Started"
           />
           <FloatingCard
             className="-bottom-6 left-6 hidden sm:flex lg:left-16"
             delay={0.8}
             icon={<Sparkles className="h-4 w-4 text-gold" />}
-            label="Rank"
-            value="Silver"
+            label="Rank System"
+            value="Novice → Legend"
           />
           <FloatingCard
             className="-bottom-6 right-6 hidden sm:flex lg:right-16"

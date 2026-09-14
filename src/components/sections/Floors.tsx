@@ -1,4 +1,5 @@
-import { floors, totalSupply } from "@/content/site";
+import { Lock } from "lucide-react";
+import { floors, totalSupply, economyConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -26,8 +27,15 @@ export function Floors() {
                     className="w-full transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-100 via-void-100/10 to-transparent" />
+                  {floor.index !== economyConfig.currentFloorIndex && (
+                    <div className="pointer-events-none absolute inset-0 bg-void-300/40 backdrop-grayscale" />
+                  )}
                   <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-void-300/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold backdrop-blur">
                     Floor {floor.roman}
+                  </span>
+                  <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full border border-white/15 bg-void-300/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-faint backdrop-blur">
+                    <Lock className="h-2.5 w-2.5" />
+                    {floor.index === economyConfig.currentFloorIndex ? "Opens at Genesis" : "Locked"}
                   </span>
                 </div>
                 <div className="p-6">

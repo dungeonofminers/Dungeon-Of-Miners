@@ -3,6 +3,7 @@ import { links } from "@/content/site";
 import { Reveal } from "@/components/ui/Reveal";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
+import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
 export function CTA() {
   return (
@@ -14,13 +15,15 @@ export function CTA() {
       <div className="section-shell relative">
         <Reveal>
           <div className="surface-panel mx-auto max-w-3xl px-8 py-16 text-center sm:px-14">
-            <span className="eyebrow">Enter the Dungeon</span>
+            <div className="flex justify-center">
+              <GenesisStatusBadge />
+            </div>
             <h2 className="heading-xl mt-6 text-4xl">
-              Ready to <span className="text-gradient-gold">Enter the Dungeon?</span>
+              Ready to <span className="text-gradient-gold">Prepare for Genesis?</span>
             </h2>
             <p className="body-lg mx-auto mt-5 max-w-xl">
-              Start mining DOM today, hold to rank up, and be part of the community that decides
-              when the next Descent begins.
+              Mining hasn&apos;t started yet. Join the community, create your miner profile, and be
+              ready the moment The First Descent begins.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
               <a
@@ -29,7 +32,7 @@ export function CTA() {
                 rel="noopener noreferrer"
                 className="btn-primary"
               >
-                Open Mini App
+                Enter Mini App
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a

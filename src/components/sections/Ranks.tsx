@@ -36,6 +36,17 @@ export function Ranks() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.4}>
+          <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 text-center">
+            <p className="text-sm text-ink-muted">
+              Ranks are determined by your Holding Wallet balance.{" "}
+              <span className="text-ink-faint">Rank Downgrade Policy: TBA.</span>{" "}
+              <span className="text-ink-faint">Permanent Rank: TBA.</span> We won&apos;t assume a rule
+              here until it&apos;s final.
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

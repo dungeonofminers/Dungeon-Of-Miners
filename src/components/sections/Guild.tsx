@@ -1,5 +1,5 @@
-import { Trophy, Swords } from "lucide-react";
-import { guildStats } from "@/content/site";
+import { Trophy, Swords, Crown, ShieldPlus, LogIn, LogOut, ArrowLeftRight, UserMinus } from "lucide-react";
+import { guildStats, guildRuleDetails } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -32,11 +32,15 @@ export function Guild() {
 
               <div className="mt-8">
                 <div className="flex items-center justify-between text-xs text-ink-muted">
-                  <span>Members claimed today</span>
-                  <span className="font-semibold text-ink">18 / 30</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    Members claimed today
+                    <span className="rounded-full border border-white/10 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-ink-faint">
+                      Example — opens at Genesis
+                    </span>
+                  </span>
+                  <span className="font-semibold text-ink">0 / 30</span>
                 </div>
                 <div className="relative mt-3 h-3 w-full overflow-hidden rounded-full bg-white/5">
-                  <div className="h-full w-3/5 rounded-full bg-gradient-to-r from-emerald-glow/70 to-emerald-glow" />
                   <div className="absolute inset-y-0 left-[60%] w-px bg-white/30" />
                 </div>
                 <div className="mt-2 flex justify-between text-[11px] text-ink-faint">
@@ -72,7 +76,50 @@ export function Guild() {
             </Reveal>
           ))}
         </div>
+
+        <div className="mx-auto mt-6 grid max-w-4xl grid-cols-1 gap-6 lg:grid-cols-2">
+          <Reveal delay={0.3}>
+            <div className="surface-panel h-full p-7">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
+                Guild Roles & Actions
+              </h3>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <RoleTag icon={Crown} label="Guild Owner" />
+                <RoleTag icon={ShieldPlus} label="Guild Officer" />
+                <RoleTag icon={LogIn} label="Join Guild" />
+                <RoleTag icon={LogOut} label="Leave Guild" />
+                <RoleTag icon={ArrowLeftRight} label="Transfer Ownership" />
+                <RoleTag icon={UserMinus} label="Kick Member" />
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.34}>
+            <div className="surface-panel h-full p-7">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
+                Guild Rules
+              </h3>
+              <dl className="mt-4 flex flex-col gap-2.5">
+                {guildRuleDetails.map((rule) => (
+                  <div key={rule.label} className="flex items-center justify-between text-sm">
+                    <dt className="text-ink-muted">{rule.label}</dt>
+                    <dd className="font-semibold text-ink-faint">{rule.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
+  );
+}
+
+function RoleTag({ icon: Icon, label }: { icon: React.ComponentType<{ className?: string }>; label: string }) {
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 text-xs text-ink-muted">
+      <Icon className="h-3.5 w-3.5 text-emerald-glow" />
+      {label}
+    </div>
   );
 }

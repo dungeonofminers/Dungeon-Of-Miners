@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 const STATUS_META = {
-  done: { label: "Live", icon: CheckCircle2, className: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow" },
+  done: { label: "Shipped", icon: CheckCircle2, className: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow" },
   active: { label: "In Progress", icon: Loader2, className: "border-gold/30 bg-gold/10 text-gold" },
   planned: { label: "Planned", icon: CircleDashed, className: "border-white/15 bg-white/[0.04] text-ink-faint" },
 } as const;

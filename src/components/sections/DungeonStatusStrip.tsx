@@ -1,8 +1,9 @@
-import { Users, Gauge, CalendarClock, ArrowDownCircle } from "lucide-react";
-import { floors, dungeonStatusPreview } from "@/content/site";
+import { Lock, Gauge, CalendarClock, ArrowDownCircle } from "lucide-react";
+import { floors, economyConfig, genesisStatusStrip } from "@/content/site";
+import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
 export function DungeonStatusStrip() {
-  const currentFloor = floors.find((f) => f.index === dungeonStatusPreview.currentFloorIndex);
+  const currentFloor = floors.find((f) => f.index === economyConfig.currentFloorIndex);
   if (!currentFloor) return null;
 
   const items = [
@@ -11,24 +12,24 @@ export function DungeonStatusStrip() {
       value: `Floor ${currentFloor.roman} · ${currentFloor.name}`,
     },
     {
+      icon: Lock,
+      label: "Mining Status",
+      value: "NOT STARTED",
+    },
+    {
       icon: Gauge,
       label: "Mined",
-      value: `${dungeonStatusPreview.percentMined}%`,
+      value: `${genesisStatusStrip.percentMined}%`,
     },
     {
       icon: CalendarClock,
-      label: "Days Remaining",
-      value: `${dungeonStatusPreview.daysRemaining}`,
-    },
-    {
-      icon: Users,
-      label: "Miners Active",
-      value: dungeonStatusPreview.minersActive,
+      label: "Genesis Start",
+      value: genesisStatusStrip.genesisStart,
     },
     {
       icon: ArrowDownCircle,
-      label: "Next Descent",
-      value: dungeonStatusPreview.nextMultiplier,
+      label: "Descent Trigger",
+      value: "Supply Exhausted OR 90 Days",
     },
   ];
 
@@ -36,10 +37,7 @@ export function DungeonStatusStrip() {
     <div className="relative border-y border-white/[0.06] bg-void-200/60 backdrop-blur-sm">
       <div className="section-shell">
         <div className="flex items-center gap-6 overflow-x-auto py-3.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-gold">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-            Dungeon Preview
-          </span>
+          <GenesisStatusBadge />
 
           {items.map((item) => (
             <div key={item.label} className="flex shrink-0 items-center gap-2 whitespace-nowrap">

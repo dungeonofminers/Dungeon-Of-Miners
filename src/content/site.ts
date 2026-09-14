@@ -24,6 +24,7 @@ export const links = {
 // (e.g. from /tokenomics), not just the homepage.
 export const navLinks = [
   { label: "About", href: "/#about" },
+  { label: "Genesis", href: "/#genesis" },
   { label: "How It Works", href: "/#how-it-works" },
   { label: "The Descent", href: "/#the-descent" },
   { label: "Economy", href: "/#economy" },
@@ -73,7 +74,7 @@ export const coreLoop = [
   },
   {
     step: "02",
-    title: "Start Mining DOM",
+    title: "Mining Begins at Genesis",
     description:
       "Your rig runs idle, mining DOM around the clock at a rate set by your current rank.",
   },
@@ -177,17 +178,270 @@ export const floors = [
 export const totalSupply = "6,000,000,000 DOM";
 
 // ---------------------------------------------------------------------------
-// Dungeon Status Strip — illustrative preview data only (no live backend
-// yet). Every value the strip renders comes from this one object, so wiring
-// in a real API later means replacing this export, not hunting through JSX.
+// Genesis / Economy status — SINGLE SOURCE OF TRUTH for whether mining has
+// started. Every component that shows Genesis/mining state reads from this
+// object instead of hardcoding its own copy. Flip `genesisStatus` to
+// "GENESIS_ACTIVE" and set `genesisTimestamp` once Genesis actually launches
+// — nothing else in the codebase needs to change.
 // ---------------------------------------------------------------------------
-export const dungeonStatusPreview = {
-  currentFloorIndex: 2,
-  percentMined: 62,
-  daysRemaining: 47,
-  minersActive: "12,482",
-  nextMultiplier: "×0.25",
+export type GenesisStatus =
+  | "PRE_GENESIS"
+  | "GENESIS_ACTIVE"
+  | "FLOOR_ACTIVE"
+  | "DESCENT_TRANSITION"
+  | "MAINTENANCE"
+  | "TGE_PREPARATION";
+
+export const economyConfig = {
+  genesisStatus: "PRE_GENESIS" as GenesisStatus,
+  genesisTimestamp: null as string | null,
+  currentFloorIndex: 1,
+  floorDurationDays: 90,
+  economyVersion: "v1.0",
+  economyLastUpdated: "2026-09-14",
+  tgeStatus: "Pre-TGE",
+  claimSplit: { holding: 70, pool: 30 },
 };
+
+export const GENESIS_STATUS_LABEL: Record<GenesisStatus, string> = {
+  PRE_GENESIS: "Pre-Genesis",
+  GENESIS_ACTIVE: "Genesis Active",
+  FLOOR_ACTIVE: "Floor Active",
+  DESCENT_TRANSITION: "Descent In Progress",
+  MAINTENANCE: "Maintenance",
+  TGE_PREPARATION: "TGE Preparation",
+};
+
+// ---------------------------------------------------------------------------
+// Genesis status strip — the honest pre-mining replacement for the old
+// "live" preview strip. All fields derive from economyConfig/floors; nothing
+// here is a fake live number.
+// ---------------------------------------------------------------------------
+export const genesisStatusStrip = {
+  floorStatus: "LOCKED — WAITING FOR GENESIS",
+  percentMined: 0,
+  minedLabel: "0 / 3,000,000,000 DOM Mined",
+  genesisStart: "TBA",
+};
+
+// ---------------------------------------------------------------------------
+// The Genesis — Floor I facts shown before mining begins.
+// ---------------------------------------------------------------------------
+export const genesisFacts = [
+  { label: "Floor", value: "I · Rubble" },
+  { label: "Genesis Supply", value: "3,000,000,000 DOM" },
+  { label: "Base Floor Multiplier", value: "×1.00" },
+  { label: "Genesis Mining", value: "NOT STARTED" },
+  { label: "Genesis Start", value: "TBA" },
+  { label: "Maximum Floor Duration", value: "90 Days" },
+  { label: "Descent Trigger", value: "Supply Exhausted OR 90 Days" },
+];
+
+// ---------------------------------------------------------------------------
+// Prepare for Genesis — Pre-Genesis activities. IMPORTANT: none of these
+// reward DOM. Rewards are Genesis Points / XP / badges / chest keys only.
+// ---------------------------------------------------------------------------
+export const prepareForGenesis = [
+  {
+    icon: "user",
+    title: "Genesis Profile",
+    description: "Create your miner profile before the first descent.",
+    reward: "Profile Setup",
+  },
+  {
+    icon: "shield",
+    title: "Genesis Badge",
+    description: "Early participants can earn a permanent Genesis Delver badge.",
+    reward: "Badge",
+  },
+  {
+    icon: "calendar-check",
+    title: "Daily Check-In",
+    description: "Stay active before mining begins.",
+    reward: "Genesis Points",
+  },
+  {
+    icon: "user-plus",
+    title: "Referrals",
+    description: "Invite miners and build your network before Genesis.",
+    reward: "Genesis Points",
+  },
+  {
+    icon: "users",
+    title: "Guild Registration",
+    description: "Create or join a guild before the dungeon opens.",
+    reward: "Early Access Score",
+  },
+  {
+    icon: "list-checks",
+    title: "Genesis Tasks",
+    description: "Complete early community missions.",
+    reward: "XP + Chest Key",
+  },
+];
+
+export const genesisBadge = {
+  name: "Genesis Delver",
+  description: "Joined Dungeon of Miners before Genesis Mining began.",
+  rules: [
+    "Limited to Pre-Genesis participants.",
+    "Permanent achievement — it cannot be earned once Genesis begins.",
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Mining formula — how the final per-hour rate is calculated. Multipliers
+// without an official number yet are marked TBA rather than invented.
+// ---------------------------------------------------------------------------
+export const miningFormula = {
+  chain: [
+    "Base Rank Rate",
+    "× Floor Multiplier",
+    "× Equipment Multiplier",
+    "× Referral Multiplier",
+    "× Guild Multiplier",
+    "× Temporary Boost",
+  ],
+  example: {
+    label: "Example Miner",
+    rows: [
+      { label: "Base Rate", value: "10 DOM/hour" },
+      { label: "Floor", value: "×1.00" },
+      { label: "Referral", value: "×1.10" },
+      { label: "Guild", value: "×1.15" },
+    ],
+    final: { label: "Final Rate", value: "12.65 DOM/hour" },
+  },
+};
+
+export const boostRules = [
+  { label: "Floor Multiplier", value: "Set per floor — see The Descent" },
+  { label: "Pickaxe (Equipment) Multiplier", value: "TBA" },
+  { label: "Referral Multiplier", value: "+2% per qualified referral (max +100%)" },
+  { label: "Guild Multiplier", value: "+15% on qualifying days (60%+ guild claim rate)" },
+  { label: "Temporary Boost", value: "TBA" },
+  { label: "Maximum Mining Multiplier", value: "TBA" },
+  { label: "Temporary Boost Duration", value: "TBA" },
+  { label: "Boost Stacking", value: "TBA" },
+];
+
+export const storageRules = {
+  description:
+    "DOM accumulates inside Mining Storage. If storage fills up, mining pauses until you claim — DOM is never automatically deleted.",
+  baseStorage: "TBA",
+  storageUpgrade: "Available after Genesis",
+  storageCapacity: "Displayed inside the Mini App",
+  exampleCurrent: 2400,
+  exampleMax: 5000,
+};
+
+export const claimRules = {
+  minimumClaim: "TBA",
+  claimCooldown: "TBA",
+  maximumClaim: "TBA",
+};
+
+// ---------------------------------------------------------------------------
+// Global Floor Ledger + Genesis Record — public transparency data. Every
+// value below is the correct pre-Genesis state; once Genesis starts, these
+// should be replaced by live backend reads, not edited by hand.
+// ---------------------------------------------------------------------------
+export const floorLedger = [
+  { label: "Floor Allocation", value: "3,000,000,000 DOM" },
+  { label: "Claimed", value: "0 DOM" },
+  { label: "Remaining", value: "3,000,000,000 DOM" },
+  { label: "Pending", value: "0 DOM" },
+  { label: "Genesis Timestamp", value: "Not Started" },
+  { label: "Current Floor", value: "I · Rubble" },
+  { label: "Floor Start Time", value: "Awaiting Genesis" },
+  { label: "Time Remaining", value: "90-Day Countdown Begins at Genesis" },
+  { label: "Descent Trigger", value: "Supply Exhausted OR 90 Days" },
+];
+
+export const genesisRecord = [
+  { label: "Genesis Timestamp", value: "Awaiting Genesis" },
+  { label: "Floor", value: "I · Rubble" },
+  { label: "Initial Supply", value: "3,000,000,000 DOM" },
+  { label: "Initial Floor Multiplier", value: "×1.00" },
+  { label: "Genesis Miners", value: "Awaiting Genesis" },
+  { label: "Economy Version", value: economyConfig.economyVersion },
+  { label: "Status", value: "NOT STARTED" },
+];
+
+// Filled in by the backend once a floor actually finishes — empty by design.
+export type FloorArchiveEntry = {
+  floor: string;
+  started: string;
+  ended: string;
+  duration: string;
+  domClaimed: string;
+  participatingMiners: string;
+  totalClaims: string;
+  topGuild: string;
+  descentTrigger: string;
+  finalFloorSupply: string;
+};
+export const floorArchive: FloorArchiveEntry[] = [];
+
+export const economyChangelog = [
+  {
+    version: "v1.0",
+    date: economyConfig.economyLastUpdated,
+    summary: "Genesis rules established: 6-floor allocation, ×1.00–×0.03125 Descent multipliers, 70/30 claim split.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Pre-TGE ledger + TGE migration — nothing here may be invented. Anything
+// not yet officially decided is TBA.
+// ---------------------------------------------------------------------------
+export const tgeMigration = [
+  { label: "Snapshot Date", value: "TBA" },
+  { label: "Eligible Balances", value: "TBA" },
+  { label: "Conversion Ratio", value: "TBA" },
+  { label: "Blockchain Network", value: "TBA" },
+  { label: "Contract Address", value: "TBA" },
+  { label: "Claim Process", value: "TBA" },
+  { label: "Vesting", value: "TBA" },
+  { label: "Wallet Connection", value: "TBA" },
+];
+
+export const riskDisclosure =
+  "Dungeon of Miners is currently in a Pre-TGE phase. DOM does not currently represent a guaranteed financial return or guaranteed market value. Participation should not be interpreted as a promise of profit. Game mechanics, TGE details, network information, and migration rules will be published before implementation.";
+
+// ---------------------------------------------------------------------------
+// Fair Play policy
+// ---------------------------------------------------------------------------
+export const fairPlay = {
+  notAllowed: [
+    "Automation scripts",
+    "Bots",
+    "Modified clients",
+    "Request manipulation",
+    "Multiple-account farming",
+    "Referral abuse",
+    "Exploit abuse",
+    "Tampering with mining calculation",
+  ],
+  possibleActions: [
+    "Reward rollback",
+    "Leaderboard removal",
+    "Mining suspension",
+    "Account restriction",
+    "Account ban",
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Guild rules — numeric details beyond the existing guildStats. TBA where a
+// number hasn't been decided.
+// ---------------------------------------------------------------------------
+export const guildRuleDetails = [
+  { label: "Guild Creation Cost", value: "TBA" },
+  { label: "Join Cooldown", value: "TBA" },
+  { label: "Leave Cooldown", value: "TBA" },
+  { label: "Guild Boost Duration", value: "TBA" },
+];
 
 // ---------------------------------------------------------------------------
 // Ranks
@@ -242,7 +496,8 @@ export const features = [
   },
   {
     title: "Watch & Earn",
-    description: "Rewarded ads convert your attention directly into DOM.",
+    description:
+      "Rewarded ads convert your attention into Genesis Points and boosts pre-Genesis, and into mining-related rewards once Genesis begins. Daily ad limit: TBA.",
     icon: "play-circle",
   },
   {
@@ -277,9 +532,9 @@ export const faqs = [
       "Dungeon of Miners is a Telegram Mini App idle-mining game. You mine DOM passively, rank up by holding, upgrade your gear, and progress through six dungeon floors alongside a global community of miners.",
   },
   {
-    question: "How do I start mining?",
+    question: "Has mining started yet?",
     answer:
-      "Open the Dungeon of Miners Mini App inside Telegram and tap Start Mining. There's nothing to install and no wallet setup required to begin.",
+      "Not yet. Dungeon of Miners is currently Pre-Genesis — mining has not started, Floor I is locked, and 0 DOM has been mined. Open the Mini App now to set up your profile, complete Genesis Tasks, and be ready the moment Genesis Mining begins.",
   },
   {
     question: "What is The Descent?",
@@ -314,12 +569,17 @@ export const faqs = [
   {
     question: "How do Watch & Earn and tasks work?",
     answer:
-      "Watch & Earn lets you view rewarded ads in exchange for DOM. Daily tasks include check-ins, joining or boosting our Telegram channel, and inviting friends — each contributing small, steady rewards toward your Pool Wallet.",
+      "Pre-Genesis, Watch & Earn and daily tasks reward Genesis Points, XP, temporary Pre-Genesis boosts, and Chest Keys — never DOM. After Genesis, ads can grant temporary mining boosts like Torch Boost instead. Daily ad limits apply to prevent unlimited ad farming.",
   },
   {
     question: "How does the referral program work?",
     answer:
-      "Each qualified referral gives you +2% permanent hashrate, up to 50 referrals (+100% max). A referral only qualifies once your friend claims on 3 different days, and they get a +50 DOM starter bonus for joining. This isn't revenue sharing — it's a permanent mining-rate boost.",
+      "Each qualified referral gives you +2% permanent hashrate, up to 50 referrals (+100% max). A referral only qualifies once your friend claims on 3 different days, and they get a +50 DOM starter bonus for joining. This isn't revenue sharing — it's a permanent mining-rate boost. Self-referrals, automated accounts, and multi-account farming are not allowed and can invalidate rewards — see our Fair Play Policy.",
+  },
+  {
+    question: "What happens during maintenance?",
+    answer:
+      "Mining and claim behavior during maintenance follows server-authoritative timestamps and official maintenance announcements — nothing is ever calculated client-side. We don't promise automatic compensation unless that logic has actually shipped.",
   },
 ];
 
@@ -364,11 +624,11 @@ export const roadmap = [
   },
   {
     phase: "Phase 3",
-    title: "The Descent, Live",
+    title: "Genesis & The Descent",
     status: "planned" as const,
     items: [
+      "Genesis Mining launch — Floor I unlocks",
       "Full six-floor rollout",
-      "Descent Hour global bonus events",
       "Permanent per-floor guild leaderboards",
       "Miner Card sharing",
     ],

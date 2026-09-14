@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-void-200">
       <div className="section-shell py-14 sm:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               <PlaceholderImage
@@ -100,6 +100,45 @@ export function Footer() {
               </li>
             </ul>
           </div>
+
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Legal & Docs</h4>
+            <ul className="mt-4 flex flex-col gap-3">
+              <li>
+                <a href="/#genesis-ledger" className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  Economy Rules
+                </a>
+              </li>
+              <li>
+                <a href="/#the-descent" className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  The Descent
+                </a>
+              </li>
+              <li>
+                <a href="/fair-play" className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  Fair Play
+                </a>
+              </li>
+              <li>
+                <a href="/#risk-disclosure" className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  Risk Disclosure
+                </a>
+              </li>
+              <li>
+                <a
+                  href={links.telegramCommunity}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-ink-muted transition-colors hover:text-gold"
+                >
+                  Contact / Support
+                </a>
+              </li>
+              <li className="text-sm text-ink-faint">Docs · Coming Soon</li>
+              <li className="text-sm text-ink-faint">Terms of Service · Coming Soon</li>
+              <li className="text-sm text-ink-faint">Privacy Policy · Coming Soon</li>
+            </ul>
+          </div>
         </div>
 
         <div className="divider-glow my-10" />
@@ -109,7 +148,7 @@ export function Footer() {
             © {new Date().getFullYear()} Dungeon of Miners. All rights reserved.
           </p>
           <p className="text-xs text-ink-faint">
-            Pre-TGE ecosystem. Product mechanics and features may evolve.
+            Pre-Genesis · Pre-TGE ecosystem. Product mechanics and features may evolve.
           </p>
         </div>
       </div>

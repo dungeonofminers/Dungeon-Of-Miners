@@ -1,4 +1,5 @@
 import { Vault, Coins, ArrowRight } from "lucide-react";
+import { claimRules } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -49,11 +50,33 @@ export function Wallets() {
                   upgrades, guild play, withdrawal queueing — separate and always usable.
                 </p>
               </div>
+
+              <div className="mt-6 border-t border-white/[0.06] pt-6">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
+                  Claim System
+                </h3>
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <ClaimStat label="Minimum Claim" value={claimRules.minimumClaim} />
+                  <ClaimStat label="Claim Cooldown" value={claimRules.claimCooldown} />
+                  <ClaimStat label="Maximum Claim" value={claimRules.maximumClaim} />
+                </div>
+              </div>
             </div>
           </div>
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function ClaimStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
+      <p className="text-xs uppercase tracking-wider text-ink-faint">{label}</p>
+      <p className={`mt-1 font-display text-lg ${value === "TBA" ? "text-ink-faint" : "text-ink"}`}>
+        {value}
+      </p>
+    </div>
   );
 }
 

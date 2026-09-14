@@ -1,14 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown, Timer, TrendingDown, Zap } from "lucide-react";
-import { floors, assets } from "@/content/site";
+import { ChevronDown, Timer, TrendingDown, Lock } from "lucide-react";
+import { floors, assets, economyConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
-const CURRENT_FLOOR_INDEX = 2;
+const CURRENT_FLOOR_INDEX = economyConfig.currentFloorIndex;
 
 const conditions = [
   {
@@ -62,46 +63,50 @@ export function TheDescent() {
           </div>
         </div>
 
-        {/* Live status */}
+        <Reveal delay={0.15}>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-ink-faint">
+            The Descent begins only after Genesis Mining starts. Each floor stays active until
+            either its allocated supply is exhausted or 90 days pass — whichever happens first.
+          </p>
+        </Reveal>
+
+        {/* Pre-Genesis status */}
         <Reveal delay={0.2}>
           <div className="surface-panel mx-auto mt-6 max-w-4xl overflow-hidden p-8 sm:p-10">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-widest text-torch">Current Floor</p>
-                <p className="heading-md mt-1">Floor II · Hollow</p>
+                <p className="heading-md mt-1">Floor I · Rubble</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-ink-faint">
+                  Locked — Waiting for Genesis
+                </p>
               </div>
-              <div className="flex items-center gap-2 rounded-full border border-torch/30 bg-torch/10 px-4 py-2">
-                <Zap className="h-4 w-4 text-torch" />
-                <span className="text-xs font-semibold text-torch">Descent Hour: 2× bonus live</span>
-              </div>
+              <GenesisStatusBadge />
             </div>
 
             <div className="mt-8">
               <div className="flex items-center justify-between text-xs text-ink-muted">
                 <span>Floor allocation mined</span>
-                <span className="font-semibold text-ink">930,000,000 / 1,500,000,000 DOM</span>
+                <span className="font-semibold text-ink">0 / 3,000,000,000 DOM</span>
               </div>
               <div className="relative mt-3 h-4 w-full overflow-hidden rounded-full bg-white/5">
                 <motion.div
                   initial={{ width: 0 }}
-                  whileInView={{ width: "62%" }}
+                  whileInView={{ width: "0%" }}
                   viewport={{ once: true }}
-                  transition={{ duration: 1.4, ease: "easeOut" }}
                   className="relative h-full rounded-full bg-gradient-to-r from-torch-ember via-torch to-gold"
-                >
-                  <div className="absolute inset-0 animate-shimmer bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.35),transparent)] bg-[length:200%_100%]" />
-                </motion.div>
+                />
               </div>
               <div className="mt-3 flex items-center justify-between text-xs text-ink-faint">
-                <span>62% depleted</span>
-                <span>Descent Stage 2 of 6</span>
+                <span>0% depleted</span>
+                <span>90-Day Countdown Begins at Genesis</span>
               </div>
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
-              <Stat label="Global Rate" value="×0.50 current" />
-              <Stat label="Next Floor Rate" value="×0.25" accent />
-              <Stat label="Miners Active" value="On Floor II" />
+              <Stat label="Base Floor Multiplier" value="×1.00" />
+              <Stat label="Next Floor Rate" value="×0.50" accent />
+              <Stat label="Genesis Start" value="TBA" />
             </div>
           </div>
         </Reveal>
@@ -154,12 +159,22 @@ export function TheDescent() {
             <div key={floor.index} className="flex w-full flex-col items-center">
               <Reveal delay={i * 0.12}>
                 <div
-                  className={`flex w-64 flex-col items-center rounded-2xl border px-8 py-5 text-center ${
+                  className={`relative flex w-64 flex-col items-center rounded-2xl border px-8 py-5 text-center ${
                     floor.index === CURRENT_FLOOR_INDEX
                       ? "border-torch/40 bg-torch/10 shadow-glow-torch"
-                      : "border-white/10 bg-white/[0.03]"
+                      : "border-white/10 bg-white/[0.03] opacity-70"
                   }`}
                 >
+                  <span
+                    className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                      floor.index === CURRENT_FLOOR_INDEX
+                        ? "border-gold/30 bg-gold/10 text-gold"
+                        : "border-white/15 bg-white/[0.06] text-ink-faint"
+                    }`}
+                  >
+                    <Lock className="h-2.5 w-2.5" />
+                    {floor.index === CURRENT_FLOOR_INDEX ? "Opens at Genesis" : "Locked"}
+                  </span>
                   <span className="font-display text-3xl text-gold">{floor.roman}</span>
                   <span className="mt-1 text-sm font-semibold text-ink">{floor.name}</span>
                   <span className="mt-2 rounded-full bg-white/[0.06] px-3 py-1 font-mono text-xs font-bold text-torch">
