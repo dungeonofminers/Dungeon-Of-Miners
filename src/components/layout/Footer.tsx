@@ -1,14 +1,14 @@
 import { Send, Twitter, MessageCircle } from "lucide-react";
-import { siteConfig, links, navLinks, assets } from "@/content/site";
+import { siteConfig, links, navGroups, navTopLevel, assets } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-void-200">
       <div className="section-shell py-14 sm:py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+            <a href="/#top" className="flex items-center gap-2.5">
               <PlaceholderImage
                 src={assets.logoDom}
                 alt="Dungeon of Miners logo"
@@ -16,7 +16,7 @@ export function Footer() {
                 className="h-9 w-9 rounded-lg"
               />
               <span className="font-display text-lg text-ink">Dungeon of Miners</span>
-            </div>
+            </a>
             <p className="body-lg mt-4 max-w-sm text-sm">{siteConfig.description}</p>
             <div className="mt-6 flex items-center gap-3">
               <a
@@ -49,25 +49,40 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Navigate</h4>
-            <ul className="mt-4 flex flex-col gap-3">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-ink-muted transition-colors hover:text-gold"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {navGroups.map((group) => (
+            <div key={group.label}>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">
+                {group.label}
+              </h4>
+              <ul className="mt-4 flex flex-col gap-3">
+                {group.items.map((item) => (
+                  <li key={item.label}>
+                    {item.comingSoon ? (
+                      <span className="text-sm text-ink-faint">{item.label} · Soon</span>
+                    ) : (
+                      <a
+                        href={item.href}
+                        target={item.external ? "_blank" : undefined}
+                        rel={item.external ? "noopener noreferrer" : undefined}
+                        className="text-sm text-ink-muted transition-colors hover:text-gold"
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Play</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">More</h4>
             <ul className="mt-4 flex flex-col gap-3">
+              <li>
+                <a href={navTopLevel.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  {navTopLevel.label}
+                </a>
+              </li>
               <li>
                 <a
                   href={links.miniApp}
@@ -75,53 +90,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm text-ink-muted transition-colors hover:text-gold"
                 >
-                  Open Mini App
-                </a>
-              </li>
-              <li>
-                <a
-                  href={links.telegramCommunity}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-ink-muted transition-colors hover:text-gold"
-                >
-                  Join Community
-                </a>
-              </li>
-              <li>
-                <a
-                  href={links.telegramChannel}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-ink-muted transition-colors hover:text-gold"
-                >
-                  Announcements
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Legal & Docs</h4>
-            <ul className="mt-4 flex flex-col gap-3">
-              <li>
-                <a href="/#genesis-ledger" className="text-sm text-ink-muted transition-colors hover:text-gold">
-                  Economy Rules
-                </a>
-              </li>
-              <li>
-                <a href="/#the-descent" className="text-sm text-ink-muted transition-colors hover:text-gold">
-                  The Descent
-                </a>
-              </li>
-              <li>
-                <a href="/fair-play" className="text-sm text-ink-muted transition-colors hover:text-gold">
-                  Fair Play
-                </a>
-              </li>
-              <li>
-                <a href="/#risk-disclosure" className="text-sm text-ink-muted transition-colors hover:text-gold">
-                  Risk Disclosure
+                  Enter Mini App
                 </a>
               </li>
               <li>
@@ -134,9 +103,8 @@ export function Footer() {
                   Contact / Support
                 </a>
               </li>
-              <li className="text-sm text-ink-faint">Docs · Coming Soon</li>
-              <li className="text-sm text-ink-faint">Terms of Service · Coming Soon</li>
-              <li className="text-sm text-ink-faint">Privacy Policy · Coming Soon</li>
+              <li className="text-sm text-ink-faint">Terms of Service · Soon</li>
+              <li className="text-sm text-ink-faint">Privacy Policy · Soon</li>
             </ul>
           </div>
         </div>

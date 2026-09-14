@@ -20,20 +20,56 @@ export const links = {
   twitter: "https://x.com/DungeonOfMiners",
 };
 
-// Hash links are prefixed with "/" so they resolve correctly from any page
-// (e.g. from /tokenomics), not just the homepage.
-export const navLinks = [
-  { label: "About", href: "/#about" },
-  { label: "Genesis", href: "/#genesis" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "The Descent", href: "/#the-descent" },
-  { label: "Economy", href: "/#economy" },
-  { label: "Tokenomics", href: "/tokenomics" },
-  { label: "Features", href: "/#features" },
-  { label: "Guild", href: "/#guild" },
-  { label: "Roadmap", href: "/#roadmap" },
-  { label: "FAQ", href: "/#faq" },
+// ---------------------------------------------------------------------------
+// Navigation — grouped for the desktop dropdown / mobile accordion navbar.
+// Hash links are prefixed with "/" so they resolve correctly from any page,
+// not just the page that owns the section.
+// ---------------------------------------------------------------------------
+export type NavItem = { label: string; href: string; external?: boolean; comingSoon?: boolean };
+export type NavGroup = { label: string; items: NavItem[] };
+
+export const navGroups: NavGroup[] = [
+  {
+    label: "Game",
+    items: [
+      { label: "Overview", href: "/game" },
+      { label: "How It Works", href: "/game#how-it-works" },
+      { label: "The Descent", href: "/game#the-descent" },
+      { label: "Ranks", href: "/game#ranks" },
+      { label: "Features", href: "/game#features" },
+    ],
+  },
+  {
+    label: "Economy",
+    items: [
+      { label: "Mining Economy", href: "/economy" },
+      { label: "Tokenomics", href: "/tokenomics" },
+      { label: "Genesis", href: "/genesis" },
+      { label: "Pre-TGE → TGE", href: "/tokenomics#pre-tge" },
+    ],
+  },
+  {
+    label: "Community",
+    items: [
+      { label: "Guilds", href: "/community/guilds" },
+      { label: "Leaderboard", href: "/leaderboard" },
+      { label: "Referral Program", href: "/referral" },
+      { label: "Announcements", href: links.telegramChannel, external: true },
+    ],
+  },
+  {
+    label: "Docs",
+    items: [
+      { label: "Documentation", href: "#", comingSoon: true },
+      { label: "FAQ", href: "/faq" },
+      { label: "Fair Play", href: "/fair-play" },
+      { label: "Changelog", href: "/changelog" },
+      { label: "Risk Disclosure", href: "/risk-disclosure" },
+    ],
+  },
 ];
+
+export const navTopLevel: NavItem = { label: "Roadmap", href: "/roadmap" };
 
 // ---------------------------------------------------------------------------
 // Assets — drop your files into /public/assets using these exact names

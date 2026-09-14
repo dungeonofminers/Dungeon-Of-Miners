@@ -115,7 +115,7 @@ export function Hero() {
                 Enter Mini App
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#the-descent" className="btn-secondary">
+              <a href="/game#the-descent" className="btn-secondary">
                 Explore The Descent
               </a>
             </motion.div>

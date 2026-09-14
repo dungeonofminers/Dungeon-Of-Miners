@@ -7,6 +7,7 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { EmberField } from "@/components/ui/EmberField";
 import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributionChart";
+import { PreTgeSection } from "@/components/sections/PreTgeSection";
 
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
@@ -149,6 +150,8 @@ export default function TokenomicsPage() {
           </div>
         </div>
       </section>
+
+      <PreTgeSection />
 
       {/* CTA */}
       <section className="relative overflow-hidden py-20 sm:py-24">
