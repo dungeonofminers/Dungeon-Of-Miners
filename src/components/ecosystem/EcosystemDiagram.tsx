@@ -308,14 +308,11 @@ export function EcosystemDiagram({ play }: { play: boolean }) {
         ))}
       </div>
 
-      {/* Narrative caption — stays close to the diagram, never overlaid on mobile */}
-      <div className="mt-6 min-h-[3.5rem] max-w-md text-center">
-        <p ref={primaryRef} className="text-sm font-semibold text-ink sm:text-base" />
-        <p ref={secondaryRef} className="mt-1 text-xs text-ink-muted sm:text-sm" />
-        <span
-          ref={badgeRef}
-          className="mt-2 inline-block text-[10px] font-bold uppercase tracking-widest text-gold empty:hidden"
-        />
+      {/* Narrative text — kept for screen readers, hidden visually below the diagram per request */}
+      <div className="sr-only">
+        <p ref={primaryRef} />
+        <p ref={secondaryRef} />
+        <span ref={badgeRef} />
       </div>
 
       {/* Mobile tap info panel */}
