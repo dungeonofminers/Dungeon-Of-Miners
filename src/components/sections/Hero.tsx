@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Lock, Users, Compass } from "lucide-react";
-import { links, assets, totalSupply, floors, ranks } from "@/content/site";
+import { links, assets } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -13,13 +13,6 @@ import { DungeonStatusStrip } from "@/components/sections/DungeonStatusStrip";
 const DungeonHeroBanner = dynamic(() => import("@/components/hero/DungeonHeroBanner"), {
   ssr: false,
 });
-
-const heroStats = [
-  { value: totalSupply, label: "Max Supply" },
-  { value: `${floors.length} Floors`, label: "Dungeon Depth" },
-  { value: `${ranks.length} Ranks`, label: "Novice → Legend" },
-  { value: "30", label: "Max Guild Size" },
-];
 
 export function Hero() {
   return (
@@ -87,23 +80,6 @@ export function Hero() {
                 <Lock className="h-3 w-3" />
                 Floor I: Locked
               </span>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.32 }}
-              className="mt-4 flex flex-wrap justify-center gap-2.5 lg:justify-start"
-            >
-              {heroStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm"
-                >
-                  <span className="font-semibold text-gold">{stat.value}</span>{" "}
-                  <span className="text-ink-muted">{stat.label}</span>
-                </div>
-              ))}
             </motion.div>
 
             <motion.div
@@ -179,7 +155,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.35 }}
-          className="-mx-5 mt-14 sm:-mx-8 lg:-mx-10"
+          className="mt-14 w-screen ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]"
         >
           <DungeonStatusStrip />
         </motion.div>

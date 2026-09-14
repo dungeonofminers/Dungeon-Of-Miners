@@ -1,13 +1,29 @@
 import { Send, Twitter, MessageCircle } from "lucide-react";
-import { siteConfig, links, navGroups, navTopLevel, assets } from "@/content/site";
+import { siteConfig, links, navTopLevel, assets } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+
+const exploreLinks = [
+  { label: "Game", href: "/game" },
+  { label: "Economy", href: "/economy" },
+  { label: "Genesis", href: "/genesis" },
+  { label: "Tokenomics", href: "/tokenomics" },
+  { label: "Guilds", href: "/community/guilds" },
+  { label: navTopLevel.label, href: navTopLevel.href },
+];
+
+const resourceLinks = [
+  { label: "FAQ", href: "/faq" },
+  { label: "Fair Play", href: "/fair-play" },
+  { label: "Changelog", href: "/changelog" },
+  { label: "Risk Disclosure", href: "/risk-disclosure" },
+];
 
 export function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-void-200">
-      <div className="section-shell py-14 sm:py-16">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+      <div className="section-shell py-10 sm:py-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+          <div className="col-span-2">
             <a href="/#top" className="flex items-center gap-2.5">
               <PlaceholderImage
                 src={assets.logoDom}
@@ -17,8 +33,8 @@ export function Footer() {
               />
               <span className="font-display text-lg text-ink">Dungeon of Miners</span>
             </a>
-            <p className="body-lg mt-4 max-w-sm text-sm">{siteConfig.description}</p>
-            <div className="mt-6 flex items-center gap-3">
+            <p className="body-lg mt-3 max-w-sm text-sm">{siteConfig.description}</p>
+            <div className="mt-5 flex items-center gap-3">
               <a
                 href={links.telegramCommunity}
                 target="_blank"
@@ -49,50 +65,29 @@ export function Footer() {
             </div>
           </div>
 
-          {navGroups.map((group) => (
-            <div key={group.label}>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                {group.label}
-              </h4>
-              <ul className="mt-4 flex flex-col gap-3">
-                {group.items.map((item) => (
-                  <li key={item.label}>
-                    {item.comingSoon ? (
-                      <span className="text-sm text-ink-faint">{item.label} · Soon</span>
-                    ) : (
-                      <a
-                        href={item.href}
-                        target={item.external ? "_blank" : undefined}
-                        rel={item.external ? "noopener noreferrer" : undefined}
-                        className="text-sm text-ink-muted transition-colors hover:text-gold"
-                      >
-                        {item.label}
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Explore</h4>
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {exploreLinks.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">More</h4>
-            <ul className="mt-4 flex flex-col gap-3">
-              <li>
-                <a href={navTopLevel.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
-                  {navTopLevel.label}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={links.miniApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-ink-muted transition-colors hover:text-gold"
-                >
-                  Enter Mini App
-                </a>
-              </li>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Resources</h4>
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {resourceLinks.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
               <li>
                 <a
                   href={links.telegramCommunity}
@@ -103,20 +98,18 @@ export function Footer() {
                   Contact / Support
                 </a>
               </li>
-              <li className="text-sm text-ink-faint">Terms of Service · Soon</li>
-              <li className="text-sm text-ink-faint">Privacy Policy · Soon</li>
             </ul>
           </div>
         </div>
 
-        <div className="divider-glow my-10" />
+        <div className="divider-glow my-8" />
 
-        <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+        <div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
           <p className="text-xs text-ink-faint">
             © {new Date().getFullYear()} Dungeon of Miners. All rights reserved.
           </p>
           <p className="text-xs text-ink-faint">
-            Pre-Genesis · Pre-TGE ecosystem. Product mechanics and features may evolve.
+            Pre-Genesis · Pre-TGE ecosystem. Terms of Service and Privacy Policy — Soon.
           </p>
         </div>
       </div>
