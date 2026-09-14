@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Lock, Users, Compass } from "lucide-react";
@@ -15,6 +16,15 @@ const DungeonHeroBanner = dynamic(() => import("@/components/hero/DungeonHeroBan
 });
 
 export function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   return (
     <section id="top" className="relative overflow-hidden pb-20 pt-32 sm:pb-28 sm:pt-40">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(217,138,30,0.18),transparent)]" />
@@ -160,48 +170,50 @@ export function Hero() {
           <DungeonStatusStrip />
         </motion.div>
 
-        {/* Hero visual composition */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="relative mx-auto mt-10 max-w-5xl"
-        >
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
-            <DungeonHeroBanner />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-300 via-transparent to-transparent" />
-          </div>
+        {/* Hero visual composition — skipped entirely on mobile, not just hidden */}
+        {!isMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="relative mx-auto mt-10 max-w-5xl"
+          >
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+              <DungeonHeroBanner />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-300 via-transparent to-transparent" />
+            </div>
 
-          {/* Floating UI cards — game rules and Genesis facts, never fake live stats */}
-          <FloatingCard
-            className="-left-4 top-8 hidden sm:flex lg:-left-10"
-            delay={0.6}
-            icon={<Lock className="h-4 w-4 text-torch" />}
-            label="Current Floor"
-            value="Floor I · Rubble"
-          />
-          <FloatingCard
-            className="-right-4 top-4 hidden sm:flex lg:-right-10"
-            delay={0.7}
-            icon={<Compass className="h-4 w-4 text-gold" />}
-            label="Genesis"
-            value="Not Started"
-          />
-          <FloatingCard
-            className="-bottom-6 left-6 hidden sm:flex lg:left-16"
-            delay={0.8}
-            icon={<Sparkles className="h-4 w-4 text-gold" />}
-            label="Rank System"
-            value="Novice → Legend"
-          />
-          <FloatingCard
-            className="-bottom-6 right-6 hidden sm:flex lg:right-16"
-            delay={0.9}
-            icon={<Users className="h-4 w-4 text-emerald-glow" />}
-            label="Guild Bonus"
-            value="+15%"
-          />
-        </motion.div>
+            {/* Floating UI cards — game rules and Genesis facts, never fake live stats */}
+            <FloatingCard
+              className="-left-4 top-8 hidden sm:flex lg:-left-10"
+              delay={0.6}
+              icon={<Lock className="h-4 w-4 text-torch" />}
+              label="Current Floor"
+              value="Floor I · Rubble"
+            />
+            <FloatingCard
+              className="-right-4 top-4 hidden sm:flex lg:-right-10"
+              delay={0.7}
+              icon={<Compass className="h-4 w-4 text-gold" />}
+              label="Genesis"
+              value="Not Started"
+            />
+            <FloatingCard
+              className="-bottom-6 left-6 hidden sm:flex lg:left-16"
+              delay={0.8}
+              icon={<Sparkles className="h-4 w-4 text-gold" />}
+              label="Rank System"
+              value="Novice → Legend"
+            />
+            <FloatingCard
+              className="-bottom-6 right-6 hidden sm:flex lg:right-16"
+              delay={0.9}
+              icon={<Users className="h-4 w-4 text-emerald-glow" />}
+              label="Guild Bonus"
+              value="+15%"
+            />
+          </motion.div>
+        )}
       </div>
     </section>
   );

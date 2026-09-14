@@ -55,8 +55,13 @@ const config: Config = {
         "drift": "drift 18s linear infinite",
         "pulse-glow": "pulseGlow 3s ease-in-out infinite",
         "shimmer": "shimmer 2.5s linear infinite",
+        "dust-drift": "dustDrift 6s ease-in-out infinite",
       },
       keyframes: {
+        dustDrift: {
+          "0%, 100%": { transform: "translate(0px, 0px)", opacity: "0" },
+          "50%": { transform: "translate(6px, -12px)", opacity: "0.55" },
+        },
         flicker: {
           "0%, 100%": { opacity: "1" },
           "48%": { opacity: "0.85" },

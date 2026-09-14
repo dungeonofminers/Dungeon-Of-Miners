@@ -96,6 +96,7 @@ export const assets = {
   floorEmber: "/assets/floor-ember.png",
   floorCinder: "/assets/floor-cinder.png",
   floorAbyss: "/assets/floor-abyss.png",
+  domEcosystem: "/assets/Oracle.svg",
 };
 
 // ---------------------------------------------------------------------------
@@ -681,3 +682,137 @@ export const roadmap = [
     ],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// DOM Ecosystem — cinematic storytelling section (between About and the
+// Game/How-It-Works content). `nodes` positions are percentages against the
+// Oracle.svg illustration, hand-measured from the artwork — the image is a
+// single flattened illustration (no separate vector elements per node), so
+// every interactive/animated effect is an overlay positioned on top of it,
+// never a modification of the artwork itself.
+// ---------------------------------------------------------------------------
+export type EcosystemStatus = "LIVE" | "IN PROGRESS" | "PLANNED" | "POST-TGE";
+
+export type EcosystemNode = {
+  id: string;
+  x: number; // percent, left
+  y: number; // percent, top
+  status: EcosystemStatus;
+  narrative: { primary: string; secondary: string };
+  tooltip: { title: string; text: string };
+};
+
+export const domEcosystem = {
+  eyebrow: "The DOM Ecosystem",
+  headline: ["One Token.", "One Living Dungeon."],
+  headlineHighlight: 1, // index into headline[] to render in the gold accent
+  paragraph:
+    "DOM sits at the heart of Dungeon of Miners. Every miner, upgrade, guild action, reward, and future on-chain utility connects back to one shared economy.",
+  tagline: "Mine. Progress. Connect. Descend.",
+  intro: {
+    lineOne: "The dungeon is more than a mine.",
+    lineTwo: "It is a living economy.",
+  },
+  core: {
+    lineOne: "At its center is DOM.",
+    lineTwo: "The resource that connects every path through the dungeon.",
+  },
+  finalScene: {
+    lineOne: "Different paths.",
+    lineTwo: "One shared economy.",
+    lineThree: "Everything leads back to DOM.",
+    tagline: "MINE • UPGRADE • CONNECT • DESCEND",
+    cta: "Enter the Dungeon",
+  },
+  // Narrative sequence order — matches Scenes 03-10.
+  nodes: [
+    {
+      id: "miner",
+      x: 50,
+      y: 13.5,
+      status: "LIVE",
+      narrative: {
+        primary: "Every descent begins with a miner.",
+        secondary: "Mine DOM, build your position, and prepare to go deeper.",
+      },
+      tooltip: { title: "Miner", text: "Every journey through the dungeon begins here." },
+    },
+    {
+      id: "mining",
+      x: 27.5,
+      y: 27,
+      status: "LIVE",
+      narrative: {
+        primary: "Mining powers progression.",
+        secondary: "Upgrade your tools, increase your rate, and extract more before the dungeon descends.",
+      },
+      tooltip: { title: "Mining", text: "Extract DOM and improve your mining power." },
+    },
+    {
+      id: "rewards",
+      x: 25.5,
+      y: 67,
+      status: "LIVE",
+      narrative: {
+        primary: "Every action pushes your progress forward.",
+        secondary: "Tasks, upgrades, achievements, and activity shape your journey.",
+      },
+      tooltip: { title: "Progress", text: "Activity, upgrades, and achievements move you forward." },
+    },
+    {
+      id: "treasury",
+      x: 17.5,
+      y: 46,
+      status: "LIVE",
+      narrative: {
+        primary: "Progress creates resources.",
+        secondary: "Your Pool Wallet powers upgrades, guild activity, and progression inside the dungeon.",
+      },
+      tooltip: { title: "Pool Wallet", text: "Spendable resources for progression inside the dungeon." },
+    },
+    {
+      id: "community",
+      x: 50,
+      y: 77,
+      status: "IN PROGRESS",
+      narrative: {
+        primary: "No one descends alone.",
+        secondary: "Miners form guilds, complete expeditions, and push deeper together.",
+      },
+      tooltip: { title: "Guilds", text: "Coordinate with other miners and descend together." },
+    },
+    {
+      id: "dao",
+      x: 86,
+      y: 46,
+      status: "PLANNED",
+      narrative: {
+        primary: "Beyond mining comes coordination.",
+        secondary: "Community governance is designed as a future layer of the expanding DOM ecosystem.",
+      },
+      tooltip: { title: "Governance", text: "A future community coordination layer for DOM." },
+    },
+    {
+      id: "liquidity",
+      x: 75,
+      y: 67,
+      status: "POST-TGE",
+      narrative: {
+        primary: "DOM is built to move beyond the dungeon.",
+        secondary: "Liquidity becomes part of the ecosystem after DOM enters its on-chain era.",
+      },
+      tooltip: { title: "Liquidity", text: "A future component of the post-TGE DOM economy." },
+    },
+    {
+      id: "swap",
+      x: 74,
+      y: 27,
+      status: "POST-TGE",
+      narrative: {
+        primary: "From mining utility to an open token economy.",
+        secondary: "Swap functionality belongs to the future on-chain DOM ecosystem.",
+      },
+      tooltip: { title: "Swap", text: "Future on-chain utility once DOM enters its token economy." },
+    },
+  ] satisfies EcosystemNode[],
+};
