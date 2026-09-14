@@ -46,6 +46,26 @@ export function DomEcosystem() {
                 {domEcosystem.tagline}
               </p>
             </Reveal>
+
+            <Reveal delay={0.3} className="mt-8 flex flex-col items-center gap-2 lg:items-start">
+              <p className="max-w-sm text-sm text-ink-muted sm:text-base">
+                {domEcosystem.finalScene.lineOne} {domEcosystem.finalScene.lineTwo}
+              </p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
+                {domEcosystem.finalScene.tagline}
+              </p>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: prefersReduced ? 0 : 9.2 }}
+                className="mt-4"
+              >
+                <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-secondary">
+                  {domEcosystem.finalScene.cta}
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </motion.div>
+            </Reveal>
           </div>
 
           {/* Diagram — second on mobile, right on desktop */}
@@ -53,26 +73,6 @@ export function DomEcosystem() {
             <EcosystemDiagram play={inView} />
           </div>
         </div>
-
-        <Reveal delay={0.1} className="mt-14 flex flex-col items-center gap-2 text-center">
-          <p className="max-w-lg text-sm text-ink-muted sm:text-base">
-            {domEcosystem.finalScene.lineOne} {domEcosystem.finalScene.lineTwo}
-          </p>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">
-            {domEcosystem.finalScene.tagline}
-          </p>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: prefersReduced ? 0 : 9.2 }}
-            className="mt-4"
-          >
-            <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              {domEcosystem.finalScene.cta}
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </motion.div>
-        </Reveal>
       </div>
     </section>
   );

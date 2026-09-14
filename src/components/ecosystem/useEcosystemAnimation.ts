@@ -16,8 +16,9 @@ type Refs = {
 };
 
 /**
- * Drives the one-time cinematic story sequence for the DOM Ecosystem diagram,
- * then hands off to a lightweight ambient loop. The Oracle.svg artwork is a
+ * Drives the cinematic story sequence for the DOM Ecosystem diagram. The
+ * whole sequence repeats indefinitely, pausing briefly on the fully-connected
+ * final state before restarting from Scene 01. The Oracle.svg artwork is a
  * single flattened illustration — nothing here modifies it. Every effect
  * (glow, particle travel, connection brightening, narrative text) is an
  * overlay layered on top, addressed via data-node/data-connection attributes
@@ -32,8 +33,7 @@ export function useEcosystemAnimation(
   play: boolean,
   onIntroDone?: () => void
 ) {
-  const ambientTweensRef = useRef<gsap.core.Tween[]>([]);
-  const ambientIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const inViewRef = useRef(true);
 
   useEffect(() => {
@@ -66,11 +66,11 @@ export function useEcosystemAnimation(
     };
 
     if (prefersReduced) {
-      // Show the final, fully-connected state immediately — no continuous motion.
+      // Show the final, fully-connected state immediately — no looping motion.
       gsap.set(coreEl, { opacity: 1, scale: 1 });
       gsap.set(nodeEls, { opacity: 1, y: 0 });
       gsap.set(glowEls, { opacity: 0.35 });
-      gsap.set(connectionEls, { opacity: 0.5, strokeDashoffset: 0 });
+      gsap.set(connectionEls, { opacity: 0.16, strokeDashoffset: 0 });
       gsap.set(particle, { opacity: 0 });
       gsap.set(trails, { opacity: 0 });
       gsap.set(rings, { opacity: 0 });
@@ -79,18 +79,26 @@ export function useEcosystemAnimation(
       return;
     }
 
-    let cleanupTimeline: gsap.core.Timeline | null = null;
+    let introAnnounced = false;
+    const announceIntroDone = () => {
+      if (introAnnounced) return;
+      introAnnounced = true;
+      onIntroDone?.();
+    };
 
     const tl = gsap.timeline({
       defaults: { ease: "power2.out" },
-      onComplete: startAmbient,
+      repeat: -1,
+      repeatDelay: 2.5,
     });
-    cleanupTimeline = tl;
+    timelineRef.current = tl;
+    if (!inViewRef.current) tl.pause();
 
     // Scene 01 — the dungeon awakens
     tl.fromTo(root, { autoAlpha: 0.45, scale: 0.97 }, { autoAlpha: 1, scale: 1, duration: 1.1, ease: "power1.inOut" }, 0)
-      .to(
+      .fromTo(
         connectionEls,
+        { strokeDashoffset: 1 },
         { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut", stagger: 0.06 },
         0.3
       )
@@ -140,7 +148,7 @@ export function useEcosystemAnimation(
         )
         .to(particle, { opacity: 0, duration: 0.2 }, t + 0.65)
         .set(particle, { left: "50%", top: "46%" }, t + 0.85)
-        .to(connection ?? [], { opacity: 0.4, duration: 0.4 }, t + 1.0);
+        .to(connection ?? [], { opacity: 0.1, duration: 0.4 }, t + 1.0);
 
       // Comet trail — two echo dots chasing the main particle with a slight lag.
       trails.forEach((trailEl, i) => {
@@ -154,12 +162,12 @@ export function useEcosystemAnimation(
       t += 0.9;
     });
 
-    // Final scene — everything connects
+    // Final scene — everything connects, then a brief pause before looping
     tl.call(
       () => {
         gsap.to(nodeEls, { opacity: 1, duration: 0.6 });
         gsap.to(glowEls, { opacity: 0.3, duration: 0.6 });
-        gsap.to(connectionEls, { opacity: 0.55, duration: 0.6 });
+        gsap.to(connectionEls, { opacity: 0.2, duration: 0.6 });
         gsap.to(coreEl, { opacity: 1, duration: 0.4 });
         rings.forEach((ring, i) => {
           gsap.fromTo(
@@ -175,59 +183,32 @@ export function useEcosystemAnimation(
       .to(coreEl, { scale: 1.05, duration: 0.6, ease: "back.out(1.5)", yoyo: true, repeat: 1 }, t + 0.2)
       .call(() => setText(finalScene.lineOne, finalScene.lineTwo), undefined, t + 0.3)
       .call(() => setText(finalScene.lineThree, ""), undefined, t + 1.6)
-      .call(() => onIntroDone?.(), undefined, t + 1.6);
-
-    function startAmbient() {
-      const breathe = gsap.to(coreEl!, {
-        scale: 1.02,
-        duration: 3.4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-      const shimmer = gsap.to(glowEls, {
-        opacity: "+=0.05",
-        duration: 4,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        stagger: { each: 0.6, repeat: -1, yoyo: true },
-      });
-      ambientTweensRef.current = [breathe, shimmer];
-      if (!inViewRef.current) {
-        breathe.pause();
-        shimmer.pause();
-      }
-
-      ambientIntervalRef.current = setInterval(() => {
-        if (document.hidden || !inViewRef.current) return;
-        const random = nodes[Math.floor(Math.random() * nodes.length)];
-        const glow = nodeGlowFor(random.id);
-        const connection = connectionFor(random.id);
-        if (glow) gsap.to(glow, { opacity: 0.6, duration: 0.6, yoyo: true, repeat: 1 });
-        if (connection) gsap.to(connection, { opacity: 0.7, duration: 0.6, yoyo: true, repeat: 1 });
-      }, 5000);
-    }
+      .call(announceIntroDone, undefined, t + 1.6)
+      // Reset per-node overlays before the repeat's Scene 01 fromTo() reruns,
+      // so nothing is left mid-brightness from this cycle's final state.
+      .set(nodeEls, { opacity: 0, y: 0 }, t + 2.4)
+      .set(glowEls, { opacity: 0 }, t + 2.4)
+      .set(connectionEls, { opacity: 0.06 }, t + 2.4)
+      .set(coreEl, { opacity: 1, scale: 1 }, t + 2.4);
 
     return () => {
-      cleanupTimeline?.kill();
-      ambientTweensRef.current.forEach((tween) => tween.kill());
-      if (ambientIntervalRef.current) clearInterval(ambientIntervalRef.current);
+      tl.kill();
+      timelineRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [play]);
 
-  // Pause the ambient loop while the section is far outside the viewport.
+  // Pause/resume the looping timeline while the section scrolls in and out
+  // of view, so it isn't animating (and repeatedly re-querying/re-tweening)
+  // when nobody can see it.
   useEffect(() => {
     const root = refs.root.current;
     if (!root) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         inViewRef.current = entry.isIntersecting;
-        ambientTweensRef.current.forEach((tween) => {
-          if (entry.isIntersecting) tween.resume();
-          else tween.pause();
-        });
+        if (entry.isIntersecting) timelineRef.current?.resume();
+        else timelineRef.current?.pause();
       },
       { threshold: 0 }
     );

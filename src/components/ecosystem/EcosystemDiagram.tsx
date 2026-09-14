@@ -139,7 +139,7 @@ export function EcosystemDiagram({ play }: { play: boolean }) {
               stroke="url(#dom-energy-gradient)"
               strokeWidth={0.4}
               strokeLinecap="round"
-              opacity={0.15}
+              opacity={0.06}
               style={{ strokeDasharray: 1, strokeDashoffset: 1 }}
             />
           ))}
@@ -159,6 +159,23 @@ export function EcosystemDiagram({ play }: { play: boolean }) {
               "radial-gradient(circle, rgba(247,182,74,0.35) 0%, rgba(255,157,46,0.12) 55%, transparent 75%)",
           }}
         />
+
+        {/* Brand coin logo — sits directly over the artwork's baked-in center coin */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={assets.logoDragonCoin}
+          alt=""
+          aria-hidden
+          className="pointer-events-none absolute select-none rounded-full object-contain"
+          style={{
+            left: `${CORE_X}%`,
+            top: `${CORE_Y}%`,
+            width: "34%",
+            height: "34%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+
         {[0, 1].map((i) => (
           <div
             key={i}
