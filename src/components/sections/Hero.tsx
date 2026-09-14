@@ -8,6 +8,7 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
+import { DungeonStatusStrip } from "@/components/sections/DungeonStatusStrip";
 
 const DungeonHeroBanner = dynamic(() => import("@/components/hero/DungeonHeroBanner"), {
   ssr: false,
@@ -174,12 +175,21 @@ export function Hero() {
           </motion.div>
         </div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="-mx-5 mt-14 sm:-mx-8 lg:-mx-10"
+        >
+          <DungeonStatusStrip />
+        </motion.div>
+
         {/* Hero visual composition */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="relative mx-auto mt-20 max-w-5xl"
+          className="relative mx-auto mt-10 max-w-5xl"
         >
           <div className="relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
             <DungeonHeroBanner />

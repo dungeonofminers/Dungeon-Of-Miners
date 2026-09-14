@@ -1,5 +1,4 @@
 import { Hero } from "@/components/sections/Hero";
-import { DungeonStatusStrip } from "@/components/sections/DungeonStatusStrip";
 import { Platforms } from "@/components/sections/Platforms";
 import { About } from "@/components/sections/About";
 import { Honesty } from "@/components/sections/Honesty";
@@ -9,7 +8,6 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <DungeonStatusStrip />
       <Platforms />
       <About />
       <Honesty />
