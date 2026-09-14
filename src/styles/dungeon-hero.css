@@ -1,0 +1,75 @@
+.dungeon-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 760;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #0a1020;
+  isolation: isolate;
+}
+
+.dungeon-hero[data-tier="mobile"] {
+  aspect-ratio: auto;
+  height: clamp(650px, 130vw, 750px);
+}
+
+.dungeon-hero-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.coin-hit {
+  cursor: pointer;
+}
+
+.coin-outer,
+#main-logo,
+#logo-glow,
+#layer-background,
+#layer-crystals,
+#layer-mid,
+#layer-foreground,
+.hero-particle,
+.rock,
+.orbit-light {
+  will-change: transform, opacity;
+}
+
+.hero-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -125%);
+  background: rgba(10, 16, 32, 0.88);
+  border: 1px solid rgba(244, 181, 68, 0.35);
+  border-radius: 0.6rem;
+  padding: 0.4rem 0.75rem;
+  white-space: nowrap;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+
+.hero-tooltip-title {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f8b62d;
+  letter-spacing: 0.04em;
+}
+
+.hero-tooltip-sub {
+  display: block;
+  font-size: 0.65rem;
+  color: #c7ced7;
+  margin-top: 0.1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dungeon-hero {
+    aspect-ratio: 1920 / 760;
+    height: auto;
+  }
+}
