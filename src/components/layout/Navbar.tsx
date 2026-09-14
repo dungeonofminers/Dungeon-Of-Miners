@@ -92,7 +92,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/[0.06] bg-void-300/98 backdrop-blur-xl xl:hidden">
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/[0.06] bg-void-300 backdrop-blur-xl xl:hidden">
           <div className="section-shell flex flex-col gap-1 py-4">
             {navGroups.map((group) => {
               const isOpen = openAccordion === group.label;
@@ -223,7 +223,7 @@ function NavDropdown({
           isOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
         )}
       >
-        <div className="overflow-hidden rounded-xl border border-white/10 bg-void-200/98 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl">
+        <div className="overflow-hidden rounded-xl border border-white/10 bg-void-100 p-1.5 shadow-2xl shadow-black/50">
           {group.items.map((item) =>
             item.comingSoon ? (
               <span
