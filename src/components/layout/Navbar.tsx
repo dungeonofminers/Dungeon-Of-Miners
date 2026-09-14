@@ -26,13 +26,13 @@ export function Navbar() {
           : "border-b border-transparent bg-transparent"
       )}
     >
-      <nav className="section-shell flex h-14 items-center justify-between sm:h-16">
-        <a href="#top" className="flex items-center gap-2.5">
+      <nav className="section-shell flex h-16 items-center justify-between sm:h-20">
+        <a href="#top" className="flex shrink-0 items-center gap-2.5">
           <PlaceholderImage
             src={assets.logoDom}
             alt="Dungeon of Miners logo"
             label="DOM"
-            className="h-8 w-8 rounded-lg sm:h-9 sm:w-9"
+            className="h-10 w-10 rounded-lg sm:h-11 sm:w-11"
             aspect="aspect-square"
           />
           <span className="font-display text-base tracking-wide text-ink sm:text-lg">
@@ -40,24 +40,24 @@ export function Navbar() {
           </span>
         </a>
 
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-ink-muted transition-colors hover:text-gold"
+              className="whitespace-nowrap text-sm text-ink-muted transition-colors hover:text-gold"
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden xl:block">
           <a
             href={links.miniApp}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-gold/25 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/15"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-gold/25 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/15"
           >
             Open Mini App
           </a>
@@ -66,14 +66,14 @@ export function Navbar() {
         <button
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-ink lg:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-ink xl:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </nav>
 
       {open && (
-        <div className="border-t border-white/[0.06] bg-void-300/98 backdrop-blur-xl lg:hidden">
+        <div className="border-t border-white/[0.06] bg-void-300/98 backdrop-blur-xl xl:hidden">
           <div className="section-shell flex flex-col gap-1 py-4">
             {navLinks.map((link) => (
               <a
