@@ -185,8 +185,8 @@ export function TheDescent() {
 
           <Reveal delay={floors.length * 0.12 + 0.1}>
             <p className="mx-auto mt-8 max-w-sm text-center text-xs text-ink-faint">
-              There is no Floor VII. Once The Abyss's allocation is exhausted, DOM emission ends
-              permanently.
+              There is no Floor VII. Once The Abyss&apos;s allocation is exhausted, DOM emission
+              ends permanently.
             </p>
           </Reveal>
         </div>
