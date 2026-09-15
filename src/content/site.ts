@@ -1,14 +1,22 @@
 // ---------------------------------------------------------------------------
 // Dungeon of Miners — central content & config file.
 // Edit copy, links, and asset paths here. Nothing else needs to change.
+//
+// ECONOMIC MODEL (live mining economy, not Pre-TGE):
+// DOM has a fixed max supply of 1,000,000,000. 55% (550,000,000 DOM) is the
+// mining/community reward pool, emitted progressively through six Halving
+// eras. Each Halving cuts the mining emission multiplier in half. Eligible
+// mined DOM can be requested for on-chain withdrawal at zero fee to the
+// miner (network gas is sponsored by the ecosystem — the chain itself still
+// has real gas cost, the miner just doesn't pay it).
 // ---------------------------------------------------------------------------
 
 export const siteConfig = {
   name: "Dungeon of Miners",
   ticker: "DOM",
-  tagline: "Mine Deep. Rise Higher. Survive The Descent.",
+  tagline: "Mine DOM. Survive the Halving.",
   description:
-    "Dungeon of Miners is a Telegram Mini App idle-mining game where players mine DOM, rank up by holding, upgrade their tools, and descend deeper as the global community unlocks new floors.",
+    "Dungeon of Miners is a live Web3 mining ecosystem powered by a fixed supply of 1 billion DOM. Mine, upgrade your equipment, build your guild, survive six Halving eras, and withdraw eligible DOM directly on-chain.",
   url: "https://dungeonofminers.com",
 };
 
@@ -34,7 +42,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Overview", href: "/game" },
       { label: "How It Works", href: "/game#how-it-works" },
-      { label: "The Descent", href: "/game#the-descent" },
+      { label: "The Halvings", href: "/game#halvings" },
       { label: "Ranks", href: "/game#ranks" },
       { label: "Features", href: "/game#features" },
     ],
@@ -44,8 +52,8 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Mining Economy", href: "/economy" },
       { label: "Tokenomics", href: "/tokenomics" },
-      { label: "Genesis", href: "/genesis" },
-      { label: "Pre-TGE → TGE", href: "/tokenomics#pre-tge" },
+      { label: "Halving", href: "/halving" },
+      { label: "On-Chain Withdrawal", href: "/economy#withdrawal" },
     ],
   },
   {
@@ -74,7 +82,10 @@ export const navTopLevel: NavItem = { label: "Roadmap", href: "/roadmap" };
 // ---------------------------------------------------------------------------
 // Assets — drop your files into /public/assets using these exact names
 // and every image on the site updates automatically. Until then, an
-// elegant placeholder is rendered in its place.
+// elegant placeholder is rendered in its place. The six "halving*" keys
+// reuse the existing floor artwork (Rubble→Abyss) as the visual identity
+// for Halving 1→6 — the dungeon-depth aesthetic carries over even though
+// the economic "Floor" mechanic itself is retired.
 // ---------------------------------------------------------------------------
 export const assets = {
   logoDom: "/assets/logo-dom.png",
@@ -83,6 +94,7 @@ export const assets = {
   iconLivingEconomy: "/assets/icon-living-economy.png",
   iconScarcityWatch: "/assets/icon-scarcity-watch.png",
   iconHonestPretge: "/assets/icon-honest-pretge.png",
+  iconZeroWithdrawFee: "/assets/icon-zero-withdraw-fee.png",
   heroDungeon: "/assets/hero-dungeon.png",
   telegramMockup: "/assets/telegram-mini-app-mockup.png",
   miniAppMine: "/assets/miniapp-mine-screen.png",
@@ -90,12 +102,12 @@ export const assets = {
   miniAppBoost: "/assets/miniapp-boost-screen.png",
   miniAppReferral: "/assets/miniapp-referral-screen.png",
   miniAppMe: "/assets/miniapp-me-screen.png",
-  floorRubble: "/assets/floor-rubble.png",
-  floorHollow: "/assets/floor-hollow.png",
-  floorGloom: "/assets/floor-gloom.png",
-  floorEmber: "/assets/floor-ember.png",
-  floorCinder: "/assets/floor-cinder.png",
-  floorAbyss: "/assets/floor-abyss.png",
+  halving1: "/assets/floor-rubble.png",
+  halving2: "/assets/floor-hollow.png",
+  halving3: "/assets/floor-gloom.png",
+  halving4: "/assets/floor-ember.png",
+  halving5: "/assets/floor-cinder.png",
+  halving6: "/assets/floor-abyss.png",
   domEcosystem: "/assets/Oracle.svg",
 };
 
@@ -111,9 +123,9 @@ export const coreLoop = [
   },
   {
     step: "02",
-    title: "Mining Begins at Genesis",
+    title: "Start Mining — It's Live",
     description:
-      "Your rig runs idle, mining DOM around the clock at a rate set by your current rank.",
+      "Your rig runs idle, mining DOM around the clock at a rate set by your current rank and Halving era.",
   },
   {
     step: "03",
@@ -135,196 +147,225 @@ export const coreLoop = [
   },
   {
     step: "06",
-    title: "Join a Guild & Descend",
+    title: "Withdraw On-Chain",
     description:
-      "Team up with up to 30 delvers, complete daily expeditions, and push deeper as the world advances toward The Descent.",
+      "Request an on-chain withdrawal of eligible DOM straight to your wallet — zero withdrawal fee, gas sponsored by the ecosystem.",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Floors
+// The Six Halvings — replaces the old Floor allocation/scarcity mechanic.
+// Halvings do NOT carry their own supply pool; they cut the mining-emission
+// multiplier applied against the shared 550,000,000 DOM mining allocation.
+// `status` and `trigger` should ultimately be driven by the backend once a
+// mined-supply threshold or timestamp trigger is configured — TBA for now,
+// not invented.
 // ---------------------------------------------------------------------------
-// `rateMultiplier` = the global mining-rate multiplier active on that floor
-// (×1.00 on Floor I, halving on each floor after). "Halving" is the
-// internal/technical name for this mechanic only — it must never appear in
-// user-facing copy. The public-facing name for the event that drops the
-// multiplier and opens the next floor is always "The Descent".
-export const floors = [
+export type HalvingStatus = "CURRENT" | "UPCOMING" | "LOCKED";
+
+export const halvings = [
   {
-    index: 1,
-    roman: "I",
-    name: "Rubble",
-    image: assets.floorRubble,
-    allocation: "3,000,000,000 DOM",
-    scarcity: 1,
-    rateMultiplier: "×1.00",
-    vibe: "The surface tunnels. Loose stone, easy air, and the first taste of the dark.",
+    number: 1,
+    name: "Starting Era",
+    image: assets.halving1,
+    multiplier: "×1.000",
+    percent: "100%",
+    status: "CURRENT" as HalvingStatus,
+    vibe: "The surface tunnels. Mining emissions run at full rate — the richest era to start extracting DOM.",
   },
   {
-    index: 2,
-    roman: "II",
-    name: "Hollow",
-    image: assets.floorHollow,
-    allocation: "1,500,000,000 DOM",
-    scarcity: 2,
-    rateMultiplier: "×0.50",
-    vibe: "Empty caverns swallow sound. The walls narrow and the crowd thins out.",
+    number: 2,
+    name: "First Reduction",
+    image: assets.halving2,
+    multiplier: "×0.500",
+    percent: "50%",
+    status: "UPCOMING" as HalvingStatus,
+    vibe: "Empty caverns swallow sound. Emissions cut in half — early miners keep their edge.",
   },
   {
-    index: 3,
-    roman: "III",
-    name: "Gloom",
-    image: assets.floorGloom,
-    allocation: "750,000,000 DOM",
-    scarcity: 3,
-    rateMultiplier: "×0.25",
+    number: 3,
+    name: "Deep Mining",
+    image: assets.halving3,
+    multiplier: "×0.250",
+    percent: "25%",
+    status: "LOCKED" as HalvingStatus,
     vibe: "Torchlight barely holds the dark back. Only committed miners make it this far.",
   },
   {
-    index: 4,
-    roman: "IV",
-    name: "Ember",
-    image: assets.floorEmber,
-    allocation: "375,000,000 DOM",
-    scarcity: 4,
-    rateMultiplier: "×0.125",
-    vibe: "Heat rises from the deep rock. Yields are richer, and so is the risk of falling behind.",
+    number: 4,
+    name: "Scarcity Era",
+    image: assets.halving4,
+    multiplier: "×0.125",
+    percent: "12.5%",
+    status: "LOCKED" as HalvingStatus,
+    vibe: "Heat rises from the deep rock. DOM is harder to extract, and every claim counts more.",
   },
   {
-    index: 5,
-    roman: "V",
-    name: "Cinder",
-    image: assets.floorCinder,
-    allocation: "187,500,000 DOM",
-    scarcity: 5,
-    rateMultiplier: "×0.0625",
+    number: 5,
+    name: "Last Vein",
+    image: assets.halving5,
+    multiplier: "×0.0625",
+    percent: "6.25%",
+    status: "LOCKED" as HalvingStatus,
     vibe: "Ash drifts through cracked tunnels. Scarcity is no longer a warning — it's the reality.",
   },
   {
-    index: 6,
-    roman: "VI",
-    name: "The Abyss",
-    image: assets.floorAbyss,
-    allocation: "187,500,000 DOM",
-    scarcity: 6,
-    rateMultiplier: "×0.03125",
-    vibe: "The final floor. What's left of the supply lives here, guarded by the deepest Descent.",
+    number: 6,
+    name: "Final Depth",
+    image: assets.halving6,
+    multiplier: "×0.03125",
+    percent: "3.125%",
+    status: "LOCKED" as HalvingStatus,
+    vibe: "The deepest chamber. The lowest emission rate the mining era will ever reach.",
   },
 ];
 
-export const totalSupply = "6,000,000,000 DOM";
+export const halvingTrigger = "Dynamic Supply Trigger — TBA";
+
+export const totalSupply = "1,000,000,000 DOM";
 
 // ---------------------------------------------------------------------------
-// Genesis / Economy status — SINGLE SOURCE OF TRUTH for whether mining has
-// started. Every component that shows Genesis/mining state reads from this
-// object instead of hardcoding its own copy. Flip `genesisStatus` to
-// "GENESIS_ACTIVE" and set `genesisTimestamp` once Genesis actually launches
-// — nothing else in the codebase needs to change.
+// Economy status — SINGLE SOURCE OF TRUTH for live mining/Halving state.
+// Every component that shows mining/Halving status reads from this object
+// instead of hardcoding its own copy. Update `currentHalving` and
+// `miningStatus` here as the real backend state changes — nothing else in
+// the codebase needs to change.
 // ---------------------------------------------------------------------------
-export type GenesisStatus =
-  | "PRE_GENESIS"
-  | "GENESIS_ACTIVE"
-  | "FLOOR_ACTIVE"
-  | "DESCENT_TRANSITION"
-  | "MAINTENANCE"
-  | "TGE_PREPARATION";
+export type MiningStatus = "LIVE" | "MAINTENANCE";
 
 export const economyConfig = {
-  genesisStatus: "PRE_GENESIS" as GenesisStatus,
-  genesisTimestamp: null as string | null,
-  currentFloorIndex: 1,
-  floorDurationDays: 90,
-  economyVersion: "v1.0",
-  economyLastUpdated: "2026-09-14",
-  tgeStatus: "Pre-TGE",
+  miningStatus: "LIVE" as MiningStatus,
+  currentHalving: 1,
+  economyVersion: "v2.0",
+  economyLastUpdated: "2026-09-15",
   claimSplit: { holding: 70, pool: 30 },
 };
 
-export const GENESIS_STATUS_LABEL: Record<GenesisStatus, string> = {
-  PRE_GENESIS: "Pre-Genesis",
-  GENESIS_ACTIVE: "Genesis Active",
-  FLOOR_ACTIVE: "Floor Active",
-  DESCENT_TRANSITION: "Descent In Progress",
-  MAINTENANCE: "Maintenance",
-  TGE_PREPARATION: "TGE Preparation",
+// ---------------------------------------------------------------------------
+// Token allocation — exact 1,000,000,000 DOM split. Percentages and amounts
+// must never be changed without an explicit, approved economic decision.
+// ---------------------------------------------------------------------------
+export const tokenAllocation = [
+  {
+    id: "mining",
+    label: "Mining Rewards",
+    percent: 55,
+    amount: "550,000,000 DOM",
+    color: "#F4B544", // primary gold
+    description: "The largest allocation belongs to miners and community distribution.",
+  },
+  {
+    id: "liquidity",
+    label: "Liquidity",
+    percent: 10,
+    amount: "100,000,000 DOM",
+    color: "#D98A1E", // amber
+    description: "Reserved to support healthy DOM market liquidity.",
+  },
+  {
+    id: "team",
+    label: "Team",
+    percent: 5,
+    amount: "50,000,000 DOM",
+    color: "#8a5a3c", // bronze
+    description: "Long-term allocation for the core team.",
+  },
+  {
+    id: "treasury",
+    label: "Treasure & Ecosystem Reserve",
+    percent: 10,
+    amount: "100,000,000 DOM",
+    color: "#B8860B", // deep gold
+    description: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
+  },
+  {
+    id: "ecosystem",
+    label: "Ecosystem",
+    percent: 15,
+    amount: "150,000,000 DOM",
+    color: "#FF8A2A", // warm orange
+    description: "Allocated for product growth, guilds, partnerships, integrations, and ecosystem expansion.",
+  },
+  {
+    id: "public",
+    label: "Public / Strategic",
+    percent: 5,
+    amount: "50,000,000 DOM",
+    color: "#a9825a", // muted copper
+    description: "Reserved for public and strategic ecosystem opportunities.",
+  },
+];
+
+export const MINING_ALLOCATION_DOM = "550,000,000 DOM";
+
+// ---------------------------------------------------------------------------
+// Live mining status strip — every value here must come from the real
+// backend once it's wired up. Nothing below is a fabricated live statistic;
+// it's the honest structural shape the strip renders (see
+// DungeonStatusStrip.tsx for the "unavailable" fallback state).
+// ---------------------------------------------------------------------------
+export const miningStatusStrip = {
+  miningLabel: "LIVE",
+  currentHalvingLabel: `Halving ${economyConfig.currentHalving}`,
+  withdrawalLabel: "ON-CHAIN",
+  withdrawalFeeLabel: "0 DOM",
 };
 
 // ---------------------------------------------------------------------------
-// Genesis status strip — the honest pre-mining replacement for the old
-// "live" preview strip. All fields derive from economyConfig/floors; nothing
-// here is a fake live number.
+// Halving status facts — shown on the Halving page for the current era.
 // ---------------------------------------------------------------------------
-export const genesisStatusStrip = {
-  floorStatus: "LOCKED — WAITING FOR GENESIS",
-  percentMined: 0,
-  minedLabel: "0 / 3,000,000,000 DOM Mined",
-  genesisStart: "TBA",
-};
-
-// ---------------------------------------------------------------------------
-// The Genesis — Floor I facts shown before mining begins.
-// ---------------------------------------------------------------------------
-export const genesisFacts = [
-  { label: "Floor", value: "I · Rubble" },
-  { label: "Genesis Supply", value: "3,000,000,000 DOM" },
-  { label: "Base Floor Multiplier", value: "×1.00" },
-  { label: "Genesis Mining", value: "NOT STARTED" },
-  { label: "Genesis Start", value: "TBA" },
-  { label: "Maximum Floor Duration", value: "90 Days" },
-  { label: "Descent Trigger", value: "Supply Exhausted OR 90 Days" },
+export const halvingFacts = [
+  { label: "Current Halving", value: "Halving 1 · Starting Era" },
+  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
+  { label: "Current Multiplier", value: "×1.000" },
+  { label: "Mining Status", value: "LIVE" },
+  { label: "Next Halving Trigger", value: halvingTrigger },
+  { label: "Total Halvings", value: "6" },
 ];
 
 // ---------------------------------------------------------------------------
-// Prepare for Genesis — Pre-Genesis activities. IMPORTANT: none of these
-// reward DOM. Rewards are Genesis Points / XP / badges / chest keys only.
+// Mining activities — live mining is already on, so these are ongoing ways
+// to build progression, not pre-launch busywork. All of these can reward
+// real DOM or in-game progression now that mining is live.
 // ---------------------------------------------------------------------------
-export const prepareForGenesis = [
+export const miningActivities = [
   {
     icon: "user",
-    title: "Genesis Profile",
-    description: "Create your miner profile before the first descent.",
+    title: "Miner Profile",
+    description: "Set up your profile and start tracking your mining progress.",
     reward: "Profile Setup",
   },
   {
     icon: "shield",
-    title: "Genesis Badge",
-    description: "Early participants can earn a permanent Genesis Delver badge.",
+    title: "Delver Badges",
+    description: "Earn permanent badges tied to milestones and Halving eras.",
     reward: "Badge",
   },
   {
     icon: "calendar-check",
     title: "Daily Check-In",
-    description: "Stay active before mining begins.",
-    reward: "Genesis Points",
+    description: "Stay active every day to keep your streak and bonuses going.",
+    reward: "DOM + XP",
   },
   {
     icon: "user-plus",
     title: "Referrals",
-    description: "Invite miners and build your network before Genesis.",
-    reward: "Genesis Points",
+    description: "Invite miners and grow your network for a permanent hashrate boost.",
+    reward: "+2% Hashrate",
   },
   {
     icon: "users",
     title: "Guild Registration",
-    description: "Create or join a guild before the dungeon opens.",
-    reward: "Early Access Score",
+    description: "Create or join a guild and coordinate daily expeditions.",
+    reward: "Guild Bonus",
   },
   {
     icon: "list-checks",
-    title: "Genesis Tasks",
-    description: "Complete early community missions.",
+    title: "Daily Tasks",
+    description: "Complete community missions and objectives for steady rewards.",
     reward: "XP + Chest Key",
   },
 ];
-
-export const genesisBadge = {
-  name: "Genesis Delver",
-  description: "Joined Dungeon of Miners before Genesis Mining began.",
-  rules: [
-    "Limited to Pre-Genesis participants.",
-    "Permanent achievement — it cannot be earned once Genesis begins.",
-  ],
-};
 
 // ---------------------------------------------------------------------------
 // Mining formula — how the final per-hour rate is calculated. Multipliers
@@ -333,7 +374,7 @@ export const genesisBadge = {
 export const miningFormula = {
   chain: [
     "Base Rank Rate",
-    "× Floor Multiplier",
+    "× Halving Multiplier",
     "× Equipment Multiplier",
     "× Referral Multiplier",
     "× Guild Multiplier",
@@ -343,7 +384,7 @@ export const miningFormula = {
     label: "Example Miner",
     rows: [
       { label: "Base Rate", value: "10 DOM/hour" },
-      { label: "Floor", value: "×1.00" },
+      { label: "Halving", value: "×1.000" },
       { label: "Referral", value: "×1.10" },
       { label: "Guild", value: "×1.15" },
     ],
@@ -352,7 +393,7 @@ export const miningFormula = {
 };
 
 export const boostRules = [
-  { label: "Floor Multiplier", value: "Set per floor — see The Descent" },
+  { label: "Halving Multiplier", value: "Set per Halving era — see The Halvings" },
   { label: "Pickaxe (Equipment) Multiplier", value: "TBA" },
   { label: "Referral Multiplier", value: "+2% per qualified referral (max +100%)" },
   { label: "Guild Multiplier", value: "+15% on qualifying days (60%+ guild claim rate)" },
@@ -366,7 +407,7 @@ export const storageRules = {
   description:
     "DOM accumulates inside Mining Storage. If storage fills up, mining pauses until you claim — DOM is never automatically deleted.",
   baseStorage: "TBA",
-  storageUpgrade: "Available after Genesis",
+  storageUpgrade: "Available now",
   storageCapacity: "Displayed inside the Mini App",
   exampleCurrent: 2400,
   exampleMax: 5000,
@@ -379,72 +420,79 @@ export const claimRules = {
 };
 
 // ---------------------------------------------------------------------------
-// Global Floor Ledger + Genesis Record — public transparency data. Every
-// value below is the correct pre-Genesis state; once Genesis starts, these
-// should be replaced by live backend reads, not edited by hand.
+// Public Halving Ledger — transparency data. Structural shape only; once the
+// real backend is wired up these should be live reads, not edited by hand.
+// No live numbers are fabricated here.
 // ---------------------------------------------------------------------------
-export const floorLedger = [
-  { label: "Floor Allocation", value: "3,000,000,000 DOM" },
-  { label: "Claimed", value: "0 DOM" },
-  { label: "Remaining", value: "3,000,000,000 DOM" },
-  { label: "Pending", value: "0 DOM" },
-  { label: "Genesis Timestamp", value: "Not Started" },
-  { label: "Current Floor", value: "I · Rubble" },
-  { label: "Floor Start Time", value: "Awaiting Genesis" },
-  { label: "Time Remaining", value: "90-Day Countdown Begins at Genesis" },
-  { label: "Descent Trigger", value: "Supply Exhausted OR 90 Days" },
+export const halvingLedger = [
+  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
+  { label: "Total Mined", value: "Awaiting backend" },
+  { label: "Remaining Mining Allocation", value: "Awaiting backend" },
+  { label: "Current Halving", value: "Halving 1 · Starting Era" },
+  { label: "Current Multiplier", value: "×1.000" },
+  { label: "Next Halving Trigger", value: halvingTrigger },
+  { label: "Number of Miners", value: "Awaiting backend" },
 ];
 
-export const genesisRecord = [
-  { label: "Genesis Timestamp", value: "Awaiting Genesis" },
-  { label: "Floor", value: "I · Rubble" },
-  { label: "Initial Supply", value: "3,000,000,000 DOM" },
-  { label: "Initial Floor Multiplier", value: "×1.00" },
-  { label: "Genesis Miners", value: "Awaiting Genesis" },
+export const halvingRecord = [
   { label: "Economy Version", value: economyConfig.economyVersion },
-  { label: "Status", value: "NOT STARTED" },
+  { label: "Last Updated", value: economyConfig.economyLastUpdated },
+  { label: "Total Supply", value: totalSupply },
+  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
+  { label: "Current Halving", value: "1 of 6" },
+  { label: "Mining Status", value: "LIVE" },
 ];
 
-// Filled in by the backend once a floor actually finishes — empty by design.
-export type FloorArchiveEntry = {
-  floor: string;
+// Filled in by the backend once a Halving era actually completes — empty by design.
+export type HalvingArchiveEntry = {
+  halving: string;
   started: string;
   ended: string;
   duration: string;
-  domClaimed: string;
+  domMined: string;
   participatingMiners: string;
   totalClaims: string;
   topGuild: string;
-  descentTrigger: string;
-  finalFloorSupply: string;
+  trigger: string;
 };
-export const floorArchive: FloorArchiveEntry[] = [];
+export const halvingArchive: HalvingArchiveEntry[] = [];
 
 export const economyChangelog = [
   {
-    version: "v1.0",
+    version: "v2.0",
     date: economyConfig.economyLastUpdated,
-    summary: "Genesis rules established: 6-floor allocation, ×1.00–×0.03125 Descent multipliers, 70/30 claim split.",
+    summary:
+      "DOM Live Economy Update: Pre-TGE model retired, supply updated to 1,000,000,000 DOM, new six-part token allocation introduced, the Floor system replaced by a six-Halving emission model, and on-chain withdrawal introduced at zero fee to miners (network gas sponsored by the ecosystem).",
+  },
+  {
+    version: "v1.0",
+    date: "2026-09-14",
+    summary: "Original Pre-TGE economy rules established (retired in v2.0): 6-floor allocation, ×1.00–×0.03125 Descent multipliers, 70/30 claim split.",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Pre-TGE ledger + TGE migration — nothing here may be invented. Anything
-// not yet officially decided is TBA.
+// On-chain withdrawal — network/contract configuration. Anything not yet
+// officially deployed/confirmed is TBA rather than invented. Server secrets
+// (signer keys, treasury credentials) must never live here or anywhere in
+// frontend code — this object is safe-to-ship public configuration only.
 // ---------------------------------------------------------------------------
-export const tgeMigration = [
-  { label: "Snapshot Date", value: "TBA" },
-  { label: "Eligible Balances", value: "TBA" },
-  { label: "Conversion Ratio", value: "TBA" },
-  { label: "Blockchain Network", value: "TBA" },
-  { label: "Contract Address", value: "TBA" },
-  { label: "Claim Process", value: "TBA" },
-  { label: "Vesting", value: "TBA" },
-  { label: "Wallet Connection", value: "TBA" },
-];
+export const withdrawalConfig = {
+  feeDom: 0,
+  feeLabel: "Zero Withdrawal Fee",
+  gasSponsored: true,
+  gasSponsorLabel: "Gas Sponsored",
+  network: "TBA",
+  chainId: "TBA",
+  domContractAddress: "TBA",
+  blockExplorerUrl: "TBA",
+  statuses: ["Pending", "Processing", "Broadcasted", "Confirmed", "Failed"] as const,
+  minimumWithdrawal: "TBA",
+  maximumWithdrawal: "TBA",
+};
 
 export const riskDisclosure =
-  "Dungeon of Miners is currently in a Pre-TGE phase. DOM does not currently represent a guaranteed financial return or guaranteed market value. Participation should not be interpreted as a promise of profit. Game mechanics, TGE details, network information, and migration rules will be published before implementation.";
+  "Dungeon of Miners is a live blockchain-based mining ecosystem. Mining DOM does not guarantee financial value or profit. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
 
 // ---------------------------------------------------------------------------
 // Fair Play policy
@@ -457,13 +505,19 @@ export const fairPlay = {
     "Request manipulation",
     "Multiple-account farming",
     "Referral abuse",
+    "Sybil attacks",
+    "API abuse",
     "Exploit abuse",
     "Tampering with mining calculation",
+    "Withdrawal exploits",
+    "Balance manipulation",
+    "Smart contract exploitation",
   ],
   possibleActions: [
     "Reward rollback",
     "Leaderboard removal",
     "Mining suspension",
+    "Withdrawal security review",
     "Account restriction",
     "Account ban",
   ],
@@ -502,8 +556,8 @@ export const features = [
     icon: "pickaxe",
   },
   {
-    title: "The Descent",
-    description: "A global event that drops mining speed and opens the next floor when a floor's supply runs out.",
+    title: "The Halvings",
+    description: "Six eras of progressively lower mining emissions — DOM gets harder to mine as the network advances.",
     icon: "flame",
   },
   {
@@ -533,8 +587,7 @@ export const features = [
   },
   {
     title: "Watch & Earn",
-    description:
-      "Rewarded ads convert your attention into Genesis Points and boosts pre-Genesis, and into mining-related rewards once Genesis begins. Daily ad limit: TBA.",
+    description: "Rewarded ads convert your attention into DOM and mining boosts. Daily ad limit: TBA.",
     icon: "play-circle",
   },
   {
@@ -553,8 +606,8 @@ export const features = [
     icon: "user-plus",
   },
   {
-    title: "Miner Card Sharing",
-    description: "Show off your rank, rig, and floor with a shareable miner card.",
+    title: "On-Chain Withdrawal",
+    description: "Request a real on-chain withdrawal of eligible DOM — zero fee to the miner, gas sponsored by the ecosystem.",
     icon: "share-2",
   },
 ];
@@ -566,22 +619,46 @@ export const faqs = [
   {
     question: "What is Dungeon of Miners?",
     answer:
-      "Dungeon of Miners is a Telegram Mini App idle-mining game. You mine DOM passively, rank up by holding, upgrade your gear, and progress through six dungeon floors alongside a global community of miners.",
+      "Dungeon of Miners is a live Telegram Mini App mining ecosystem. You mine DOM passively, rank up by holding, upgrade your gear, and progress through six Halving eras alongside a global community of miners.",
   },
   {
-    question: "Has mining started yet?",
+    question: "Is DOM live?",
     answer:
-      "Not yet. Dungeon of Miners is currently Pre-Genesis — mining has not started, Floor I is locked, and 0 DOM has been mined. Open the Mini App now to set up your profile, complete Genesis Tasks, and be ready the moment Genesis Mining begins.",
+      "Yes. DOM powers the live Dungeon of Miners mining economy. Miners can earn DOM through gameplay, and eligible balances can be requested for on-chain withdrawal.",
   },
   {
-    question: "What is The Descent?",
+    question: "Is Dungeon of Miners Pre-TGE?",
+    answer: "No. Dungeon of Miners no longer uses a Pre-TGE mining model.",
+  },
+  {
+    question: "Can I withdraw DOM?",
+    answer: "Yes. Eligible DOM balances can be requested for withdrawal to a supported wallet.",
+  },
+  {
+    question: "Is there a withdrawal fee?",
     answer:
-      "The Descent is our signature event, split across all 6 floors. Every floor carries a finite allocation of DOM. When its supply is exhausted — or 90 days pass — the entire dungeon descends: mining becomes scarcer, a new floor opens, and the next chapter begins. It's a permanent, public scarcity mechanic, not a marketing gimmick.",
+      "No withdrawal fee is charged to miners. Blockchain transaction costs are sponsored by the Dungeon of Miners ecosystem.",
+  },
+  {
+    question: "What is the maximum DOM supply?",
+    answer: "1,000,000,000 DOM.",
+  },
+  {
+    question: "What is a Halving?",
+    answer: "A Halving reduces the DOM mining emission rate, making new DOM progressively harder to mine.",
+  },
+  {
+    question: "How many Halvings are planned?",
+    answer: "Six Halving eras define the mining emission lifecycle.",
+  },
+  {
+    question: "Can the supply exceed 1 billion?",
+    answer: "No. DOM has a fixed maximum supply of 1,000,000,000 tokens.",
   },
   {
     question: "What's the difference between the Holding Wallet and the Pool Wallet?",
     answer:
-      "Every claim splits 70/30. The Holding Wallet receives 70% and determines your rank — it isn't spendable. The Pool Wallet receives 30% and is what you spend on upgrades and queue for withdrawal.",
+      "Every claim splits 70/30. The Holding Wallet receives 70% and determines your rank — it is not itself withdrawable on-chain. The Pool Wallet receives 30% and is what you spend on upgrades and request for on-chain withdrawal. This split is an existing game-progression mechanic under active review as on-chain withdrawal rolls out — we'll announce clearly if it changes.",
   },
   {
     question: "How do ranks work?",
@@ -591,12 +668,7 @@ export const faqs = [
   {
     question: "What are Guilds?",
     answer:
-      "Guilds are teams of up to 30 miners. If 60% or more of a guild's members claim on a given day, the entire guild receives a +15% hashrate bonus for that Daily Expedition. Guild rankings per floor are permanently recorded on the leaderboard.",
-  },
-  {
-    question: "What is Pre-TGE withdraw?",
-    answer:
-      "Dungeon of Miners is currently in a Pre-TGE (Token Generation Event) stage. Withdrawal requests are recorded and queued, but shown honestly as 'Pre-TGE · Locked until listing.' There is no live payout right now, and we will never claim otherwise.",
+      "Guilds are teams of up to 30 miners. If 60% or more of a guild's members claim on a given day, the entire guild receives a +15% hashrate bonus for that Daily Expedition. Guild rankings are permanently recorded on the leaderboard.",
   },
   {
     question: "Is this available on Telegram?",
@@ -606,12 +678,12 @@ export const faqs = [
   {
     question: "How do Watch & Earn and tasks work?",
     answer:
-      "Pre-Genesis, Watch & Earn and daily tasks reward Genesis Points, XP, temporary Pre-Genesis boosts, and Chest Keys — never DOM. After Genesis, ads can grant temporary mining boosts like Torch Boost instead. Daily ad limits apply to prevent unlimited ad farming.",
+      "Watch & Earn lets you view rewarded ads in exchange for DOM and mining boosts. Daily tasks include check-ins, joining or boosting our Telegram channel, and inviting friends — each contributing steady rewards toward your Pool Wallet. Daily ad limits apply to prevent unlimited ad farming.",
   },
   {
     question: "How does the referral program work?",
     answer:
-      "Each qualified referral gives you +2% permanent hashrate, up to 50 referrals (+100% max). A referral only qualifies once your friend claims on 3 different days, and they get a +50 DOM starter bonus for joining. This isn't revenue sharing — it's a permanent mining-rate boost. Self-referrals, automated accounts, and multi-account farming are not allowed and can invalidate rewards — see our Fair Play Policy.",
+      "Each qualified referral gives you +2% permanent hashrate, up to 50 referrals (+100% max). A referral only qualifies once your friend claims on 3 different days, and they get a +50 DOM starter bonus for joining. Self-referrals, automated accounts, and multi-account farming are not allowed and can invalidate rewards — see our Fair Play Policy.",
   },
   {
     question: "What happens during maintenance?",
@@ -627,7 +699,7 @@ export const guildStats = [
   { label: "Max Members", value: "30" },
   { label: "Claim Threshold", value: "60%" },
   { label: "Guild Bonus", value: "+15% Hashrate" },
-  { label: "Leaderboard", value: "Recorded Per Floor" },
+  { label: "Leaderboard", value: "Recorded Live" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -640,45 +712,47 @@ export const roadmap = [
     title: "Foundation",
     status: "done" as const,
     items: [
-      "Telegram Mini App launch",
-      "Idle mining core loop",
-      "Rank system — Novice to Legend",
-      "Holding Wallet / Pool Wallet split",
-      "Daily tasks & Watch-to-Earn",
+      "Website",
+      "Telegram Mini App",
+      "Mining Engine",
+      "Account System",
+      "Mining Economy",
     ],
   },
   {
     phase: "Phase 2",
-    title: "Depth & Guilds",
+    title: "Mining Network",
     status: "active" as const,
     items: [
-      "Guild system — up to 30 members",
-      "Daily Expedition hashrate bonus",
-      "Delver Badges",
-      "Stone Breaker mini-game",
-      "Referral program",
+      "Live Mining",
+      "Equipment Upgrades",
+      "Rank System — Novice to Legend",
+      "Daily Tasks & Referral Program",
+      "Guild System — up to 30 members",
     ],
   },
   {
     phase: "Phase 3",
-    title: "Genesis & The Descent",
-    status: "planned" as const,
+    title: "On-Chain Economy",
+    status: "active" as const,
     items: [
-      "Genesis Mining launch — Floor I unlocks",
-      "Full six-floor rollout",
-      "Permanent per-floor guild leaderboards",
-      "Miner Card sharing",
+      "Wallet Connection",
+      "DOM Token Integration",
+      "On-Chain Withdrawal",
+      "Gas Sponsorship",
+      "Withdrawal Tracking & Block Explorer Verification",
     ],
   },
   {
     phase: "Phase 4",
-    title: "Pre-TGE → TGE",
+    title: "Halving Expansion",
     status: "planned" as const,
     items: [
-      "Withdraw queue activation",
-      "Exchange listing preparation",
-      "DOM Token Generation Event",
-      "Migration from Pre-TGE ledger to on-chain token",
+      "Halving 2 through Halving 6",
+      "Advanced Guild Expeditions",
+      "Treasury Mechanics",
+      "Liquidity Expansion & Swap Integration",
+      "Community Governance",
     ],
   },
 ];
@@ -691,7 +765,7 @@ export const roadmap = [
 // every interactive/animated effect is an overlay positioned on top of it,
 // never a modification of the artwork itself.
 // ---------------------------------------------------------------------------
-export type EcosystemStatus = "LIVE" | "IN PROGRESS" | "PLANNED" | "POST-TGE";
+export type EcosystemStatus = "LIVE" | "IN PROGRESS" | "PLANNED" | "COMING SOON";
 
 export type EcosystemNode = {
   id: string;
@@ -704,14 +778,14 @@ export type EcosystemNode = {
 
 export const domEcosystem = {
   eyebrow: "The DOM Ecosystem",
-  headline: ["One Token.", "One Living Dungeon."],
+  headline: ["One Token.", "One Living Economy."],
   headlineHighlight: 1, // index into headline[] to render in the gold accent
   paragraph:
-    "DOM sits at the heart of Dungeon of Miners. Every miner, upgrade, guild action, reward, and future on-chain utility connects back to one shared economy.",
-  tagline: "Mine. Progress. Connect. Descend.",
+    "DOM powers the entire Dungeon of Miners ecosystem. Every miner, upgrade, guild action, reward, and on-chain withdrawal connects back to one shared economy.",
+  tagline: "Mine. Progress. Connect. Withdraw.",
   intro: {
     lineOne: "The dungeon is more than a mine.",
-    lineTwo: "It is a living economy.",
+    lineTwo: "It is a live economy.",
   },
   core: {
     lineOne: "At its center is DOM.",
@@ -721,10 +795,10 @@ export const domEcosystem = {
     lineOne: "Different paths.",
     lineTwo: "One shared economy.",
     lineThree: "Everything leads back to DOM.",
-    tagline: "MINE • UPGRADE • CONNECT • DESCEND",
+    tagline: "MINE • UPGRADE • CONNECT • WITHDRAW",
     cta: "Enter the Dungeon",
   },
-  // Narrative sequence order — matches Scenes 03-10.
+  // Narrative sequence order.
   nodes: [
     {
       id: "miner",
@@ -732,8 +806,8 @@ export const domEcosystem = {
       y: 13.5,
       status: "LIVE",
       narrative: {
-        primary: "Every descent begins with a miner.",
-        secondary: "Mine DOM, build your position, and prepare to go deeper.",
+        primary: "Every journey begins with a miner.",
+        secondary: "Mine DOM, build your position, and climb the ranks.",
       },
       tooltip: { title: "Miner", text: "Every journey through the dungeon begins here." },
     },
@@ -743,8 +817,8 @@ export const domEcosystem = {
       y: 27,
       status: "LIVE",
       narrative: {
-        primary: "Mining powers progression.",
-        secondary: "Upgrade your tools, increase your rate, and extract more before the dungeon descends.",
+        primary: "Mine DOM through the live mining economy.",
+        secondary: "Upgrade your tools and increase your rate before the next Halving.",
       },
       tooltip: { title: "Mining", text: "Extract DOM and improve your mining power." },
     },
@@ -766,9 +840,9 @@ export const domEcosystem = {
       status: "LIVE",
       narrative: {
         primary: "Progress creates resources.",
-        secondary: "Your Pool Wallet powers upgrades, guild activity, and progression inside the dungeon.",
+        secondary: "The treasury supports ecosystem rewards and long-term development.",
       },
-      tooltip: { title: "Pool Wallet", text: "Spendable resources for progression inside the dungeon." },
+      tooltip: { title: "Treasury", text: "Supports ecosystem rewards and long-term development." },
     },
     {
       id: "community",
@@ -776,10 +850,10 @@ export const domEcosystem = {
       y: 77,
       status: "IN PROGRESS",
       narrative: {
-        primary: "No one descends alone.",
-        secondary: "Miners form guilds, complete expeditions, and push deeper together.",
+        primary: "No one mines alone.",
+        secondary: "Miners form guilds, complete expeditions, and progress together.",
       },
-      tooltip: { title: "Guilds", text: "Coordinate with other miners and descend together." },
+      tooltip: { title: "Guilds", text: "Coordinate miners and strengthen your expedition." },
     },
     {
       id: "dao",
@@ -788,31 +862,31 @@ export const domEcosystem = {
       status: "PLANNED",
       narrative: {
         primary: "Beyond mining comes coordination.",
-        secondary: "Community governance is designed as a future layer of the expanding DOM ecosystem.",
+        secondary: "Community governance for the evolving DOM ecosystem.",
       },
-      tooltip: { title: "Governance", text: "A future community coordination layer for DOM." },
+      tooltip: { title: "Governance", text: "Community governance for the evolving ecosystem." },
     },
     {
       id: "liquidity",
       x: 75,
       y: 67,
-      status: "POST-TGE",
+      status: "COMING SOON",
       narrative: {
-        primary: "DOM is built to move beyond the dungeon.",
-        secondary: "Liquidity becomes part of the ecosystem after DOM enters its on-chain era.",
+        primary: "DOM supports its own market.",
+        secondary: "Liquidity infrastructure that supports healthy DOM market activity.",
       },
-      tooltip: { title: "Liquidity", text: "A future component of the post-TGE DOM economy." },
+      tooltip: { title: "Liquidity", text: "Supports DOM market liquidity." },
     },
     {
       id: "swap",
       x: 74,
       y: 27,
-      status: "POST-TGE",
+      status: "COMING SOON",
       narrative: {
         primary: "From mining utility to an open token economy.",
-        secondary: "Swap functionality belongs to the future on-chain DOM ecosystem.",
+        secondary: "Move between supported ecosystem assets.",
       },
-      tooltip: { title: "Swap", text: "Future on-chain utility once DOM enters its token economy." },
+      tooltip: { title: "Swap", text: "Move between supported ecosystem assets." },
     },
   ] satisfies EcosystemNode[],
 };

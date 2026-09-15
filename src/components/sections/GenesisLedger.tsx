@@ -1,5 +1,5 @@
 import { Archive, ScrollText } from "lucide-react";
-import { floorLedger, genesisRecord, floorArchive, economyChangelog, economyConfig } from "@/content/site";
+import { halvingLedger, halvingRecord, halvingArchive, economyChangelog, economyConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -9,18 +9,18 @@ export function GenesisLedger() {
       <div className="section-shell">
         <SectionHeading
           eyebrow="Public Ledger"
-          title="Global Floor Ledger & Genesis Record"
-          description="Everything below is publicly readable — once Genesis starts, these numbers come straight from the backend, not from hand-edited copy."
+          title="Global Halving Ledger & Economy Record"
+          description="Everything below is publicly readable. Values marked as awaiting the backend are shown honestly, never fabricated."
         />
 
         <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Reveal>
             <div className="surface-panel h-full p-7 sm:p-8">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                Global Floor Ledger — Floor I
+                Global Halving Ledger
               </h3>
               <dl className="mt-5 flex flex-col gap-3">
-                {floorLedger.map((row) => (
+                {halvingLedger.map((row) => (
                   <div key={row.label} className="flex items-start justify-between gap-4 text-sm">
                     <dt className="text-ink-muted">{row.label}</dt>
                     <dd className="text-right font-semibold text-ink">{row.value}</dd>
@@ -33,10 +33,10 @@ export function GenesisLedger() {
           <Reveal delay={0.08}>
             <div className="surface-panel h-full p-7 sm:p-8">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                Genesis Record
+                Economy Record
               </h3>
               <dl className="mt-5 flex flex-col gap-3">
-                {genesisRecord.map((row) => (
+                {halvingRecord.map((row) => (
                   <div key={row.label} className="flex items-start justify-between gap-4 text-sm">
                     <dt className="text-ink-muted">{row.label}</dt>
                     <dd className="text-right font-semibold text-ink">{row.value}</dd>
@@ -52,15 +52,16 @@ export function GenesisLedger() {
             <div className="surface-panel flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
               <Archive className="h-6 w-6 text-ink-faint" />
               <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                Floor Archive
+                Halving Archive
               </h3>
-              {floorArchive.length === 0 ? (
+              {halvingArchive.length === 0 ? (
                 <p className="max-w-sm text-sm text-ink-muted">
-                  No floors have completed yet. Once a floor ends, its full history — duration, DOM
-                  claimed, participating miners, top guild — will appear here permanently.
+                  No Halving eras have completed yet. Once a Halving ends, its full history —
+                  duration, DOM mined, participating miners, top guild — will appear here
+                  permanently.
                 </p>
               ) : (
-                <p className="text-sm text-ink-muted">{floorArchive.length} floor(s) recorded.</p>
+                <p className="text-sm text-ink-muted">{halvingArchive.length} Halving(s) recorded.</p>
               )}
             </div>
           </Reveal>
@@ -74,7 +75,7 @@ export function GenesisLedger() {
                 </h3>
               </div>
               <p className="mt-1 text-xs text-ink-faint">
-                Status: Pre-Genesis · Last Updated: {economyConfig.economyLastUpdated}
+                Status: Live Mining · Last Updated: {economyConfig.economyLastUpdated}
               </p>
               <ul className="mt-4 flex flex-col gap-3">
                 {economyChangelog.map((entry) => (

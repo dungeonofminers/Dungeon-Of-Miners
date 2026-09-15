@@ -1,16 +1,7 @@
 "use client";
 
-import { floors, totalSupply } from "@/content/site";
+import { tokenAllocation, totalSupply } from "@/content/site";
 import { Reveal } from "@/components/ui/Reveal";
-
-const FLOOR_COLORS = [
-  "#F4B544", // Rubble — gold
-  "#FF8A2A", // Hollow — torch orange
-  "#D98A1E", // Gloom — amber
-  "#63E5FF", // Ember — crystal blue
-  "#3FA97A", // Cinder — emerald
-  "#B94A1D", // The Abyss — deep ember
-];
 
 function parseAmount(value: string) {
   return Number(value.replace(/[^0-9]/g, ""));
@@ -20,16 +11,9 @@ const totalAmount = parseAmount(totalSupply);
 const RADIUS = 80;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-const segments = floors.map((floor, i) => {
-  const amount = parseAmount(floor.allocation);
-  const share = amount / totalAmount;
-  return {
-    ...floor,
-    amount,
-    share,
-    percent: (share * 100).toFixed(1),
-    color: FLOOR_COLORS[i % FLOOR_COLORS.length],
-  };
+const segments = tokenAllocation.map((entry) => {
+  const share = parseAmount(entry.amount) / totalAmount;
+  return { ...entry, share };
 });
 
 export function TokenDistributionChart() {
@@ -45,7 +29,7 @@ export function TokenDistributionChart() {
               const dash = seg.share * CIRCUMFERENCE;
               const circle = (
                 <circle
-                  key={seg.name}
+                  key={seg.id}
                   cx="100"
                   cy="100"
                   r={RADIUS}
@@ -55,7 +39,9 @@ export function TokenDistributionChart() {
                   strokeDasharray={`${dash} ${CIRCUMFERENCE - dash}`}
                   strokeDashoffset={-offset}
                   strokeLinecap="butt"
-                />
+                >
+                  <title>{`${seg.label} — ${seg.percent}% — ${seg.amount}`}</title>
+                </circle>
               );
               offset += dash;
               return circle;
@@ -84,7 +70,7 @@ export function TokenDistributionChart() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {segments.map((seg, i) => (
-          <Reveal key={seg.name} delay={i * 0.05}>
+          <Reveal key={seg.id} delay={i * 0.05}>
             <div className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3">
               <div className="flex items-center gap-3">
                 <span
@@ -92,10 +78,8 @@ export function TokenDistributionChart() {
                   style={{ backgroundColor: seg.color }}
                 />
                 <div>
-                  <p className="text-sm font-semibold text-ink">
-                    Floor {seg.roman} · {seg.name}
-                  </p>
-                  <p className="text-xs text-ink-faint">{seg.allocation}</p>
+                  <p className="text-sm font-semibold text-ink">{seg.label}</p>
+                  <p className="text-xs text-ink-faint">{seg.amount}</p>
                 </div>
               </div>
               <span className="font-display text-lg text-ink">{seg.percent}%</span>

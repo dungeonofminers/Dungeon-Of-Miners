@@ -11,7 +11,7 @@ export function Guild() {
       <div className="section-shell relative">
         <SectionHeading
           eyebrow="Guild System"
-          title="No one descends alone"
+          title="No one mines alone"
           description="Form a guild of up to 30 delvers, coordinate daily expeditions, and earn a shared hashrate bonus that rewards teams who show up together."
         />
 
@@ -35,7 +35,7 @@ export function Guild() {
                   <span className="inline-flex items-center gap-1.5">
                     Members claimed today
                     <span className="rounded-full border border-white/10 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-ink-faint">
-                      Example — opens at Genesis
+                      Example — awaiting live backend
                     </span>
                   </span>
                   <span className="font-semibold text-ink">0 / 30</span>
@@ -57,10 +57,10 @@ export function Guild() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-gold/25 bg-gold/10">
                 <Trophy className="h-5 w-5 text-gold" />
               </div>
-              <h3 className="heading-md mt-5 text-xl">Permanent Floor Leaderboard</h3>
+              <h3 className="heading-md mt-5 text-xl">Permanent Guild Leaderboard</h3>
               <p className="body-lg mt-3 text-sm">
-                Every floor&rsquo;s guild standings are recorded permanently — a public history of
-                which guilds led the descent, floor by floor.
+                Guild standings are recorded permanently — a public history of which guilds led
+                the mining economy, Halving by Halving.
               </p>
             </div>
           </Reveal>

@@ -1,22 +1,22 @@
-import { Lock, ShieldCheck, XCircle, FileText } from "lucide-react";
+import { FileCheck2, ShieldCheck, XCircle } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 const points = [
   {
-    icon: FileText,
-    title: "Withdraw Requests Are Recorded",
-    description: "Every withdraw request you make is logged against your account, in order.",
+    icon: FileCheck2,
+    title: "Real On-Chain Withdrawals",
+    description: "Eligible DOM withdrawals are broadcast on-chain with a real transaction hash and a block explorer link.",
   },
   {
-    icon: Lock,
-    title: "Status Shown Honestly",
-    description: "Each request displays exactly what it is: Pre-TGE · Locked until listing.",
+    icon: ShieldCheck,
+    title: "Status Tracked Honestly",
+    description: "Every request shows its real status — Pending, Processing, Broadcasted, Confirmed, or Failed — never a vague placeholder.",
   },
   {
     icon: XCircle,
     title: "No Fake Payouts",
-    description: "No manufactured transaction proofs, no fake \"processing\" status, no fabricated payout screenshots — ever.",
+    description: "No manufactured transaction proofs, no fabricated hashes, no fake payout screenshots — ever.",
   },
 ];
 
@@ -32,7 +32,7 @@ export function Honesty() {
               align="left"
               eyebrow="Transparency"
               title="We tell you exactly where DOM stands today"
-              description="Dungeon of Miners is a Pre-TGE ecosystem. That's not a footnote — it's stated clearly, everywhere it matters, so your expectations are always accurate."
+              description="Dungeon of Miners is a live mining economy with real on-chain withdrawal. That's stated clearly, everywhere it matters, so your expectations are always accurate."
               className="items-start text-left"
             />
 
@@ -54,12 +54,14 @@ export function Honesty() {
               <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-glow" />
               <p className="text-sm text-ink-muted">
                 <span className="font-semibold text-ink">
-                  Dungeon of Miners is funded through optional rewarded advertising and future
-                  Telegram Stars purchases.
+                  Mining DOM does not guarantee financial value or profit.
                 </span>{" "}
-                DOM does not represent revenue sharing or ownership of platform revenue. There is
-                currently no prize pool and no live payout to users — stated plainly, not buried
-                in terms.
+                Dungeon of Miners does not promise price appreciation, exchange listing, or
+                guaranteed liquidity — stated plainly, not buried in terms. Read our full{" "}
+                <a href="/risk-disclosure" className="text-gold underline-offset-4 hover:underline">
+                  Risk Disclosure
+                </a>
+                .
               </p>
             </div>
           </div>

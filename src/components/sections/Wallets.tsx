@@ -38,7 +38,7 @@ export function Wallets() {
                   icon={Coins}
                   percent="30%"
                   title="Pool Wallet"
-                  description="Spendable balance. Used for upgrades, guild costs, Stone Breaker rounds, and queued for withdrawal."
+                  description="Spendable balance. Used for upgrades, guild costs, Stone Breaker rounds, and eligible for on-chain withdrawal."
                   tone="emerald"
                 />
               </div>
@@ -47,7 +47,7 @@ export function Wallets() {
                 <p className="text-sm text-ink-muted">
                   <span className="font-semibold text-ink">Why two wallets?</span> Ranking up
                   rewards long-term holders, while the Pool Wallet keeps day-to-day progression —
-                  upgrades, guild play, withdrawal queueing — separate and always usable.
+                  upgrades, guild play, on-chain withdrawal — separate and always usable.
                 </p>
               </div>
 

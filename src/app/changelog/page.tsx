@@ -17,7 +17,7 @@ export default function ChangelogPage() {
           <SectionHeading
             eyebrow="Economy Changelog"
             title={`Economy Rules — ${economyConfig.economyVersion}`}
-            description={`Status: Pre-Genesis · Last updated ${economyConfig.economyLastUpdated}`}
+            description={`Status: Live Mining · Last updated ${economyConfig.economyLastUpdated}`}
           />
 
           <div className="mx-auto mt-14 max-w-2xl">

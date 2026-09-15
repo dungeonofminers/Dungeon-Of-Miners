@@ -1,4 +1,4 @@
-import { assets } from "@/content/site";
+import { assets, withdrawalConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -6,21 +6,24 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 const pillars = [
   {
     image: assets.iconLivingEconomy,
-    title: "A Living Dungeon Economy",
-    description:
-      "DOM isn't mined into an infinite void. Every floor carries a fixed allocation, and every claim brings the world closer to its next Descent.",
+    title: "Finite Supply",
+    description: "Only 1 billion DOM will ever exist. Every claim brings the network closer to full emission.",
   },
   {
     image: assets.iconScarcityWatch,
-    title: "Scarcity You Can Watch",
+    title: "Six Halvings",
     description:
-      "The Descent isn't a whitepaper promise — it's a public event split across 6 floors. The moment a floor's supply is fully mined, or 90 days pass, mining speed drops for everyone and the dungeon moves on.",
+      "Mining emissions decrease as the ecosystem advances through six Halving eras — the deeper it goes, the scarcer new DOM becomes.",
   },
   {
     image: assets.iconHonestPretge,
-    title: "Honest, Pre-TGE by Design",
-    description:
-      "DOM has no live payout and no prize pool today. Withdraw requests are recorded and clearly marked Pre-TGE · Locked until listing — no exceptions, no fine print.",
+    title: "On-Chain Withdrawal",
+    description: "Withdraw eligible DOM directly to your wallet — a real on-chain transaction, tracked to confirmation.",
+  },
+  {
+    image: assets.iconZeroWithdrawFee,
+    title: "Zero Withdrawal Fee",
+    description: `No withdrawal fee is charged to miners. ${withdrawalConfig.gasSponsorLabel} — network transaction costs are sponsored by the ecosystem.`,
   },
 ];
 
@@ -30,11 +33,11 @@ export function About() {
       <div className="section-shell">
         <SectionHeading
           eyebrow="About Dungeon of Miners"
-          title="A dungeon-mining game built on real scarcity"
+          title="A Mining Economy Built Around Scarcity"
           description="Dungeon of Miners takes the idle-mining format and gives it a mechanic that actually matters: a shared, shrinking supply that the entire community mines against — together."
         />
 
-        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((pillar, i) => (
             <Reveal key={pillar.title} delay={i * 0.1}>
               <div className="surface-panel group h-full p-7 transition-colors hover:border-gold/25">

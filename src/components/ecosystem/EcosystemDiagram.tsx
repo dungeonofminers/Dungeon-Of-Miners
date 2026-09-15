@@ -12,7 +12,7 @@ const STATUS_CLASS: Record<string, string> = {
   LIVE: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow",
   "IN PROGRESS": "border-gold/30 bg-gold/10 text-gold",
   PLANNED: "border-white/15 bg-white/[0.04] text-ink-faint",
-  "POST-TGE": "border-white/15 bg-white/[0.04] text-ink-faint",
+  "COMING SOON": "border-white/15 bg-white/[0.04] text-ink-faint",
 };
 
 const DUST_PARTICLES = Array.from({ length: 7 }).map((_, i) => ({

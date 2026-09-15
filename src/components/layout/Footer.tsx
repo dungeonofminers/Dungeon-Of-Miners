@@ -5,7 +5,7 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 const exploreLinks = [
   { label: "Game", href: "/game" },
   { label: "Economy", href: "/economy" },
-  { label: "Genesis", href: "/genesis" },
+  { label: "Halving", href: "/halving" },
   { label: "Tokenomics", href: "/tokenomics" },
   { label: "Guilds", href: "/community/guilds" },
   { label: navTopLevel.label, href: navTopLevel.href },
@@ -70,7 +70,7 @@ export function Footer() {
             <ul className="mt-3 flex flex-col gap-2.5">
               {exploreLinks.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  <a href={item.href} className="inline-block py-0.5 text-sm text-ink-muted transition-colors hover:text-gold">
                     {item.label}
                   </a>
                 </li>
@@ -83,7 +83,7 @@ export function Footer() {
             <ul className="mt-3 flex flex-col gap-2.5">
               {resourceLinks.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="text-sm text-ink-muted transition-colors hover:text-gold">
+                  <a href={item.href} className="inline-block py-0.5 text-sm text-ink-muted transition-colors hover:text-gold">
                     {item.label}
                   </a>
                 </li>
@@ -93,7 +93,7 @@ export function Footer() {
                   href={links.telegramCommunity}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-ink-muted transition-colors hover:text-gold"
+                  className="inline-block py-0.5 text-sm text-ink-muted transition-colors hover:text-gold"
                 >
                   Contact / Support
                 </a>
@@ -109,7 +109,7 @@ export function Footer() {
             © {new Date().getFullYear()} Dungeon of Miners. All rights reserved.
           </p>
           <p className="text-xs text-ink-faint">
-            Pre-Genesis · Pre-TGE ecosystem. Terms of Service and Privacy Policy — Soon.
+            Live mining ecosystem. Terms of Service and Privacy Policy — Soon.
           </p>
         </div>
       </div>

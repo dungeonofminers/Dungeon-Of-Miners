@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export const metadata: Metadata = {
   title: `Risk Disclosure — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "Dungeon of Miners is Pre-TGE. Read the risk disclosure before participating.",
+  description: "Dungeon of Miners is a live blockchain-based mining ecosystem. Read the risk disclosure before participating.",
 };
 
 export default function RiskDisclosurePage() {

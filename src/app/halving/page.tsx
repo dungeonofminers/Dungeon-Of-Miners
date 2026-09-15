@@ -8,15 +8,15 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export const metadata: Metadata = {
-  title: `Genesis — ${siteConfig.name} (${siteConfig.ticker})`,
+  title: `Halving — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "Everything about Genesis Mining: current status, Floor I facts, how to prepare, and the public Genesis Ledger. Mining has not started yet.",
+    "Everything about the DOM Halving system: current Halving status, mining allocation, how to build your position, and the public Halving Ledger. Mining is live.",
 };
 
-const genesisFaqSlugs = ["Has mining started yet?", "What is The Descent?"];
-const genesisFaqs = faqs.filter((faq) => genesisFaqSlugs.includes(faq.question));
+const halvingFaqSlugs = ["Is DOM live?", "What is a Halving?", "How many Halvings are planned?"];
+const halvingFaqs = faqs.filter((faq) => halvingFaqSlugs.includes(faq.question));
 
-export default function GenesisPage() {
+export default function HalvingPage() {
   return (
     <div className="pt-8">
       <TheGenesis />
@@ -25,9 +25,9 @@ export default function GenesisPage() {
 
       <section className="relative py-16">
         <div className="section-shell">
-          <SectionHeading eyebrow="Genesis FAQ" title="Quick answers before Genesis" />
+          <SectionHeading eyebrow="Halving FAQ" title="Quick answers about the Halving system" />
           <div className="mx-auto mt-10 max-w-2xl">
-            {genesisFaqs.map((faq, i) => (
+            {halvingFaqs.map((faq, i) => (
               <Reveal key={faq.question} delay={i * 0.06}>
                 <div className="border-b border-white/[0.06] py-5">
                   <p className="text-sm font-semibold text-ink sm:text-base">{faq.question}</p>
@@ -48,14 +48,18 @@ export default function GenesisPage() {
         <div className="section-shell relative">
           <Reveal>
             <div className="surface-panel mx-auto max-w-2xl px-8 py-14 text-center sm:px-12">
-              <h2 className="heading-lg">Be ready before The First Descent</h2>
+              <h2 className="heading-lg">Start mining before the next Halving</h2>
               <p className="body-lg mx-auto mt-4 max-w-lg">
-                Mining hasn&apos;t started yet — but your profile, badge, and guild can be.
+                Every Halving reduces DOM emissions. Mine now, upgrade your equipment, and build
+                your position while the multiplier is at its highest.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  Enter Mini App
+                  Start Mining
                   <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href="/game#halvings" className="btn-secondary">
+                  View Halving Data
                 </a>
               </div>
             </div>
@@ -65,4 +69,3 @@ export default function GenesisPage() {
     </div>
   );
 }
-

@@ -1,35 +1,31 @@
-import { Lock, Gauge, CalendarClock, ArrowDownCircle } from "lucide-react";
-import { floors, economyConfig, genesisStatusStrip } from "@/content/site";
+import { Zap, Gauge, ArrowDownCircle, Coins } from "lucide-react";
+import { economyConfig, halvings, miningStatusStrip } from "@/content/site";
 import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
 export function DungeonStatusStrip() {
-  const currentFloor = floors.find((f) => f.index === economyConfig.currentFloorIndex);
-  if (!currentFloor) return null;
+  const currentHalving = halvings.find((h) => h.number === economyConfig.currentHalving);
+  if (!currentHalving) return null;
 
   const items = [
     {
-      label: "Current Floor",
-      value: `Floor ${currentFloor.roman} · ${currentFloor.name}`,
-    },
-    {
-      icon: Lock,
-      label: "Mining Status",
-      value: "NOT STARTED",
+      icon: Zap,
+      label: "Current Halving",
+      value: `Halving ${currentHalving.number} · ${currentHalving.name}`,
     },
     {
       icon: Gauge,
-      label: "Mined",
-      value: `${genesisStatusStrip.percentMined}%`,
-    },
-    {
-      icon: CalendarClock,
-      label: "Genesis Start",
-      value: genesisStatusStrip.genesisStart,
+      label: "Multiplier",
+      value: currentHalving.multiplier,
     },
     {
       icon: ArrowDownCircle,
-      label: "Descent Trigger",
-      value: "Supply Exhausted OR 90 Days",
+      label: "Withdrawal",
+      value: miningStatusStrip.withdrawalLabel,
+    },
+    {
+      icon: Coins,
+      label: "Withdrawal Fee",
+      value: miningStatusStrip.withdrawalFeeLabel,
     },
   ];
 

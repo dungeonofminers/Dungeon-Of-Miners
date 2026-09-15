@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Lock, Users, Compass } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Users, Wallet } from "lucide-react";
 import { links, assets } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
@@ -44,7 +44,7 @@ export function Hero() {
               className="eyebrow"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              Telegram Mini App · Idle Mining
+              Live Mining Ecosystem
             </motion.div>
 
             <motion.h1
@@ -53,9 +53,9 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="heading-xl mt-6 max-w-xl"
             >
-              Mine Deep. Rise Higher.
+              Mine DOM.
               <br />
-              <span className="text-gradient-gold">Survive The Descent.</span>
+              <span className="text-gradient-gold">Survive the Halving.</span>
             </motion.h1>
 
             <motion.p
@@ -64,19 +64,10 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="body-lg mt-5 max-w-lg"
             >
-              Dungeon of Miners is a Telegram Mini App idle-mining game where players mine{" "}
-              <span className="font-semibold text-ink">DOM</span>, rank up by holding, upgrade
-              their tools, and descend deeper as the global community unlocks new floors.
-            </motion.p>
-
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25 }}
-              className="mt-3 max-w-lg text-sm text-ink-muted"
-            >
-              Mining has not started yet. Prepare your miner, join the community, and secure your
-              place before the first descent begins.
+              Dungeon of Miners is a live mining ecosystem powered by a fixed supply of{" "}
+              <span className="font-semibold text-ink">1 billion DOM</span>. Mine, upgrade your
+              equipment, build your guild, survive six Halvings, and withdraw your rewards
+              directly on-chain.
             </motion.p>
 
             <motion.div
@@ -87,8 +78,8 @@ export function Hero() {
             >
               <GenesisStatusBadge />
               <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-ink-faint">
-                <Lock className="h-3 w-3" />
-                Floor I: Locked
+                <Zap className="h-3 w-3" />
+                Halving 1 · Starting Era
               </span>
             </motion.div>
 
@@ -99,11 +90,11 @@ export function Hero() {
               className="mt-8 flex flex-col gap-4 sm:flex-row"
             >
               <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Enter Mini App
+                Start Mining
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="/game#the-descent" className="btn-secondary">
-                Explore The Descent
+              <a href="/tokenomics" className="btn-secondary">
+                Explore Tokenomics
               </a>
             </motion.div>
 
@@ -114,12 +105,12 @@ export function Hero() {
               className="mt-5"
             >
               <a
-                href="/tokenomics"
+                href="/economy#withdrawal"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs transition-colors hover:border-gold/30 hover:bg-white/[0.06]"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                <span className="text-ink-faint">Token Status</span>
-                <span className="font-semibold text-gold">Pre-TGE</span>
+                <Wallet className="h-3.5 w-3.5 text-gold" />
+                <span className="text-ink-faint">Withdrawal</span>
+                <span className="font-semibold text-gold">On-Chain · Zero Fee</span>
                 <ArrowRight className="h-3 w-3 text-gold" />
               </a>
             </motion.div>
@@ -130,7 +121,7 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.55 }}
               className="mt-5 text-xs uppercase tracking-widest text-ink-faint"
             >
-              Pre-TGE · No prize pool · Fully transparent economy
+              1B Fixed Supply · 6 Halvings · Zero Withdrawal Fee
             </motion.p>
           </div>
 
@@ -183,20 +174,20 @@ export function Hero() {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-300 via-transparent to-transparent" />
             </div>
 
-            {/* Floating UI cards — game rules and Genesis facts, never fake live stats */}
+            {/* Floating UI cards — game rules and live facts, never fake live stats */}
             <FloatingCard
               className="-left-4 top-8 hidden sm:flex lg:-left-10"
               delay={0.6}
-              icon={<Lock className="h-4 w-4 text-torch" />}
-              label="Current Floor"
-              value="Floor I · Rubble"
+              icon={<Zap className="h-4 w-4 text-torch" />}
+              label="Current Halving"
+              value="Halving 1 · Starting Era"
             />
             <FloatingCard
               className="-right-4 top-4 hidden sm:flex lg:-right-10"
               delay={0.7}
-              icon={<Compass className="h-4 w-4 text-gold" />}
-              label="Genesis"
-              value="Not Started"
+              icon={<Wallet className="h-4 w-4 text-gold" />}
+              label="Withdrawal"
+              value="On-Chain"
             />
             <FloatingCard
               className="-bottom-6 left-6 hidden sm:flex lg:left-16"

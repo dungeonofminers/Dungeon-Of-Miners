@@ -40,7 +40,7 @@ export function Navbar() {
       )}
     >
       <nav className="section-shell flex h-16 items-center justify-between sm:h-20">
-        <a href="/#top" className="flex shrink-0 items-center gap-2.5">
+        <a href="/#top" className="flex h-full shrink-0 items-center gap-2.5">
           <PlaceholderImage
             src={assets.logoDom}
             alt="Dungeon of Miners logo"
@@ -131,7 +131,7 @@ export function Navbar() {
                             className="flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-sm text-ink-muted transition-colors hover:bg-white/5 hover:text-gold"
                           >
                             {item.label}
-                            {item.label === "Genesis" && <GenesisDot />}
+                            {item.label === "Halving" && <GenesisDot />}
                           </a>
                         )
                       )}
@@ -160,10 +160,10 @@ export function Navbar() {
             </a>
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-                Pre-Genesis
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-glow">
+                Mining Live
               </span>
-              <span className="text-[10px] text-ink-faint">· Mining Not Started</span>
+              <span className="text-[10px] text-ink-faint">· Halving 1 · Starting Era</span>
             </div>
           </div>
         </div>
@@ -173,8 +173,8 @@ export function Navbar() {
 }
 
 function GenesisDot() {
-  if (economyConfig.genesisStatus !== "PRE_GENESIS") return null;
-  return <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-gold" aria-hidden />;
+  if (economyConfig.miningStatus !== "LIVE") return null;
+  return <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-emerald-glow" aria-hidden />;
 }
 
 function NavDropdown({
@@ -243,7 +243,7 @@ function NavDropdown({
                 className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-ink-muted transition-colors hover:bg-gold/10 hover:text-gold"
               >
                 {item.label}
-                {item.label === "Genesis" && <GenesisDot />}
+                {item.label === "Halving" && <GenesisDot />}
               </a>
             )
           )}

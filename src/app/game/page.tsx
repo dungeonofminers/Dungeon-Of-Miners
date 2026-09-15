@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { siteConfig, links, totalSupply, floors, ranks } from "@/content/site";
+import { siteConfig, links, totalSupply, halvings, ranks } from "@/content/site";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { TheDescent } from "@/components/sections/TheDescent";
-import { Floors } from "@/components/sections/Floors";
 import { Ranks } from "@/components/sections/Ranks";
 import { Features } from "@/components/sections/Features";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -11,12 +10,12 @@ import { EmberField } from "@/components/ui/EmberField";
 
 export const metadata: Metadata = {
   title: `Game — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "How Dungeon of Miners plays: the core loop, The Descent, ranks, and features.",
+  description: "How Dungeon of Miners plays: the live mining loop, the six Halvings, ranks, and features.",
 };
 
 const overviewStats = [
   { value: totalSupply, label: "Max Supply" },
-  { value: `${floors.length} Floors`, label: "Dungeon Depth" },
+  { value: `${halvings.length} Halvings`, label: "Mining Eras" },
   { value: `${ranks.length} Ranks`, label: "Novice → Legend" },
 ];
 
@@ -32,11 +31,11 @@ export default function GamePage() {
         <div className="section-shell relative text-center">
           <span className="eyebrow mx-auto">The Game</span>
           <h1 className="heading-xl mx-auto mt-6 max-w-2xl">
-            A dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
+            A live dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
           </h1>
           <p className="body-lg mx-auto mt-5 max-w-xl">
-            Idle mining, rank progression, and a six-floor descent that permanently drops mining
-            speed as the shared supply runs out.
+            Idle mining, rank progression, and six Halving eras that progressively cut mining
+            emissions as the shared supply is mined.
           </p>
           <div className="mx-auto mt-7 flex flex-wrap justify-center gap-2.5">
             {overviewStats.map((stat) => (
@@ -60,7 +59,6 @@ export default function GamePage() {
 
       <HowItWorks />
       <TheDescent />
-      <Floors />
       <Ranks />
       <Features />
     </>

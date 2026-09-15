@@ -6,14 +6,14 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: `Leaderboard — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "The Dungeon of Miners leaderboard opens at Genesis. No fake rankings, ever.",
+  description: "The live Dungeon of Miners leaderboard. No fake rankings, ever.",
 };
 
 const rankingBasis = [
-  "Genesis Points",
-  "Tasks Completed",
-  "Qualified Referrals",
-  "Daily Activity",
+  "Total Mined",
+  "Current Mining Rate",
+  "Rank",
+  "Current Halving",
   "Guild Contribution",
 ];
 
@@ -23,9 +23,9 @@ export default function LeaderboardPage() {
       <section className="relative py-16">
         <div className="section-shell">
           <SectionHeading
-            eyebrow="Pre-Genesis Rankings"
-            title="Genesis Leaderboard"
-            description="This ranks players by activity, not DOM. The DOM mining leaderboard opens once Genesis begins."
+            eyebrow="Live Rankings"
+            title="Leaderboard"
+            description="Miners are ranked by mining activity and progression — never by exposing private wallet balances."
           />
 
           <Reveal delay={0.1}>
@@ -33,12 +33,12 @@ export default function LeaderboardPage() {
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold/30 bg-gold/10">
                 <Trophy className="h-6 w-6 text-gold" />
               </div>
-              <span className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-gold">
-                Coming at Genesis
+              <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-bold uppercase tracking-widest text-ink-faint">
+                Awaiting Live Backend Connection
               </span>
               <p className="body-lg max-w-sm text-sm">
-                No rankings exist yet — we don&apos;t show placeholder or fake leaderboard entries.
-                Once Genesis begins, real player standings will appear here, ranked by:
+                Rankings render here once this page is connected to the live backend — we
+                don&apos;t show placeholder or fake leaderboard entries. Miners are ranked by:
               </p>
               <ul className="flex flex-wrap justify-center gap-2">
                 {rankingBasis.map((item) => (
@@ -50,7 +50,6 @@ export default function LeaderboardPage() {
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-ink-faint">DOM mining leaderboard opens after Genesis.</p>
             </div>
           </Reveal>
         </div>

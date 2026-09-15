@@ -1,26 +1,25 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Vault, Coins, ArrowRight, Send, Lock } from "lucide-react";
-import { siteConfig, links, assets, totalSupply } from "@/content/site";
+import { ShieldCheck, Vault, Coins, ArrowRight, Send, Zap } from "lucide-react";
+import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { EmberField } from "@/components/ui/EmberField";
 import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributionChart";
-import { PreTgeSection } from "@/components/sections/PreTgeSection";
 
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "DOM token distribution and max supply for Dungeon of Miners — a Pre-TGE, fully transparent idle-mining economy. No contract is deployed yet.",
+    "DOM has a fixed maximum supply of 1,000,000,000 tokens, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion.",
 };
 
 const keyFacts = [
   { label: "Ticker", value: siteConfig.ticker },
-  { label: "Network", value: "BNB Chain (BEP-20)" },
+  { label: "Network", value: withdrawalConfig.network },
   { label: "Max Supply", value: totalSupply },
-  { label: "Status", value: "Pre-TGE" },
-  { label: "Allocation Model", value: "100% Community Mined" },
+  { label: "Mining Status", value: "Live" },
+  { label: "Withdrawal Fee", value: `${withdrawalConfig.feeDom} DOM` },
 ];
 
 export default function TokenomicsPage() {
@@ -36,8 +35,8 @@ export default function TokenomicsPage() {
         <div className="section-shell relative">
           <SectionHeading
             eyebrow="Tokenomics"
-            title="DOM Token & Distribution"
-            description="Every DOM in existence is mined, not pre-sold. Here's the full supply and exactly how it's split across the six dungeon floors."
+            title="1 Billion DOM. Built for the Dungeon."
+            description="DOM has a fixed maximum supply of 1,000,000,000 tokens, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion."
           />
 
           {/* Token identity card */}
@@ -57,13 +56,13 @@ export default function TokenomicsPage() {
                   <h3 className="heading-md text-xl">Dungeon of Miners (DOM)</h3>
                   <p className="body-lg mt-2 text-sm">
                     The native token of the Dungeon of Miners economy — mined by players,
-                    ranked by holding, and spent through the Pool Wallet.
+                    ranked by holding, and eligible for on-chain withdrawal.
                   </p>
                   <div className="mt-4 flex justify-center sm:justify-start">
-                    <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs">
-                      <Lock className="h-3.5 w-3.5 text-ink-faint" />
-                      <span className="text-ink-faint">Contract</span>
-                      <span className="font-semibold text-gold">Not Deployed Yet</span>
+                    <span className="inline-flex items-center gap-2 rounded-lg border border-emerald-glow/25 bg-emerald-glow/10 px-3.5 py-2 text-xs">
+                      <Zap className="h-3.5 w-3.5 text-emerald-glow" />
+                      <span className="text-ink-faint">Mining</span>
+                      <span className="font-semibold text-emerald-glow">Live</span>
                     </span>
                   </div>
                 </div>
@@ -87,12 +86,33 @@ export default function TokenomicsPage() {
         <div className="section-shell">
           <SectionHeading
             eyebrow="Supply Breakdown"
-            title="100% of DOM is mined — floor by floor"
-            description="There is no team allocation, presale, or private round baked into this chart — the entire max supply is released to players as they mine through each dungeon floor."
+            title="1,000,000,000 DOM across six allocations"
+            description="55% of DOM supply is allocated directly to mining and community rewards, while the remaining supply supports liquidity, development, ecosystem growth, reserves, and strategic expansion."
           />
 
           <div className="mt-14">
             <TokenDistributionChart />
+          </div>
+
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {tokenAllocation.map((entry, i) => (
+              <Reveal key={entry.id} delay={i * 0.05}>
+                <div className="surface-panel h-full p-6">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: entry.color }}
+                    />
+                    <span className="font-display text-2xl text-ink">{entry.percent}%</span>
+                  </div>
+                  <h3 className="mt-3 text-sm font-semibold uppercase tracking-wider text-ink">
+                    {entry.label}
+                  </h3>
+                  <p className="mt-1 text-xs text-ink-faint">{entry.amount}</p>
+                  <p className="mt-3 text-sm text-ink-muted">{entry.description}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -117,8 +137,8 @@ export default function TokenomicsPage() {
                 </div>
                 <h4 className="mt-3 text-sm font-semibold text-ink">Holding Wallet</h4>
                 <p className="mt-1 text-sm text-ink-muted">
-                  Determines rank. Not spendable, not liquid — this is long-term commitment
-                  supply.
+                  Determines rank. Not itself withdrawable on-chain — this is long-term
+                  commitment supply.
                 </p>
               </div>
               <div className="rounded-xl border border-emerald-glow/25 bg-emerald-glow/5 p-6">
@@ -128,7 +148,8 @@ export default function TokenomicsPage() {
                 </div>
                 <h4 className="mt-3 text-sm font-semibold text-ink">Pool Wallet</h4>
                 <p className="mt-1 text-sm text-ink-muted">
-                  Spendable — used for upgrades, guild costs, and queued for withdrawal.
+                  Spendable — used for upgrades, guild costs, and eligible for on-chain
+                  withdrawal.
                 </p>
               </div>
             </div>
@@ -136,13 +157,13 @@ export default function TokenomicsPage() {
             <div className="mt-6 flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
               <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-glow" />
               <p className="text-sm text-ink-muted">
-                Dungeon of Miners is currently{" "}
-                <span className="font-semibold text-ink">Pre-TGE</span>. Withdraw requests are
-                recorded and shown honestly as{" "}
-                <span className="font-semibold text-ink">Pre-TGE · Locked until listing</span> —
-                there is no live payout or prize pool today.{" "}
-                <a href="/#honesty" className="text-gold underline-offset-4 hover:underline">
-                  Read our full transparency commitment
+                Transparency note: today, only the Pool Wallet&apos;s 30% share is eligible for
+                on-chain withdrawal — the Holding Wallet&apos;s 70% share is a rank-progression
+                balance, not a withdrawable one. This existing split is under active review now
+                that on-chain withdrawal is live; we will announce clearly, here and in the Mini
+                App, if the rule changes.{" "}
+                <a href="/economy#withdrawal" className="text-gold underline-offset-4 hover:underline">
+                  Read how on-chain withdrawal works
                 </a>
                 .
               </p>
@@ -151,8 +172,6 @@ export default function TokenomicsPage() {
         </div>
       </section>
 
-      <PreTgeSection />
-
       {/* CTA */}
       <section className="relative overflow-hidden py-20 sm:py-24">
         <GlowOrb color="torch" className="left-1/2 top-1/2 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2" />
@@ -160,11 +179,11 @@ export default function TokenomicsPage() {
           <Reveal>
             <div className="surface-panel mx-auto max-w-2xl px-8 py-14 text-center sm:px-12">
               <h2 className="heading-lg">
-                Prepare to mine your share of <span className="text-gradient-gold">DOM</span>
+                Mine your share of <span className="text-gradient-gold">DOM</span>
               </h2>
               <p className="body-lg mx-auto mt-4 max-w-lg">
-                Genesis Mining has not started — every DOM you&apos;ll hold is real, mined supply, with
-                no shortcuts and no presale bags.
+                Every DOM you hold is real, mined supply — no shortcuts, no presale bags. Eligible
+                DOM can be withdrawn directly to your wallet.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a

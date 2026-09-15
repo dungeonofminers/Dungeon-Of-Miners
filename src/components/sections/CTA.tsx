@@ -19,11 +19,11 @@ export function CTA() {
               <GenesisStatusBadge />
             </div>
             <h2 className="heading-xl mt-6 text-4xl">
-              Ready to <span className="text-gradient-gold">Prepare for Genesis?</span>
+              Ready to <span className="text-gradient-gold">Start Mining?</span>
             </h2>
             <p className="body-lg mx-auto mt-5 max-w-xl">
-              Mining hasn&apos;t started yet. Join the community, create your miner profile, and be
-              ready the moment The First Descent begins.
+              Mining is live right now. Join the community, start your miner, and survive the
+              Halving before emissions drop.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
               <a

@@ -21,15 +21,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: `${siteConfig.name} (${siteConfig.ticker}) — ${siteConfig.tagline}`,
+  title: `${siteConfig.name} | Mine DOM & Withdraw On-Chain`,
   description: siteConfig.description,
   keywords: [
     "Dungeon of Miners",
-    "DOM",
-    "Telegram Mini App",
-    "idle mining game",
-    "crypto game",
-    "The Descent",
+    "DOM Token",
+    "DOM Mining",
+    "Crypto Mining Game",
+    "Telegram Mining Game",
+    "Web3 Mining",
+    "On-Chain Withdrawal",
+    "Crypto Halving",
   ],
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
