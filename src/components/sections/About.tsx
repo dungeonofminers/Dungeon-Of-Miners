@@ -23,7 +23,7 @@ const pillars = [
   {
     image: assets.iconZeroWithdrawFee,
     title: "Zero Withdrawal Fee",
-    description: `No withdrawal fee is charged to miners. ${withdrawalConfig.gasSponsorLabel} — network transaction costs are sponsored by the ecosystem.`,
+    description: `No withdrawal fee is charged to miners. Network Fee: ${withdrawalConfig.networkFeeLabel} — network transaction costs are covered by the ecosystem.`,
   },
 ];
 

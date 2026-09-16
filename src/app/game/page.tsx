@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { siteConfig, links, totalSupply, halvings, ranks } from "@/content/site";
+import { siteConfig, links, totalSupply, halvings, pickaxeLevels } from "@/content/site";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { TheDescent } from "@/components/sections/TheDescent";
-import { Ranks } from "@/components/sections/Ranks";
+import { PickaxeLevels } from "@/components/sections/PickaxeLevels";
 import { Features } from "@/components/sections/Features";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { EmberField } from "@/components/ui/EmberField";
 
 export const metadata: Metadata = {
   title: `Game — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "How Dungeon of Miners plays: the live mining loop, the six Halvings, ranks, and features.",
+  description: "How Dungeon of Miners plays: the live mining loop, the six Halvings, Pickaxe Levels, and features.",
 };
 
 const overviewStats = [
   { value: totalSupply, label: "Max Supply" },
   { value: `${halvings.length} Halvings`, label: "Mining Eras" },
-  { value: `${ranks.length} Ranks`, label: "Novice → Legend" },
+  { value: `${pickaxeLevels.length} Pickaxe Levels`, label: "Level 1 → Level 6" },
 ];
 
 export default function GamePage() {
@@ -34,8 +34,8 @@ export default function GamePage() {
             A live dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
           </h1>
           <p className="body-lg mx-auto mt-5 max-w-xl">
-            Idle mining, rank progression, and six Halving eras that progressively cut mining
-            emissions as the shared supply is mined.
+            Idle mining, Pickaxe Level progression, and six Halving eras that progressively cut
+            mining emissions as the shared supply is mined.
           </p>
           <div className="mx-auto mt-7 flex flex-wrap justify-center gap-2.5">
             {overviewStats.map((stat) => (
@@ -59,7 +59,7 @@ export default function GamePage() {
 
       <HowItWorks />
       <TheDescent />
-      <Ranks />
+      <PickaxeLevels />
       <Features />
     </>
   );

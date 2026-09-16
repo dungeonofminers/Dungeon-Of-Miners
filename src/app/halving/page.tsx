@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Everything about the DOM Halving system: current Halving status, mining allocation, how to build your position, and the public Halving Ledger. Mining is live.",
 };
 
-const halvingFaqSlugs = ["Is DOM live?", "What is a Halving?", "How many Halvings are planned?"];
+const halvingFaqSlugs = ["Is mining live?", "What are the six Halvings?", "What happens when a Halving occurs?"];
 const halvingFaqs = faqs.filter((faq) => halvingFaqSlugs.includes(faq.question));
 
 export default function HalvingPage() {
@@ -50,8 +50,8 @@ export default function HalvingPage() {
             <div className="surface-panel mx-auto max-w-2xl px-8 py-14 text-center sm:px-12">
               <h2 className="heading-lg">Start mining before the next Halving</h2>
               <p className="body-lg mx-auto mt-4 max-w-lg">
-                Every Halving reduces DOM emissions. Mine now, upgrade your equipment, and build
-                your position while the multiplier is at its highest.
+                Every Halving reduces DOM emissions. Mine now, level up your Pickaxe, and build
+                your position while the daily emission ceiling is at its highest.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">

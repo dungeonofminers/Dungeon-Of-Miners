@@ -35,11 +35,12 @@ export function TheDescent() {
 
         <Reveal delay={0.15}>
           <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-2 text-center">
-            <span className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-ink-faint">
-              Halving Trigger: {halvingTrigger}
+            <span className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-ink-faint">
+              Halving Trigger
             </span>
+            <p className="max-w-lg text-sm text-ink-faint">{halvingTrigger}</p>
             <p className="mt-2 text-sm text-ink-faint">
-              Mine early. Upgrade wisely. Prepare for the next Halving.
+              Mine early. Level up your Pickaxe. Prepare for the next Halving.
             </p>
           </div>
         </Reveal>
@@ -58,9 +59,9 @@ export function TheDescent() {
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
-              <Stat label="Current Multiplier" value={current.multiplier} accent />
-              <Stat label="Next Halving Multiplier" value={next?.multiplier ?? "—"} />
-              <Stat label="Next Halving Trigger" value={halvingTrigger} />
+              <Stat label="Current Emission Ceiling" value={current.emissionCeiling} accent />
+              <Stat label="Next Halving Ceiling" value={next?.emissionCeiling ?? "—"} />
+              <Stat label="Era Allocation" value={current.allocation} />
             </div>
           </div>
         </Reveal>
@@ -129,8 +130,9 @@ export function TheDescent() {
                     <span className="mt-1 text-sm font-semibold text-ink">{halving.name}</span>
                     <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-1 font-mono text-xs font-bold text-torch">
                       <Gauge className="h-3 w-3" />
-                      {halving.multiplier}
+                      {halving.emissionCeiling}
                     </span>
+                    <span className="mt-1.5 text-[10px] text-ink-faint">{halving.allocation}</span>
                   </div>
                 </Reveal>
 

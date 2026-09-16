@@ -19,7 +19,7 @@ export function PrepareForGenesis() {
         <SectionHeading
           eyebrow="Mining Activities"
           title="Mining is live — here's how to build your position"
-          description="Beyond idle mining, these ongoing activities build your profile, badges, and hashrate bonuses."
+          description="Beyond idle mining, these ongoing activities build your profile, badges, and Mining Weight boosters."
         />
 
         <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,7 +46,7 @@ export function PrepareForGenesis() {
           <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 text-center">
             <p className="text-sm text-ink-muted">
               <span className="font-semibold text-ink">Leaderboard</span> ranks players by total
-              mined, current rank, referrals, and guild contribution. See the full{" "}
+              mined, Pickaxe Level, referrals, and guild contribution. See the full{" "}
               <a href="/leaderboard" className="text-gold underline-offset-4 hover:underline">
                 Leaderboard
               </a>

@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const rankingBasis = [
   "Total Mined",
-  "Current Mining Rate",
-  "Rank",
+  "Current Mining Weight",
+  "Pickaxe Level",
   "Current Halving",
   "Guild Contribution",
 ];

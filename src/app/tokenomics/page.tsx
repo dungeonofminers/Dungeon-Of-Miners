@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Vault, Coins, ArrowRight, Send, Zap } from "lucide-react";
-import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation } from "@/content/site";
+import { ShieldCheck, ArrowRight, Send, Zap } from "lucide-react";
+import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation, supplyFacts, balanceModel } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -11,7 +11,7 @@ import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributio
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "DOM has a fixed maximum supply of 1,000,000,000 tokens, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion.",
+    "DOM has a fixed maximum supply of 1,000,000,000 tokens, created once with minting permanently disabled, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion.",
 };
 
 const keyFacts = [
@@ -55,8 +55,8 @@ export default function TokenomicsPage() {
                 <div className="flex-1">
                   <h3 className="heading-md text-xl">Dungeon of Miners (DOM)</h3>
                   <p className="body-lg mt-2 text-sm">
-                    The native token of the Dungeon of Miners economy — mined by players,
-                    ranked by holding, and eligible for on-chain withdrawal.
+                    The native token of the Dungeon of Miners economy — mined by players and
+                    eligible for instant on-chain withdrawal.
                   </p>
                   <div className="mt-4 flex justify-center sm:justify-start">
                     <span className="inline-flex items-center gap-2 rounded-lg border border-emerald-glow/25 bg-emerald-glow/10 px-3.5 py-2 text-xs">
@@ -94,6 +94,18 @@ export default function TokenomicsPage() {
             <TokenDistributionChart />
           </div>
 
+          <div className="mx-auto mt-8 flex flex-wrap justify-center gap-3">
+            {supplyFacts.map((fact) => (
+              <span
+                key={fact.label}
+                className="inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/5 px-4 py-2 text-xs"
+              >
+                <span className="font-bold uppercase tracking-wider text-gold">{fact.label}</span>
+                <span className="text-ink-muted">{fact.value}</span>
+              </span>
+            ))}
+          </div>
+
           <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {tokenAllocation.map((entry, i) => (
               <Reveal key={entry.id} delay={i * 0.05}>
@@ -125,43 +137,27 @@ export default function TokenomicsPage() {
               align="left"
               eyebrow="Circulation"
               title="How DOM actually enters circulation"
-              description="Mining doesn't hand out spendable DOM directly — every claim is split the moment it lands."
+              description="Mining distributes DOM from the fixed Mining Allocation — there is no Holding Wallet / Pool Wallet split. 100% of every claim becomes your Available DOM Balance."
               className="items-start text-left"
             />
 
-            <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="rounded-xl border border-gold/25 bg-gold/5 p-6">
-                <div className="flex items-center justify-between">
-                  <Vault className="h-5 w-5 text-gold" />
-                  <span className="font-display text-2xl text-gold">70%</span>
-                </div>
-                <h4 className="mt-3 text-sm font-semibold text-ink">Holding Wallet</h4>
-                <p className="mt-1 text-sm text-ink-muted">
-                  Determines rank. Not itself withdrawable on-chain — this is long-term
-                  commitment supply.
-                </p>
-              </div>
-              <div className="rounded-xl border border-emerald-glow/25 bg-emerald-glow/5 p-6">
-                <div className="flex items-center justify-between">
-                  <Coins className="h-5 w-5 text-emerald-glow" />
-                  <span className="font-display text-2xl text-emerald-glow">30%</span>
-                </div>
-                <h4 className="mt-3 text-sm font-semibold text-ink">Pool Wallet</h4>
-                <p className="mt-1 text-sm text-ink-muted">
-                  Spendable — used for upgrades, guild costs, and eligible for on-chain
-                  withdrawal.
-                </p>
-              </div>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {balanceModel.steps
+                .filter((s) => s.label !== "Claim")
+                .map((step) => (
+                  <div key={step.label} className="rounded-xl border border-gold/25 bg-gold/5 p-6">
+                    <h4 className="text-sm font-semibold text-ink">{step.label}</h4>
+                    <p className="mt-1 text-sm text-ink-muted">{step.description}</p>
+                  </div>
+                ))}
             </div>
 
             <div className="mt-6 flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
               <ShieldCheck className="h-5 w-5 shrink-0 text-emerald-glow" />
               <p className="text-sm text-ink-muted">
-                Transparency note: today, only the Pool Wallet&apos;s 30% share is eligible for
-                on-chain withdrawal — the Holding Wallet&apos;s 70% share is a rank-progression
-                balance, not a withdrawable one. This existing split is under active review now
-                that on-chain withdrawal is live; we will announce clearly, here and in the Mini
-                App, if the rule changes.{" "}
+                100% of every claimed amount becomes Available DOM Balance — there is no split,
+                and no separate locked portion. Withdrawal validation is always
+                server-authoritative.{" "}
                 <a href="/economy#withdrawal" className="text-gold underline-offset-4 hover:underline">
                   Read how on-chain withdrawal works
                 </a>

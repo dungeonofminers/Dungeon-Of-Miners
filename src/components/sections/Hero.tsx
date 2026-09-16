@@ -55,6 +55,8 @@ export function Hero() {
             >
               Mine DOM.
               <br />
+              Withdraw On-Chain.
+              <br />
               <span className="text-gradient-gold">Survive the Halving.</span>
             </motion.h1>
 
@@ -64,10 +66,10 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="body-lg mt-5 max-w-lg"
             >
-              Dungeon of Miners is a live mining ecosystem powered by a fixed supply of{" "}
-              <span className="font-semibold text-ink">1 billion DOM</span>. Mine, upgrade your
-              equipment, build your guild, survive six Halvings, and withdraw your rewards
-              directly on-chain.
+              Mine DOM directly through Telegram. Fixed{" "}
+              <span className="font-semibold text-ink">1 billion DOM</span> supply, no additional
+              minting, six Halving eras, Telegram community Guilds, and instant automated
+              on-chain withdrawals.
             </motion.p>
 
             <motion.div
@@ -193,15 +195,15 @@ export function Hero() {
               className="-bottom-6 left-6 hidden sm:flex lg:left-16"
               delay={0.8}
               icon={<Sparkles className="h-4 w-4 text-gold" />}
-              label="Rank System"
-              value="Novice → Legend"
+              label="Pickaxe Level"
+              value="Level 1 → Level 6"
             />
             <FloatingCard
               className="-bottom-6 right-6 hidden sm:flex lg:right-16"
               delay={0.9}
               icon={<Users className="h-4 w-4 text-emerald-glow" />}
-              label="Guild Bonus"
-              value="+15%"
+              label="Guild Booster"
+              value="Up to +10%"
             />
           </motion.div>
         )}

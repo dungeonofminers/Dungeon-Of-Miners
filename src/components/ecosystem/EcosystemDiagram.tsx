@@ -91,7 +91,7 @@ export function EcosystemDiagram({ play }: { play: boolean }) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={assets.domEcosystem}
-          alt="DOM ecosystem diagram: the DOM token at the center, connected to mining, rewards, the pool wallet, guilds, governance, liquidity, and swap"
+          alt="DOM ecosystem diagram: the DOM token at the center, connected to mining, progress, the treasury, guilds, governance, liquidity, and swap"
           loading="lazy"
           decoding="async"
           className="pointer-events-none absolute inset-0 h-full w-full select-none object-contain"

@@ -1,5 +1,5 @@
-import { Trophy, Swords, Crown, ShieldPlus, LogIn, LogOut, ArrowLeftRight, UserMinus } from "lucide-react";
-import { guildStats, guildRuleDetails } from "@/content/site";
+import { Trophy, Send, Crown, ShieldPlus, LogIn, LogOut, ArrowLeftRight, UserMinus } from "lucide-react";
+import { guildStats, guildRuleDetails, guildBoosterTiers, guildCreationFlow, guildConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -12,43 +12,31 @@ export function Guild() {
         <SectionHeading
           eyebrow="Guild System"
           title="No one mines alone"
-          description="Form a guild of up to 30 delvers, coordinate daily expeditions, and earn a shared hashrate bonus that rewards teams who show up together."
+          description="Connect your Telegram community, coordinate expeditions, and earn a shared Guild Booster that rewards guilds who actually show up together."
         />
 
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <Reveal className="lg:col-span-3">
             <div className="surface-panel h-full p-8 sm:p-10">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-glow/25 bg-emerald-glow/10">
-                <Swords className="h-5 w-5 text-emerald-glow" />
+                <Send className="h-5 w-5 text-emerald-glow" />
               </div>
-              <h3 className="heading-md mt-5">Daily Expedition</h3>
+              <h3 className="heading-md mt-5">Connect Your Telegram Group</h3>
               <p className="body-lg mt-3">
-                Each day, your guild has one shot at the Expedition bonus. If{" "}
-                <span className="font-semibold text-ink">60% or more</span> of members claim
-                that day, the entire guild earns a{" "}
-                <span className="font-semibold text-emerald-glow">+15% hashrate bonus</span> —
-                stacked on top of everyone&rsquo;s individual mining rate.
+                Any Telegram Group or Supergroup admin can create a Guild and bind it to their
+                community&rsquo;s permanent chat ID — not a username that can change.
               </p>
 
-              <div className="mt-8">
-                <div className="flex items-center justify-between text-xs text-ink-muted">
-                  <span className="inline-flex items-center gap-1.5">
-                    Members claimed today
-                    <span className="rounded-full border border-white/10 px-1.5 py-0.5 text-[9px] uppercase tracking-wider text-ink-faint">
-                      Example — awaiting live backend
+              <ol className="mt-6 flex flex-col gap-2.5">
+                {guildCreationFlow.map((step, i) => (
+                  <li key={step} className="flex items-start gap-3 text-sm text-ink-muted">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[11px] font-bold text-gold">
+                      {i + 1}
                     </span>
-                  </span>
-                  <span className="font-semibold text-ink">0 / 30</span>
-                </div>
-                <div className="relative mt-3 h-3 w-full overflow-hidden rounded-full bg-white/5">
-                  <div className="absolute inset-y-0 left-[60%] w-px bg-white/30" />
-                </div>
-                <div className="mt-2 flex justify-between text-[11px] text-ink-faint">
-                  <span>0%</span>
-                  <span className="text-emerald-glow">60% threshold</span>
-                  <span>100%</span>
-                </div>
-              </div>
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </div>
           </Reveal>
 
@@ -57,14 +45,38 @@ export function Guild() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-gold/25 bg-gold/10">
                 <Trophy className="h-5 w-5 text-gold" />
               </div>
-              <h3 className="heading-md mt-5 text-xl">Permanent Guild Leaderboard</h3>
+              <h3 className="heading-md mt-5 text-xl">Guild Leaderboard</h3>
               <p className="body-lg mt-3 text-sm">
-                Guild standings are recorded permanently — a public history of which guilds led
-                the mining economy, Halving by Halving.
+                Guilds are ranked by verified activity and mining contribution — never by raw
+                member count. Standings are recorded permanently, Halving by Halving.
               </p>
             </div>
           </Reveal>
         </div>
+
+        <Reveal delay={0.2}>
+          <div className="surface-panel mx-auto mt-6 max-w-5xl p-8 sm:p-10">
+            <h3 className="heading-md text-lg">Guild Booster — tiered, always capped</h3>
+            <p className="body-lg mt-2 text-sm">
+              The booster scales with how active your guild really is, recalculated daily.
+              Empty or inactive guilds earn nothing — it modifies mining weight only and never
+              creates DOM beyond the global emission ceiling.
+            </p>
+            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {guildBoosterTiers.map((tier) => (
+                <div
+                  key={tier.activeThreshold}
+                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center"
+                >
+                  <p className="font-display text-2xl text-emerald-glow">+{tier.weightBonus}%</p>
+                  <p className="mt-1 text-xs uppercase tracking-wider text-ink-faint">
+                    {tier.activeThreshold}%+ active
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
 
         <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {guildStats.map((stat, i) => (
@@ -84,13 +96,17 @@ export function Guild() {
                 Guild Roles & Actions
               </h3>
               <div className="mt-4 grid grid-cols-2 gap-3">
-                <RoleTag icon={Crown} label="Guild Owner" />
-                <RoleTag icon={ShieldPlus} label="Guild Officer" />
+                <RoleTag icon={Crown} label="Owner" />
+                <RoleTag icon={ShieldPlus} label="Officer" />
                 <RoleTag icon={LogIn} label="Join Guild" />
                 <RoleTag icon={LogOut} label="Leave Guild" />
                 <RoleTag icon={ArrowLeftRight} label="Transfer Ownership" />
                 <RoleTag icon={UserMinus} label="Kick Member" />
               </div>
+              <p className="mt-4 text-xs text-ink-faint">
+                A player can belong to only one guild at a time. After leaving, rejoining another
+                guild requires a {guildConfig.joinCooldownHours}-hour cooldown.
+              </p>
             </div>
           </Reveal>
 

@@ -84,6 +84,16 @@ export function GenesisLedger() {
                       Economy {entry.version} <span className="text-ink-faint">· {entry.date}</span>
                     </p>
                     <p className="mt-0.5 text-sm text-ink-muted">{entry.summary}</p>
+                    {"changes" in entry && entry.changes && (
+                      <ul className="mt-2 flex flex-col gap-1">
+                        {entry.changes.map((change) => (
+                          <li key={change} className="flex items-start gap-2 text-xs text-ink-faint">
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold/60" />
+                            {change}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>

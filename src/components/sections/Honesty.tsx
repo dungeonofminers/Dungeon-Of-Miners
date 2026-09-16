@@ -1,4 +1,5 @@
 import { FileCheck2, ShieldCheck, XCircle } from "lucide-react";
+import { withdrawalConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -11,7 +12,7 @@ const points = [
   {
     icon: ShieldCheck,
     title: "Status Tracked Honestly",
-    description: "Every request shows its real status — Pending, Processing, Broadcasted, Confirmed, or Failed — never a vague placeholder.",
+    description: `Every request shows its real status — ${withdrawalConfig.statuses.join(", ")} — never a vague placeholder.`,
   },
   {
     icon: XCircle,

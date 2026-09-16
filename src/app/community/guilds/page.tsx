@@ -4,7 +4,7 @@ import { Guild } from "@/components/sections/Guild";
 
 export const metadata: Metadata = {
   title: `Guilds — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "Form a guild of up to 30 delvers, coordinate daily expeditions, and earn a shared hashrate bonus.",
+  description: "Connect your Telegram community, coordinate daily expeditions, and earn a shared, tiered Guild Booster.",
 };
 
 export default function GuildsPage() {

@@ -4,12 +4,11 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 const flowSteps = [
-  "Connect wallet",
+  `Connect a TON wallet via ${withdrawalConfig.walletConnector}`,
   "Enter withdrawal amount",
-  "Server validates eligible balance",
+  "Server validates your Available Balance",
   "Confirm withdrawal",
-  "Backend creates withdrawal request",
-  "Approved request is broadcast on-chain",
+  "Backend automatically validates and broadcasts — no manual approval queue",
   "Transaction hash + block explorer link returned",
   "Status tracked to Confirmed",
 ];
@@ -40,13 +39,13 @@ export function PreTgeSection() {
                   {withdrawalConfig.feeDom} DOM Fee
                 </span>
                 <span className="rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gold">
-                  {withdrawalConfig.gasSponsorLabel}
+                  Network Fee: {withdrawalConfig.networkFeeLabel}
                 </span>
               </div>
               <p className="mt-4 text-xs leading-relaxed text-ink-faint">
-                This describes the fee the miner pays — not the blockchain itself. The network
-                still has a real transaction cost; the ecosystem covers it on the miner&apos;s
-                behalf.
+                This describes the fee the miner pays — not the blockchain itself. The TON
+                network still has a real transaction cost; the ecosystem covers it on the
+                miner&apos;s behalf.
               </p>
             </div>
           </Reveal>
@@ -60,7 +59,11 @@ export function PreTgeSection() {
               <dl className="mt-3 flex flex-col gap-2.5">
                 <div className="flex items-center justify-between text-sm">
                   <dt className="text-ink-muted">Network</dt>
-                  <dd className="font-semibold text-ink-faint">{withdrawalConfig.network}</dd>
+                  <dd className="font-semibold text-ink">{withdrawalConfig.network}</dd>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <dt className="text-ink-muted">Wallet Connector</dt>
+                  <dd className="font-semibold text-ink">{withdrawalConfig.walletConnector}</dd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <dt className="text-ink-muted">DOM Contract</dt>
@@ -108,6 +111,7 @@ export function PreTgeSection() {
                 </span>
               ))}
             </div>
+            <p className="mt-5 text-xs leading-relaxed text-ink-faint">{withdrawalConfig.instantNote}</p>
           </div>
         </Reveal>
 
@@ -116,8 +120,8 @@ export function PreTgeSection() {
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-glow" />
             <p className="text-xs text-ink-faint">
               Withdrawal approval is always server-authoritative — the frontend never decides the
-              final withdrawable amount. Balances move through <code>available</code> →{" "}
-              <code>pendingWithdrawal</code> → <code>withdrawn</code> with atomic database
+              final withdrawable amount. Balances move through <code>availableBalance</code> →{" "}
+              <code>pendingWithdrawal</code> → <code>withdrawnBalance</code> with atomic database
               transactions to prevent duplicate withdrawals.
             </p>
           </div>

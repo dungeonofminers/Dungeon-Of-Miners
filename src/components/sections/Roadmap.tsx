@@ -1,13 +1,15 @@
-import { CheckCircle2, Loader2, CircleDashed } from "lucide-react";
+import { CheckCircle2, Loader2, CircleDashed, Rocket, Hourglass } from "lucide-react";
 import { roadmap } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 const STATUS_META = {
-  done: { label: "Shipped", icon: CheckCircle2, className: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow" },
+  done: { label: "Live", icon: CheckCircle2, className: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow" },
   active: { label: "In Progress", icon: Loader2, className: "border-gold/30 bg-gold/10 text-gold" },
+  comingSoon: { label: "Coming Soon", icon: Rocket, className: "border-torch/30 bg-torch/10 text-torch" },
   planned: { label: "Planned", icon: CircleDashed, className: "border-white/15 bg-white/[0.04] text-ink-faint" },
+  future: { label: "Future", icon: Hourglass, className: "border-white/10 bg-white/[0.03] text-ink-faint" },
 } as const;
 
 export function Roadmap() {
@@ -25,7 +27,7 @@ export function Roadmap() {
             aria-hidden
             className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-white/10 to-transparent lg:block"
           />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {roadmap.map((phase, i) => {
               const meta = STATUS_META[phase.status];
               const Icon = meta.icon;

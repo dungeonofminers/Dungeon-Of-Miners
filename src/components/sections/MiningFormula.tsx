@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { miningFormula, boostRules, storageRules } from "@/content/site";
+import { miningFormula, emissionModel, boostRules, storageRules } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -9,14 +9,14 @@ export function MiningFormula() {
       <div className="section-shell">
         <SectionHeading
           eyebrow="Economy Rules"
-          title="How Mining Rate Works"
-          description="Your final rate is never a mystery number — it's every multiplier you've earned, stacked in one formula."
+          title="How Mining Rewards Work"
+          description="Your Effective Mining Weight is never a mystery number — every booster you've earned is stacked in one formula, then shared out of a hard-capped global emission."
         />
 
         <Reveal delay={0.1}>
           <div className="surface-panel mx-auto mt-14 max-w-4xl p-8 sm:p-10">
             <div className="flex flex-wrap items-center justify-center gap-2 text-center">
-              {miningFormula.chain.map((part, i) => (
+              {miningFormula.weightChain.map((part, i) => (
                 <span
                   key={part}
                   className={`rounded-lg border px-3.5 py-2 text-sm font-semibold ${
@@ -52,6 +52,19 @@ export function MiningFormula() {
                   {miningFormula.example.final.value}
                 </p>
               </div>
+            </div>
+
+            <div className="mt-8 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
+              <p className="text-xs font-semibold uppercase tracking-wider text-ink">
+                Global Emission Model
+              </p>
+              <div className="mt-3 flex flex-col gap-2 font-mono text-xs text-ink-muted sm:text-sm">
+                <p>{emissionModel.shareFormula}</p>
+                <p>{emissionModel.rewardFormula}</p>
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-ink-faint sm:text-sm">
+                {emissionModel.note}
+              </p>
             </div>
           </div>
         </Reveal>

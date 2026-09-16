@@ -32,6 +32,16 @@ export default function ChangelogPage() {
                       Economy {entry.version} <span className="text-ink-faint">· {entry.date}</span>
                     </p>
                     <p className="mt-1 text-sm text-ink-muted">{entry.summary}</p>
+                    {"changes" in entry && entry.changes && (
+                      <ul className="mt-3 flex flex-col gap-1.5">
+                        {entry.changes.map((change) => (
+                          <li key={change} className="flex items-start gap-2 text-xs text-ink-faint">
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold/60" />
+                            {change}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </Reveal>

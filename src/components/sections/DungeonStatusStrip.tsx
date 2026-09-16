@@ -1,4 +1,4 @@
-import { Zap, Gauge, ArrowDownCircle, Coins } from "lucide-react";
+import { Zap, Gauge, ArrowDownCircle, Rocket, TrendingUp } from "lucide-react";
 import { economyConfig, halvings, miningStatusStrip } from "@/content/site";
 import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
@@ -10,12 +10,12 @@ export function DungeonStatusStrip() {
     {
       icon: Zap,
       label: "Current Halving",
-      value: `Halving ${currentHalving.number} · ${currentHalving.name}`,
+      value: `Halving ${currentHalving.number} / ${halvings.length}`,
     },
     {
       icon: Gauge,
-      label: "Multiplier",
-      value: currentHalving.multiplier,
+      label: "Emission Ceiling",
+      value: currentHalving.emissionCeiling,
     },
     {
       icon: ArrowDownCircle,
@@ -23,9 +23,14 @@ export function DungeonStatusStrip() {
       value: miningStatusStrip.withdrawalLabel,
     },
     {
-      icon: Coins,
-      label: "Withdrawal Fee",
-      value: miningStatusStrip.withdrawalFeeLabel,
+      icon: Rocket,
+      label: "TGE",
+      value: miningStatusStrip.tgeLabel,
+    },
+    {
+      icon: TrendingUp,
+      label: "Listing",
+      value: miningStatusStrip.listingLabel,
     },
   ];
 

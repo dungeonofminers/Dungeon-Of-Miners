@@ -4,10 +4,11 @@
 // the same facts already centralized in site.ts (never new numbers) in a
 // sidebar-navigated, section-by-section format.
 //
-// Source material: the Dungeon of Miners Whitepaper (Economy Rules v2.0) and
-// the companion "DOM Tokenomics & Valuation Model" analysis supplied by the
-// team. Every figure below traces back to an existing site.ts export — this
-// file adds structure and prose, not new data.
+// Economy v3.0: no Holding/Pool wallet split, Pickaxe Level 1–6 (not a Rank
+// System), no Pickaxe Equipment Multiplier, a hard Global Emission Pool, and
+// TGE / Exchange Listing both status Coming Soon. Every figure below traces
+// back to an existing site.ts export — this file adds structure and prose,
+// not new data.
 // ---------------------------------------------------------------------------
 
 import type { DocBadgeTone, DocPage, DocsNavCategory } from "./docsBlocks";
@@ -17,18 +18,25 @@ import {
   MINING_ALLOCATION_DOM,
   halvingTrigger,
   economyConfig,
+  supplyFacts,
   halvings,
   tokenAllocation,
   miningFormula,
+  emissionModel,
   boostRules,
   storageRules,
   claimRules,
-  ranks,
+  balanceModel,
+  pickaxeLevels,
   withdrawalConfig,
   fairPlay,
+  guildConfig,
+  guildBoosterTiers,
+  guildCreationFlow,
   guildRuleDetails,
   guildStats,
-  features,
+  referralBooster,
+  featureGroups,
   roadmap,
   economyChangelog,
   riskDisclosure,
@@ -41,17 +49,17 @@ export const docsNav: DocsNavCategory[] = [
       { slug: "token", title: "Token Overview" },
       { slug: "tokenomics", title: "Tokenomics & Allocation" },
       { slug: "halvings", title: "The Halvings" },
-      { slug: "mining-rate", title: "Mining Rate Formula" },
+      { slug: "mining-rate", title: "Mining Rewards Formula" },
     ],
   },
   {
     title: "Player Systems",
     items: [
-      { slug: "ranks", title: "Rank System" },
-      { slug: "wallets", title: "Wallets & Storage" },
+      { slug: "pickaxe-levels", title: "Pickaxe Levels" },
+      { slug: "balances", title: "Mining Storage & Balance" },
       { slug: "withdrawal", title: "On-Chain Withdrawal" },
       { slug: "guilds", title: "Guilds" },
-      { slug: "referral", title: "Referral Program" },
+      { slug: "referral", title: "Referral Booster" },
       { slug: "activities", title: "Mining Activities" },
       { slug: "features", title: "Full Feature List" },
     ],
@@ -79,25 +87,25 @@ const currentHalving = halvings.find((h) => h.number === economyConfig.currentHa
 export const docsIntro: DocPage = {
   slug: "",
   eyebrow: "Documentation — 00",
-  title: "A mining economy built around real scarcity",
-  description: `${siteConfig.name} is a live mining ecosystem powered by a fixed supply of ${totalSupply}.`,
+  title: "A fixed-supply mining economy",
+  description: `${siteConfig.name} is a live mining ecosystem powered by a permanently fixed supply of ${totalSupply}.`,
   blocks: [
     {
       type: "lede",
-      text: `Players mine idly, upgrade equipment, build guilds, and advance through six Halving eras that progressively cut mining emissions as the shared supply is mined — and, unlike most Telegram idle-mining games, eligible DOM can be withdrawn directly to an on-chain wallet today.`,
+      text: "Players mine idly, level up their Pickaxe through Mining XP, join Telegram-community Guilds, and advance through six Halving eras that progressively cut the network's daily emission ceiling — and eligible DOM can be withdrawn on-chain today, instantly.",
     },
     {
       type: "paragraph",
-      text: `Every claim splits automatically between a rank-defining Holding Wallet (${economyConfig.claimSplit.holding}%) and a spendable, withdrawal-eligible Pool Wallet (${economyConfig.claimSplit.pool}%). Mining began at Halving 1 — the highest emission rate the economy will ever run at — and will step down five more times before settling at its final, lowest rate.`,
+      text: "There is no Holding Wallet / Pool Wallet split. 100% of every claim becomes Available DOM Balance. Mining began at Halving 1 — the highest daily emission ceiling the economy will ever run at — and will step down five more times before settling at its final, lowest ceiling.",
     },
     { type: "heading", id: "why-different", text: "Why it's built differently" },
     {
       type: "keyValueGrid",
       items: [
-        { label: "Finite Supply", value: `Only ${totalSupply} will ever exist. Every claim brings the network closer to full emission.` },
-        { label: "Six Halvings", value: "Mining emissions decrease as the ecosystem advances through six Halving eras." },
-        { label: "On-Chain Withdrawal", value: "Withdraw eligible DOM directly to your wallet — a real on-chain transaction, tracked to confirmation." },
-        { label: "Zero Withdrawal Fee", value: "No withdrawal fee is charged to miners. Network transaction costs are sponsored by the ecosystem." },
+        { label: "Fixed Supply", value: `${totalSupply}, created once. ${economyConfig.mintingStatus}.` },
+        { label: "Six Halvings", value: "Equal 91,666,667 DOM eras, each with a halved daily emission ceiling." },
+        { label: "Global Emission Pool", value: "Rewards are a capped, shared pool — more miners divide it, never exceed it." },
+        { label: "Instant On-Chain Withdrawal", value: "Automated backend validation and broadcast on TON, via TON Connect." },
       ],
     },
     { type: "heading", id: "where-things-stand", text: "Where the ecosystem stands today" },
@@ -105,14 +113,14 @@ export const docsIntro: DocPage = {
       type: "tiles",
       items: [
         { label: "Mining Status", value: economyConfig.miningStatus, accent: "emerald" },
-        { label: "Current Halving", value: `H${currentHalving.number} · ${currentHalving.name}` },
-        { label: "Current Multiplier", value: currentHalving.multiplier },
-        { label: "Withdrawal", value: "On-Chain · Zero Fee" },
+        { label: "Withdrawal", value: economyConfig.withdrawalStatus, accent: "emerald" },
+        { label: "TGE", value: economyConfig.tgeStatus },
+        { label: "Exchange Listing", value: economyConfig.exchangeListingStatus },
       ],
     },
     {
       type: "note",
-      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy Rules ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the original Pre-TGE / Floor-system model, which has been formally retired — see Version History.`,
+      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy Rules ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the retired Pre-TGE / Floor-system and Rank System models — see Version History.`,
     },
   ],
 };
@@ -126,22 +134,27 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "DOM is the single token of the Dungeon of Miners economy — mined by players, ranked by holding, and eligible for on-chain withdrawal.",
+        text: "DOM is the single token of the Dungeon of Miners economy — mined by players and eligible for instant on-chain withdrawal.",
       },
       {
         type: "table",
         headers: ["Property", "Value"],
         rows: [
           ["Ticker", siteConfig.ticker],
-          ["Network", { text: "TBA", badge: "tba" }],
+          ["Network", withdrawalConfig.network],
+          ["Wallet Connector", withdrawalConfig.walletConnector],
           ["Max supply", totalSupply],
+          ["Minting", economyConfig.mintingStatus],
           ["Mining status", { text: economyConfig.miningStatus, badge: "live" }],
+          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "live" }],
+          ["TGE", { text: economyConfig.tgeStatus, badge: "tba" }],
+          ["Exchange listing", { text: economyConfig.exchangeListingStatus, badge: "tba" }],
           ["Withdrawal fee", withdrawalConfig.feeLabel],
         ],
       },
       {
         type: "paragraph",
-        text: "Dungeon of Miners no longer uses a Pre-TGE mining model. DOM currently has no guaranteed market value, and mining it does not guarantee financial value or profit — see Risk Disclosure.",
+        text: "DOM currently has no guaranteed market value. Mining or holding DOM does not guarantee financial value, profit, or return — see Risk Disclosure.",
       },
     ],
   },
@@ -150,11 +163,15 @@ export const docsPages: Record<string, DocPage> = {
     slug: "tokenomics",
     eyebrow: "The Economy — 02",
     title: "Tokenomics & Allocation",
-    description: "1,000,000,000 DOM, split across six fixed allocations.",
+    description: "1,000,000,000 DOM, split across six fixed allocations. Created once — never minted again.",
     blocks: [
       {
         type: "lede",
-        text: `DOM has a fixed maximum supply of ${totalSupply}. 55% is allocated directly to mining and community rewards; the remainder supports liquidity, the team, ecosystem reserves, ecosystem growth, and strategic/public opportunities.`,
+        text: `DOM has a fixed maximum supply of ${totalSupply}. The entire supply is created once; minting is permanently disabled after deployment. 55% is allocated directly to mining; the remainder supports liquidity, the team, ecosystem reserves, ecosystem growth, and strategic/public opportunities.`,
+      },
+      {
+        type: "tiles",
+        items: supplyFacts.map((f) => ({ label: f.label, value: f.value })),
       },
       { type: "heading", id: "allocations", text: "The six allocations" },
       {
@@ -172,29 +189,20 @@ export const docsPages: Record<string, DocPage> = {
       },
       { type: "heading", id: "circulation", text: "How DOM enters circulation" },
       {
-        type: "keyValueGrid",
-        items: [
-          { label: "Holding Wallet", value: `${economyConfig.claimSplit.holding}% of every claim` },
-          { label: "Pool Wallet", value: `${economyConfig.claimSplit.pool}% of every claim` },
-        ],
-      },
-      {
-        type: "callout",
-        tone: "gold",
-        title: "Transparency note",
-        text: "Today, only the Pool Wallet's 30% share is eligible for on-chain withdrawal — the Holding Wallet's 70% share is a rank-progression balance, not a withdrawable one. This split is under active review now that on-chain withdrawal is live; the team will announce clearly, here and in the Mini App, if the rule changes.",
+        type: "paragraph",
+        text: "Mining distributes DOM from the fixed 550,000,000 DOM Mining Allocation — it never creates new supply. There is no Holding Wallet / Pool Wallet split: every claim moves 100% of the claimed amount into your Available DOM Balance, which is eligible for on-chain withdrawal in full.",
       },
       {
         type: "linkGrid",
         items: [
           {
             title: "See the live allocation chart",
-            description: "The full visual breakdown with the Pool/Holding split explainer.",
+            description: "The full visual breakdown of the six allocations.",
             href: "/tokenomics",
           },
           {
             title: "Read the independent valuation model",
-            description: "Scenario-based supply, emission, and market-cap sensitivity analysis.",
+            description: "Fixed-supply and emission-based scenario analysis — not a price prediction.",
             href: "/docs/valuation-model",
           },
         ],
@@ -206,44 +214,44 @@ export const docsPages: Record<string, DocPage> = {
     slug: "halvings",
     eyebrow: "The Economy — 03",
     title: "The Halvings",
-    description: "Six eras of progressively lower mining emissions.",
+    description: "Six equal eras of the mining allocation, each with a halved daily emission ceiling.",
     blocks: [
       {
         type: "lede",
-        text: "DOM mining runs at its highest emission rate during Halving 1. As the network advances through six Halving eras, mining emissions progressively decrease, making every new DOM harder to extract — the deeper the ecosystem goes, the scarcer the rewards become.",
+        text: "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras. Each era carries its own daily global emission ceiling, halved from the previous era — the network's highest ceiling runs at Halving 1, its lowest at Halving 6.",
       },
       {
         type: "callout",
         tone: "gold",
         title: "Halving trigger",
-        text: `${halvingTrigger}. The exact condition that advances the economy from one Halving era to the next has not yet been published. There is no Halving 7: once Halving 6 is reached, DOM mining runs permanently at its lowest, final emission rate.`,
+        text: `${halvingTrigger} There is no Halving 7: once Halving 6 is reached, DOM mining runs permanently at its lowest, final emission ceiling.`,
       },
       {
         type: "tiles",
         items: [
           { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
-          { label: "Current Multiplier", value: currentHalving.multiplier },
-          { label: "Total Halvings", value: "6" },
-          { label: "Mining Status", value: economyConfig.miningStatus, accent: "emerald" },
+          { label: "Current Era Allocation", value: currentHalving.allocation },
+          { label: "Current Emission Ceiling", value: currentHalving.emissionCeiling },
+          { label: "Total Halvings", value: String(halvings.length) },
         ],
       },
-      { type: "heading", id: "eras", text: "Six eras, one decreasing emission rate" },
+      { type: "heading", id: "eras", text: "Six eras, one shrinking emission ceiling" },
       {
         type: "table",
-        headers: ["Era", "Multiplier", "Status"],
+        headers: ["Era", "Allocation", "Daily Emission Ceiling", "Status"],
         rows: halvings.map((h) => [
           `H${h.number} · ${h.name}`,
-          { text: h.multiplier, align: "right" as const },
+          { text: h.allocation, align: "right" as const },
+          { text: h.emissionCeiling, align: "right" as const },
           {
             text: h.status,
-            badge:
-              h.status === "CURRENT" ? "live" : h.status === "UPCOMING" ? "gold" : "tba",
+            badge: h.status === "CURRENT" ? "live" : h.status === "UPCOMING" ? "gold" : "tba",
           },
         ]),
       },
       {
         type: "note",
-        text: `The ${MINING_ALLOCATION_DOM} Mining Allocation is one shared pool drawn down across all six Halving eras — it is not split into six separate per-era allocations the way the retired Floor system was.`,
+        text: "Each era's 91,666,667 DOM allocation (91,666,665 DOM for Halving 6) is a fixed slice of the shared 550,000,000 DOM pool — not a separate, additional supply. The Halving does not multiply an individual miner's rate; it sets the finite global emission ceiling the entire network shares.",
       },
       {
         type: "linkGrid",
@@ -261,14 +269,19 @@ export const docsPages: Record<string, DocPage> = {
   "mining-rate": {
     slug: "mining-rate",
     eyebrow: "The Economy — 04",
-    title: "Mining Rate Formula",
-    description: "Every miner's hourly rate is the product of six factors.",
+    title: "Mining Rewards Formula",
+    description: "Effective Mining Weight, and the global emission pool it shares.",
     blocks: [
       {
         type: "lede",
-        text: "None of the factors below are hidden — they stack in one visible formula.",
+        text: "Every miner's reward comes from two layers: a personal Effective Mining Weight, and a network-wide Global Emission Pool that Weight shares from. Neither layer is hidden.",
       },
-      { type: "formula", text: miningFormula.chain.join(" ") },
+      { type: "heading", id: "weight", text: "Effective Mining Weight" },
+      { type: "formula", text: miningFormula.weightChain.join(" ") },
+      {
+        type: "note",
+        text: "There is no Pickaxe Equipment Multiplier. Pickaxe Base Mining Power is set directly by your Pickaxe Level — see Pickaxe Levels.",
+      },
       { type: "heading", id: "worked-example", text: "Worked example" },
       {
         type: "tiles",
@@ -277,75 +290,74 @@ export const docsPages: Record<string, DocPage> = {
           { label: miningFormula.example.final.label, value: miningFormula.example.final.value, accent: "gold" as const },
         ],
       },
-      { type: "heading", id: "multiplier-reference", text: "Multiplier reference" },
+      { type: "heading", id: "global-emission", text: "Global Emission Model" },
+      { type: "formula", text: emissionModel.shareFormula },
+      { type: "formula", text: emissionModel.rewardFormula },
+      {
+        type: "note",
+        text: emissionModel.note,
+      },
+      { type: "heading", id: "boosters", text: "Booster reference" },
       {
         type: "table",
-        headers: ["Factor", "Rule"],
-        rows: boostRules.map((b) => [
-          b.label,
-          b.value === "TBA" ? { text: "TBA", badge: "tba" as const } : b.value,
-        ]),
+        headers: ["Booster", "Rule"],
+        rows: boostRules.map((b) => [b.label, b.value]),
       },
     ],
   },
 
-  ranks: {
-    slug: "ranks",
+  "pickaxe-levels": {
+    slug: "pickaxe-levels",
     eyebrow: "Player Systems — 05",
-    title: "Rank System",
-    description: "Rank is set entirely by the balance sitting in a player's Holding Wallet.",
+    title: "Pickaxe Levels",
+    description: "Pickaxe Level 1–6 is the primary mining progression system.",
     blocks: [
       {
         type: "lede",
-        text: "Rank is set entirely by the balance sitting in a player's Holding Wallet — not by luck, spend, or a gacha roll. Reaching a threshold permanently raises the base mining rate.",
+        text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. Levels are driven by persistent Mining XP and lifetime activity — never by your current wallet balance, so withdrawing DOM never costs you progress.",
       },
       {
         type: "table",
-        headers: ["Rank", "Holding required", "Base rate"],
-        rows: ranks.map((r) => [
-          r.name,
-          { text: r.holding, align: "right" as const },
-          { text: r.rate, align: "right" as const },
+        headers: ["Level", "Cosmetic Name", "Base Mining Power", "XP Required"],
+        rows: pickaxeLevels.map((p) => [
+          `Level ${p.level}`,
+          p.cosmeticName,
+          { text: p.basePower, align: "right" as const },
+          p.xpRequired === "TBA" ? { text: "TBA", badge: "tba" as const } : p.xpRequired,
         ]),
       },
       {
         type: "note",
-        text: "Rank downgrade policy, and whether a rank once reached is permanent, are both explicitly undecided — the team won't publish a rule here until it's final.",
+        text: "Base Mining Power sets your share of the network's daily emission — it is not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
       },
       {
-        type: "badgeRow",
-        items: [
-          { label: "Rank downgrade — TBA", tone: "tba" },
-          { label: "Permanent rank — TBA", tone: "tba" },
-        ],
+        type: "callout",
+        tone: "gold",
+        title: "No Equipment Multiplier",
+        text: "Dungeon of Miners does not have a Pickaxe Equipment Multiplier. Each level sets Base Mining Power directly rather than applying an extra multiplicative modifier on top of a base rate.",
       },
     ],
   },
 
-  wallets: {
-    slug: "wallets",
+  balances: {
+    slug: "balances",
     eyebrow: "Player Systems — 06",
-    title: "Wallets & Storage",
-    description: "Two wallets, one purpose each.",
+    title: "Mining Storage & Balance",
+    description: "Mining Storage → Claim → Available Balance → Withdraw. No wallet split.",
     blocks: [
       {
         type: "lede",
-        text: "Every claim is split automatically the instant it lands, so ranking up and spending never compete for the same balance.",
+        text: "This replaces the retired Holding Wallet / Pool Wallet / 70:30 split entirely. There is one balance flow, and 100% of every claim becomes spendable and withdrawal-eligible.",
       },
       {
-        type: "keyValueGrid",
-        items: [
-          {
-            label: `Holding Wallet — ${economyConfig.claimSplit.holding}%`,
-            value: "Determines rank. Not itself withdrawable on-chain — this is long-term commitment supply.",
-          },
-          {
-            label: `Pool Wallet — ${economyConfig.claimSplit.pool}%`,
-            value: "Spendable balance. Used for upgrades, guild costs, Stone Breaker rounds, and eligible for on-chain withdrawal.",
-          },
-        ],
+        type: "steps",
+        items: balanceModel.steps.map((s) => ({ title: s.label, description: s.description })),
       },
-      { type: "heading", id: "mining-storage", text: "Mining storage" },
+      {
+        type: "note",
+        text: `Internal accounting states: ${balanceModel.accountingStates.join(" → ")}. ${balanceModel.integrityNote}`,
+      },
+      { type: "heading", id: "mining-storage", text: "Mining Storage" },
       { type: "paragraph", text: storageRules.description },
       {
         type: "table",
@@ -358,6 +370,7 @@ export const docsPages: Record<string, DocPage> = {
           ["Maximum claim", { text: claimRules.maximumClaim, badge: "tba" }],
         ],
       },
+      { type: "note", text: claimRules.note },
     ],
   },
 
@@ -365,35 +378,34 @@ export const docsPages: Record<string, DocPage> = {
     slug: "withdrawal",
     eyebrow: "Player Systems — 07",
     title: "On-Chain Withdrawal",
-    description: "Mine DOM. Withdraw on-chain.",
+    description: "Mine DOM. Withdraw on-chain, instantly.",
     blocks: [
       {
         type: "lede",
-        text: "Eligible DOM balances — the Pool Wallet's share — can be requested for withdrawal directly to a connected wallet.",
+        text: "All of your Available DOM Balance is eligible for withdrawal — there is no separate locked portion. Withdrawal is instant: the backend automatically validates and broadcasts the transaction, with no manual approval queue.",
       },
       {
         type: "tiles",
         items: [
           { label: "Withdrawal fee", value: `${withdrawalConfig.feeDom} DOM` },
-          { label: "Gas cost to miner", value: withdrawalConfig.gasSponsorLabel, accent: "emerald" },
+          { label: "Network fee", value: withdrawalConfig.networkFeeLabel, accent: "emerald" },
           { label: "Network", value: withdrawalConfig.network },
-          { label: "DOM contract", value: withdrawalConfig.domContractAddress },
+          { label: "Wallet Connector", value: withdrawalConfig.walletConnector },
         ],
       },
       {
         type: "note",
-        text: "Zero fee describes what the miner pays, not the blockchain itself — the network still has a real transaction cost, which the ecosystem covers on the miner's behalf.",
+        text: "Zero fee describes what the miner pays, not the blockchain itself — the TON network still has a real transaction cost, which the ecosystem covers on the miner's behalf.",
       },
       { type: "heading", id: "withdrawal-flow", text: "Withdrawal flow" },
       {
         type: "steps",
         items: [
-          { title: "Connect wallet" },
+          { title: `Connect a TON wallet via ${withdrawalConfig.walletConnector}` },
           { title: "Enter withdrawal amount" },
-          { title: "Server validates eligible balance" },
+          { title: "Server validates your Available Balance" },
           { title: "Confirm withdrawal" },
-          { title: "Backend creates withdrawal request" },
-          { title: "Approved request is broadcast on-chain" },
+          { title: "Backend automatically validates and broadcasts the transaction" },
           { title: "Transaction hash + block explorer link returned" },
           { title: "Status tracked to Confirmed" },
         ],
@@ -407,26 +419,35 @@ export const docsPages: Record<string, DocPage> = {
             ? "live"
             : s === "Failed"
               ? "warn"
-              : s === "Processing"
-                ? "gold"
-                : "tba") as DocBadgeTone,
+              : "gold") as DocBadgeTone,
         })),
       },
       {
+        type: "note",
+        text: withdrawalConfig.instantNote,
+      },
+      {
         type: "paragraph",
-        text: "Withdrawal approval is always server-authoritative — the frontend never decides the final withdrawable amount. Balances move through available → pendingWithdrawal → withdrawn with atomic database transactions to prevent duplicate withdrawals.",
+        text: "Withdrawal validation is always server-authoritative — the frontend never decides the final withdrawable amount. Balances move through availableBalance → pendingWithdrawal → withdrawnBalance with atomic database transactions, so one reward can never be withdrawn twice.",
       },
       { type: "heading", id: "network-config", text: "Network configuration" },
       {
         type: "table",
         headers: ["Property", "Value"],
         rows: [
-          ["Network", { text: withdrawalConfig.network, badge: "tba" }],
+          ["Network", withdrawalConfig.network],
+          ["Wallet Connector", withdrawalConfig.walletConnector],
           ["DOM contract", { text: withdrawalConfig.domContractAddress, badge: "tba" }],
           ["Block explorer", { text: withdrawalConfig.blockExplorerUrl, badge: "tba" }],
           ["Minimum withdrawal", { text: withdrawalConfig.minimumWithdrawal, badge: "tba" }],
           ["Maximum withdrawal", { text: withdrawalConfig.maximumWithdrawal, badge: "tba" }],
         ],
+      },
+      {
+        type: "callout",
+        tone: "danger",
+        title: "Wallet safety",
+        text: "Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — for any reason, on any channel.",
       },
     ],
   },
@@ -435,24 +456,43 @@ export const docsPages: Record<string, DocPage> = {
     slug: "guilds",
     eyebrow: "Player Systems — 08",
     title: "Guilds",
-    description: "No one mines alone.",
+    description: "Telegram-community-based guilds, with a tiered activity booster.",
     blocks: [
       {
         type: "lede",
-        text: "Guilds hold up to thirty delvers who coordinate a Daily Expedition: if 60% or more of the guild claims that day, every member's mining rate gets a hashrate bonus for the day.",
+        text: "A Guild binds one Telegram Group or Supergroup to a shared mining team of up to 30 miners. The connection is anchored to the group's permanent telegram_chat_id, not a mutable @username.",
       },
       {
         type: "tiles",
         items: guildStats.map((s) => ({ label: s.label, value: s.value })),
       },
+      { type: "heading", id: "creation", text: "Guild creation flow" },
+      {
+        type: "steps",
+        items: guildCreationFlow.map((step) => ({ title: step })),
+      },
+      { type: "heading", id: "roles", text: "Roles & rules" },
       {
         type: "table",
         headers: ["Property", "Value"],
         rows: [
-          ["Roles", "Guild Owner, Guild Officer"],
+          ["Roles", guildConfig.roles.join(", ")],
           ["Actions", "Join, leave, transfer ownership, kick member"],
-          ...guildRuleDetails.map((r) => [r.label, { text: r.value, badge: "tba" as const }]),
+          ...guildRuleDetails.map((r) => [r.label, r.value === "TBA" ? { text: r.value, badge: "tba" as const } : r.value]),
         ],
+      },
+      { type: "heading", id: "booster", text: "Guild Booster — tiered, never unlimited" },
+      {
+        type: "table",
+        headers: ["Active Members", "Mining Weight Bonus"],
+        rows: guildBoosterTiers.map((t) => [
+          `${t.activeThreshold}%+ active`,
+          { text: `+${t.weightBonus}%`, align: "right" as const },
+        ]),
+      },
+      {
+        type: "note",
+        text: "Recalculated daily. Empty or inactive guilds earn no booster. The Guild Booster modifies mining weight only — it never creates additional DOM beyond the global emission ceiling.",
       },
     ],
   },
@@ -460,25 +500,49 @@ export const docsPages: Record<string, DocPage> = {
   referral: {
     slug: "referral",
     eyebrow: "Player Systems — 09",
-    title: "Referral Program",
-    description: "A hashrate boost, not a payout.",
+    title: "Referral Booster",
+    description: "A capped mining-weight boost — not revenue sharing, not a payout.",
     blocks: [
       {
         type: "lede",
-        text: "Inviting miners raises a player's own mining rate — it is explicitly not framed as revenue sharing.",
+        text: "Inviting active miners raises your own Effective Mining Weight. It is capped, tied to activity, and never framed as revenue sharing.",
       },
       {
         type: "tiles",
         items: [
-          { label: "Per referral", value: "+2% hashrate" },
-          { label: "Cap", value: "50 referrals (+100%)" },
-          { label: "Invitee bonus", value: "+50 DOM", accent: "emerald" },
-          { label: "Qualification", value: "Claims on 3 different days" },
+          { label: "Per active referral", value: `+${referralBooster.weightPerActiveReferral}% Weight` },
+          { label: "Cap", value: `${referralBooster.maxQualifiedReferrals} referrals (+${referralBooster.maxBoostPercent}%)` },
+          { label: "Starter Boost", value: `+${referralBooster.starterBoost.percent}% for ${referralBooster.starterBoost.durationHours}h`, accent: "emerald" },
+          { label: "Qualification", value: "3 active days" },
         ],
+      },
+      { type: "heading", id: "qualification", text: "How a referral qualifies" },
+      { type: "list", items: referralBooster.qualificationRules },
+      { type: "heading", id: "milestones", text: "Milestones" },
+      {
+        type: "badgeRow",
+        items: referralBooster.milestones.map((m) => ({ label: `${m} Qualified Miner${m > 1 ? "s" : ""}`, tone: "gold" as const })),
       },
       {
         type: "note",
-        text: "Self-referrals, automated accounts, and multi-account farming invalidate rewards and fall under the Fair Play Policy, whose exact detection logic is intentionally not published.",
+        text: "Milestones unlock badges, cosmetics, and titles — never additional uncapped DOM rewards.",
+      },
+      { type: "heading", id: "statuses", text: "Referral status lifecycle" },
+      {
+        type: "badgeRow",
+        items: referralBooster.statuses.map((s) => ({
+          label: s,
+          tone: (s === "Active" || s === "Qualified" ? "live" : s === "Flagged" || s === "Invalidated" ? "warn" : "tba") as DocBadgeTone,
+        })),
+      },
+      {
+        type: "callout",
+        tone: "gold",
+        text: "Referral ownership is immutable after successful attribution — a referred account cannot switch referrers later. Every qualification event is idempotent: the same referral is never credited twice.",
+      },
+      {
+        type: "note",
+        text: "Self-referrals, automated accounts, and multi-account farming are not allowed and can invalidate rewards — see the Fair Play Policy, whose exact detection logic is intentionally not published.",
       },
     ],
   },
@@ -491,7 +555,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "Beyond idle mining, these ongoing activities build a miner's profile, badges, and hashrate bonuses.",
+        text: "Beyond idle mining, these ongoing activities build a miner's profile, Mining XP, and boosters.",
       },
       {
         type: "list",
@@ -499,14 +563,14 @@ export const docsPages: Record<string, DocPage> = {
           "Miner Profile — set up your profile and start tracking your mining progress.",
           "Delver Badges — earn permanent badges tied to milestones and Halving eras.",
           "Daily Check-In — stay active every day to keep your streak and bonuses going.",
-          "Referrals — invite miners and grow your network.",
-          "Guild Registration — create or join a guild and coordinate daily expeditions.",
+          "Referrals — invite active miners to grow your Referral Booster.",
+          "Guild Registration — connect your Telegram community and coordinate daily expeditions.",
           "Daily Tasks — complete community missions and objectives.",
         ],
       },
       {
         type: "note",
-        text: "The Leaderboard ranks players by total DOM mined, current mining rate, rank, current Halving, and guild contribution — never by exposing private wallet balances, and never with placeholder or fake entries.",
+        text: "The Leaderboard ranks players by total DOM mined, current mining weight, Pickaxe Level, current Halving, and guild contribution — never by exposing private wallet balances, and never with placeholder or fake entries.",
       },
     ],
   },
@@ -515,18 +579,15 @@ export const docsPages: Record<string, DocPage> = {
     slug: "features",
     eyebrow: "Player Systems — 11",
     title: "Full Feature List",
-    description: "The full progression loop, in one reference table.",
-    blocks: [
+    description: "Only real, current, or confirmed-planned systems — organized by group.",
+    blocks: featureGroups.flatMap((group): import("./docsBlocks").DocBlock[] => [
+      { type: "heading" as const, id: group.group.toLowerCase().replace(/\s+/g, "-"), text: group.group },
       {
-        type: "lede",
-        text: "Mining, upgrades, a mini-game, daily tasks, and social play — all connected to the same shared economy.",
-      },
-      {
-        type: "table",
+        type: "table" as const,
         headers: ["Feature", "Description"],
-        rows: features.map((f) => [f.title, f.description]),
+        rows: group.items.map((f) => [f.title, f.description]),
       },
-    ],
+    ]),
   },
 
   transparency: {
@@ -537,7 +598,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "Dungeon of Miners is a live mining economy with real on-chain withdrawal. That's stated clearly, everywhere it matters, so expectations stay accurate.",
+        text: "Dungeon of Miners is a live mining economy with real, instant on-chain withdrawal. That's stated clearly, everywhere it matters, so expectations stay accurate.",
       },
       {
         type: "table",
@@ -546,9 +607,13 @@ export const docsPages: Record<string, DocPage> = {
           ["Economy version", economyConfig.economyVersion],
           ["Last updated", economyConfig.economyLastUpdated],
           ["Total supply", totalSupply],
+          ["Minting", economyConfig.mintingStatus],
           ["Mining allocation", MINING_ALLOCATION_DOM],
           ["Current Halving", `${economyConfig.currentHalving} of ${halvings.length}`],
           ["Mining status", { text: economyConfig.miningStatus, badge: "live" }],
+          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "live" }],
+          ["TGE", { text: economyConfig.tgeStatus, badge: "tba" }],
+          ["Exchange listing", { text: economyConfig.exchangeListingStatus, badge: "tba" }],
         ],
       },
       { type: "heading", id: "commitments", text: "Stated commitments" },
@@ -556,10 +621,11 @@ export const docsPages: Record<string, DocPage> = {
         type: "list",
         items: [
           "Eligible DOM withdrawals are broadcast on-chain with a real transaction hash and a block explorer link.",
-          "Every withdrawal request shows its real status — Pending, Processing, Broadcasted, Confirmed, or Failed — never a vague placeholder.",
+          "Every withdrawal request shows its real status — Processing, Broadcasted, Confirmed, or Failed — never a vague placeholder.",
           "No manufactured transaction proofs, no fabricated hashes, no fake payout screenshots — ever.",
           "No placeholder or fake leaderboard entries — live mining totals and rankings render only once the connected backend is live.",
-          "Mining DOM does not guarantee financial value or profit. Dungeon of Miners does not promise price appreciation, exchange listing, or guaranteed liquidity — stated plainly, not buried in terms.",
+          "No TGE date, exchange name, listing date, opening price, market cap, or liquidity amount is published until officially confirmed.",
+          "Mining or holding DOM does not guarantee financial value or profit. Dungeon of Miners does not promise price appreciation, exchange listing, or guaranteed liquidity — stated plainly, not buried in terms.",
         ],
       },
       {
@@ -609,7 +675,7 @@ export const docsPages: Record<string, DocPage> = {
       { type: "callout", tone: "danger", text: riskDisclosure },
       {
         type: "note",
-        text: "Numerous parameters in this documentation — the network, contract address, equipment multipliers, claim limits, guild costs, and the Halving trigger itself — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
+        text: "Numerous parameters in this documentation — the DOM contract address, XP thresholds, claim limits, guild creation cost, minimum/maximum withdrawal, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
       },
     ],
   },
@@ -624,19 +690,25 @@ export const docsPages: Record<string, DocPage> = {
         type: "lede",
         text: "No phase carries a promised date — the stated preference is to ship a phase late rather than promise a date that can't be honestly kept.",
       },
-      ...roadmap.flatMap((p): import("./docsBlocks").DocBlock[] => [
-        { type: "heading" as const, id: p.phase.toLowerCase().replace(/\s+/g, "-"), text: `${p.phase} — ${p.title}` },
-        {
-          type: "badgeRow" as const,
-          items: [
-            {
-              label: p.status === "done" ? "Shipped" : p.status === "active" ? "In Progress" : "Planned",
-              tone: (p.status === "done" ? "live" : p.status === "active" ? "gold" : "planned") as DocBadgeTone,
-            },
-          ],
-        },
-        { type: "list" as const, items: p.items },
-      ]),
+      ...roadmap.flatMap((p): import("./docsBlocks").DocBlock[] => {
+        const label =
+          p.status === "done"
+            ? "Live"
+            : p.status === "active"
+              ? "In Progress"
+              : p.status === "comingSoon"
+                ? "Coming Soon"
+                : p.status === "future"
+                  ? "Future"
+                  : "Planned";
+        const tone: DocBadgeTone =
+          p.status === "done" ? "live" : p.status === "active" ? "gold" : p.status === "comingSoon" ? "tba" : "planned";
+        return [
+          { type: "heading" as const, id: p.phase.toLowerCase().replace(/\s+/g, "-"), text: `${p.phase} — ${p.title}` },
+          { type: "badgeRow" as const, items: [{ label, tone }] },
+          { type: "list" as const, items: p.items },
+        ];
+      }),
     ],
   },
 
@@ -657,6 +729,7 @@ export const docsPages: Record<string, DocPage> = {
           text: `Economy ${v.version} — ${v.date}`,
         },
         { type: "paragraph" as const, text: v.summary },
+        ...("changes" in v && v.changes ? [{ type: "list" as const, items: v.changes }] : []),
       ]),
     ],
   },
@@ -665,131 +738,96 @@ export const docsPages: Record<string, DocPage> = {
     slug: "valuation-model",
     eyebrow: "Reference — 17",
     title: "Tokenomics & Valuation Model",
-    description: "An independent scenario-based analysis — not an official specification, not investment advice.",
+    description: "An independent, illustrative analysis — not an official specification, not investment advice, not a price prediction.",
     blocks: [
       {
         type: "badgeRow",
-        items: [{ label: "Independent Modeling Document · Not Official Specs", tone: "tba" }],
+        items: [{ label: "Illustrative Only · Not Investment Advice", tone: "tba" }],
       },
       {
         type: "callout",
         tone: "danger",
         title: "Can DOM be given a fair value today?",
-        text: "No — not with any real precision, and any document claiming otherwise should be treated with suspicion. DOM has no live market: network is TBA, the contract is TBA, no exchange listing exists, and the mechanism that even advances the emission schedule — the Dynamic Supply Trigger — is itself TBA. What follows is a scenario model, not a price prediction: the supply math that is knowable today, plus sensitivity tables showing what different hypothetical prices would imply.",
+        text: "No — not with any real precision, and any document claiming otherwise should be treated with suspicion. DOM has no live market: the exact Halving trigger timing and several network parameters remain TBA, no exchange listing exists, and TGE status is Coming Soon. What follows is a scenario model built on the fixed, disclosed supply mechanics — not a price prediction.",
       },
-      { type: "heading", id: "methodology", text: "Methodology — disclosed vs. modeled vs. unknown" },
+      { type: "heading", id: "methodology", text: "Methodology — disclosed vs. TBA" },
       {
         type: "list",
         items: [
-          "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v2.0: supply, allocations, rank rates, referral/guild multipliers, fee structure.",
-          "Modeled — derived by applying a clearly stated assumption to disclosed data. Alternate models are shown side by side, not hidden.",
-          "Unknown (TBA) — officially undisclosed by the project itself: network, contract, Halving trigger, vesting schedules, listing venue. No number is invented to fill these gaps.",
+          "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v3.0: total supply, the six allocations, the six Halving allocations and emission ceilings, Pickaxe base mining power, and booster caps.",
+          "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, minimum/maximum withdrawal, and listing venue/timing. No number is invented to fill these gaps.",
         ],
       },
-      { type: "heading", id: "emission-modeling", text: "Emission modeling — how the 550M pool might release" },
-      {
-        type: "note",
-        text: "The Halving multipliers (×1.000 → ×0.03125) are disclosed. How much DOM each era actually releases before triggering the next Halving is not — the trigger is a Dynamic Supply Trigger, officially TBA. Two illustrative models below show how much that single unknown changes the picture.",
-      },
-      {
-        type: "table",
-        headers: ["Era", "Model A — weighted by multiplier", "Model B — equal split"],
-        rows: [
-          ["H1 · Starting Era", { text: "279,365,079 (50.79%)", align: "right" }, { text: "91,666,667", align: "right" }],
-          ["H2 · First Reduction", { text: "139,682,540 (25.40%)", align: "right" }, { text: "91,666,667", align: "right" }],
-          ["H3 · Deep Mining", { text: "69,841,270 (12.70%)", align: "right" }, { text: "91,666,667", align: "right" }],
-          ["H4 · Scarcity Era", { text: "34,920,635 (6.35%)", align: "right" }, { text: "91,666,667", align: "right" }],
-          ["H5 · Last Vein", { text: "17,460,317 (3.17%)", align: "right" }, { text: "91,666,667", align: "right" }],
-          ["H6 · Final Depth", { text: "8,730,159 (1.59%)", align: "right" }, { text: "91,666,667", align: "right" }],
-        ],
-      },
-      {
-        type: "callout",
-        tone: "gold",
-        title: "Takeaway",
-        text: "Under Model A, roughly three-quarters of all DOM that will ever be mined (76.2%) is released in the first two eras alone. Under Model B, mining stays roughly linear across all six. A single undisclosed parameter — the Halving trigger — is the difference between these two very different supply curves, and no one outside the team can currently know which (or neither) is closer to reality.",
-      },
-      { type: "heading", id: "circulating-supply", text: "Circulating supply & withdrawability" },
-      { type: "paragraph", text: "Three different numbers matter here, and conflating them is the most common error in a low-quality tokenomics writeup." },
-      {
-        type: "formula",
-        text: "Total Mined(t) × 70% → Holding Wallet (rank-only, not withdrawable today) · × 30% → Pool Wallet (spendable AND withdrawal-eligible)",
-      },
+      { type: "heading", id: "supply", text: "Fixed supply, not inflation" },
       {
         type: "tiles",
-        items: [
-          { label: "Max ever mined", value: "550,000,000", sub: "100% of mining allocation" },
-          { label: "Max Holding-locked", value: "385,000,000", sub: "70% — not withdrawable under current rules" },
-          { label: "Max withdrawal-eligible", value: "165,000,000", sub: "30% — the entire tradable-supply ceiling today", accent: "emerald" },
-        ],
+        items: supplyFacts.map((f) => ({ label: f.label, value: f.value })),
       },
       {
         type: "note",
-        text: "This 165,000,000 DOM ceiling — not the 1,000,000,000 max supply, and not even the 550,000,000 mining allocation — is the realistic upper bound on what could ever reach a market under the current 70/30 rule. The project itself flags this split as under active review now that on-chain withdrawal is live; if it changes, this ceiling changes with it.",
+        text: "There is no scenario in this model where total supply exceeds 1,000,000,000 DOM. Mining distributes the pre-allocated 550,000,000 DOM Mining Allocation — it is never token creation.",
       },
-      { type: "heading", id: "fdv-sensitivity", text: "FDV / market cap sensitivity" },
-      {
-        type: "paragraph",
-        text: "Not a forecast. A sensitivity table — the standard way analysts communicate valuation for an asset with no live price, so a reader can plug in their own price assumption rather than being handed someone else's.",
-      },
+      { type: "heading", id: "emission-schedule", text: "Emission schedule across six Halvings" },
       {
         type: "table",
-        headers: ["Hypothetical price", "FDV (1B supply)", "Market cap (165M ceiling)"],
+        headers: ["Era", "Allocation", "Daily Emission Ceiling", "Illustrative Duration at Ceiling"],
         rows: [
-          ["$0.0001", { text: "$100,000", align: "right" }, { text: "$16,500", align: "right" }],
-          ["$0.001", { text: "$1,000,000", align: "right" }, { text: "$165,000", align: "right" }],
-          ["$0.01", { text: "$10,000,000", align: "right" }, { text: "$1,650,000", align: "right" }],
-          ["$0.10", { text: "$100,000,000", align: "right" }, { text: "$16,500,000", align: "right" }],
+          ["H1 · Starting Era", { text: "91,666,667 DOM", align: "right" }, { text: "1,000,000 DOM/day", align: "right" }, { text: "≈ 91.7 days", align: "right" }],
+          ["H2 · First Reduction", { text: "91,666,667 DOM", align: "right" }, { text: "500,000 DOM/day", align: "right" }, { text: "≈ 183.3 days", align: "right" }],
+          ["H3 · Deep Mining", { text: "91,666,667 DOM", align: "right" }, { text: "250,000 DOM/day", align: "right" }, { text: "≈ 366.7 days", align: "right" }],
+          ["H4 · Scarcity Era", { text: "91,666,667 DOM", align: "right" }, { text: "125,000 DOM/day", align: "right" }, { text: "≈ 733.3 days", align: "right" }],
+          ["H5 · Last Vein", { text: "91,666,667 DOM", align: "right" }, { text: "62,500 DOM/day", align: "right" }, { text: "≈ 1,466.7 days", align: "right" }],
+          ["H6 · Final Depth", { text: "91,666,665 DOM", align: "right" }, { text: "31,250 DOM/day", align: "right" }, { text: "≈ 2,933.3 days", align: "right" }],
         ],
       },
       {
         type: "note",
-        text: "The FDV/market-cap ratio is a constant 6.06× at every price under the current 70/30 rule (Max Supply ÷ Withdrawal-Eligible Ceiling = 1,000,000,000 ÷ 165,000,000). A 6× gap between fully-diluted and realistically-tradable supply is a meaningful overhang for anyone pricing this token off market cap alone.",
+        text: "Illustrative Duration assumes every era's daily emission ceiling is fully claimed every single day — a theoretical upper bound, not a forecast. In practice a Halving advances only once its era's allocation is fully distributed, which depends on real network activity. Total theoretical emission lifecycle at these ceilings is roughly 5,775 days (≈ 15.8 years).",
+      },
+      { type: "heading", id: "emission-pool", text: "Why 1,000,000 users can't out-mine the pool" },
+      { type: "formula", text: emissionModel.shareFormula },
+      { type: "formula", text: emissionModel.rewardFormula },
+      {
+        type: "note",
+        text: "Referral, Guild, and event boosters change how the emission pool is split between miners — they never change the size of the pool. 10 miners, 10,000 miners, or 1,000,000 miners all divide the same finite daily ceiling.",
       },
       { type: "heading", id: "value-drivers", text: "Value driver assessment" },
       {
         type: "table",
         headers: ["Driver", "Status", "Note"],
         rows: [
-          ["Protocol revenue backing", { text: "None disclosed", badge: "warn" }, "Ecosystem is funded by optional rewarded ads + future Telegram Stars purchases — not revenue sharing."],
           ["Buyback / burn mechanism", { text: "TBA", badge: "tba" }, "Not mentioned in published Economy Rules or Roadmap."],
-          ["Utility sink (in-game spend)", { text: "Yes", badge: "good" }, "Pool Wallet DOM is spent on upgrades, guild costs and Stone Breaker."],
-          ["Staking", { text: "Planned", badge: "planned" }, "Roadmap Phase 4 lists Treasury Mechanics — no rate or lockup published yet."],
+          ["Utility sink (in-game spend)", { text: "Yes", badge: "good" }, "Available Balance DOM is spent on upgrades, guild costs, and Stone Breaker."],
+          ["Staking", { text: "Planned", badge: "planned" }, "Roadmap Phase 5/6 lists ecosystem utilities — no rate or lockup published yet."],
           ["Liquidity provisioning", { text: "Allocated", badge: "good" }, "10% of supply (100,000,000 DOM) earmarked — deployment timing and venue are TBA."],
-          ["Exchange listing", { text: "Not guaranteed", badge: "warn" }, "No promise of exchange listing or guaranteed liquidity."],
+          ["TGE / Market launch", { text: "Coming Soon", badge: "tba" }, "No date has been set. Announced only through official Dungeon of Miners channels."],
+          ["Exchange listing", { text: "Coming Soon", badge: "tba" }, "No venue or date confirmed. No promise of guaranteed liquidity."],
         ],
       },
-      { type: "heading", id: "dilution-risk", text: "Dilution & unlock risk" },
+      { type: "heading", id: "dilution-risk", text: "Dilution & vesting" },
       {
         type: "list",
         items: [
-          "The 70/30 split is under active review — if the Holding Wallet's 70% becomes withdrawable, the eligible-for-market ceiling jumps from 165,000,000 to as much as 550,000,000 DOM (a 3.33× supply shock) the moment the rule changes.",
-          "450,000,000 DOM has no published vesting — Liquidity, Team, Treasure & Reserve, Ecosystem and Public/Strategic together are 45% of total supply, with no disclosed cliff, vesting curve, or release date.",
+          "450,000,000 DOM (Liquidity, Team, Treasure & Reserve, Ecosystem, Public/Strategic — 45% of total supply) has no published vesting schedule at the time of writing.",
+          "The Mining Allocation (55%) is the only allocation with a disclosed release mechanism: the six-Halving emission schedule above.",
         ],
       },
-      {
-        type: "callout",
-        tone: "danger",
-        title: "Combined worst-case framing",
-        text: "Under current disclosure, there is no published ceiling that rules out more than half of the 1,000,000,000 DOM max supply becoming liquid-eligible without further notice. This is not a claim that it will happen — it is the range the current disclosures leave open.",
-      },
-      { type: "heading", id: "key-unknowns", text: "Key unknowns & sensitivities" },
+      { type: "heading", id: "key-unknowns", text: "Key unknowns" },
       {
         type: "list",
         items: [
-          "Network — determines gas economics and available liquidity venues.",
-          "Halving trigger (Dynamic Supply Trigger) — decides which emission model, if either, resembles reality.",
-          "Vesting for the 450M non-mining allocation — sets the real dilution timeline.",
-          "70/30 wallet-split outcome — sets the FDV/MC ratio, currently 6.06×.",
-          "Active miner count — sets the realistic per-miner allocation; currently unbounded from public data.",
-          "Listing venue / timing — no price exists until one does.",
+          "Exact Halving trigger timing — depends on real network mining activity, not a fixed date.",
+          "Vesting schedule for the 450M non-mining allocation.",
+          "TGE date and exchange listing venue/timing.",
+          "Active miner count — sets the realistic per-miner emission share; currently unbounded from public data.",
+          "DOM contract address and block explorer — published only once deployed.",
         ],
       },
       { type: "heading", id: "disclaimer", text: "Disclaimer" },
       {
         type: "callout",
         tone: "danger",
-        text: "This document is an independent analytical model, not an official Dungeon of Miners publication and not investment advice. Every figure is either taken directly from published Economy Rules v2.0, a clearly labeled hypothetical or modeling assumption, or explicitly marked as an unknown the project itself has not disclosed. Nothing here is a price prediction, a price target, or a guarantee of any kind. DOM has no live market, no guaranteed exchange listing, and mining or holding it does not guarantee financial value or profit.",
+        text: "This page is an illustrative analytical model, not investment advice. Every figure is either taken directly from published Economy Rules v3.0 or explicitly marked TBA. Nothing here is a price prediction, a price target, or a guarantee of any kind. DOM has no live market, no guaranteed exchange listing, and mining or holding it does not guarantee financial value or profit.",
       },
     ],
   },

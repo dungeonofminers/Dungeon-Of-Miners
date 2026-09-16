@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { ArrowRight, UserPlus, Gift, ShieldAlert } from "lucide-react";
-import { siteConfig, links } from "@/content/site";
+import { ArrowRight, UserPlus, Gift, ShieldAlert, Zap } from "lucide-react";
+import { siteConfig, links, referralBooster } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 
 export const metadata: Metadata = {
-  title: `Referral Program — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "Invite miners, earn permanent hashrate — not revenue sharing.",
+  title: `Referral Booster — ${siteConfig.name} (${siteConfig.ticker})`,
+  description: "Invite active miners, earn a capped Mining Weight boost — not revenue sharing.",
 };
 
 export default function ReferralPage() {
@@ -19,9 +19,9 @@ export default function ReferralPage() {
 
         <div className="section-shell relative">
           <SectionHeading
-            eyebrow="Referral Program"
-            title="Invite miners. Earn permanent hashrate."
-            description="This isn't revenue sharing — it's a permanent, capped boost to your own mining rate."
+            eyebrow="Referral Booster"
+            title="Invite active miners. Earn Mining Weight."
+            description="This isn't revenue sharing — it's a capped, activity-based boost to your own Effective Mining Weight."
           />
         </div>
       </section>
@@ -32,40 +32,74 @@ export default function ReferralPage() {
             <Reveal>
               <div className="surface-panel h-full p-6 text-center">
                 <UserPlus className="mx-auto h-6 w-6 text-gold" />
-                <p className="mt-4 font-display text-2xl text-gold">+2%</p>
-                <p className="mt-1 text-sm text-ink-muted">Permanent hashrate per qualified referral</p>
+                <p className="mt-4 font-display text-2xl text-gold">+{referralBooster.weightPerActiveReferral}%</p>
+                <p className="mt-1 text-sm text-ink-muted">Mining Weight per active qualified referral</p>
               </div>
             </Reveal>
             <Reveal delay={0.06}>
               <div className="surface-panel h-full p-6 text-center">
                 <Gift className="mx-auto h-6 w-6 text-gold" />
-                <p className="mt-4 font-display text-2xl text-gold">50 max</p>
-                <p className="mt-1 text-sm text-ink-muted">Referrals count toward the cap — up to +100%</p>
+                <p className="mt-4 font-display text-2xl text-gold">{referralBooster.maxQualifiedReferrals} max</p>
+                <p className="mt-1 text-sm text-ink-muted">
+                  Qualified referrals count toward the cap — up to +{referralBooster.maxBoostPercent}%
+                </p>
               </div>
             </Reveal>
             <Reveal delay={0.12}>
               <div className="surface-panel h-full p-6 text-center">
-                <Gift className="mx-auto h-6 w-6 text-emerald-glow" />
-                <p className="mt-4 font-display text-2xl text-emerald-glow">+50 DOM</p>
-                <p className="mt-1 text-sm text-ink-muted">Starter bonus your invited friend receives</p>
+                <Zap className="mx-auto h-6 w-6 text-emerald-glow" />
+                <p className="mt-4 font-display text-2xl text-emerald-glow">
+                  +{referralBooster.starterBoost.percent}%
+                </p>
+                <p className="mt-1 text-sm text-ink-muted">
+                  Starter Mining Boost your invited friend gets for {referralBooster.starterBoost.durationHours}h
+                </p>
               </div>
             </Reveal>
           </div>
+
+          <Reveal delay={0.16}>
+            <div className="surface-panel mx-auto mt-6 max-w-4xl p-8 sm:p-10">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">Milestones</h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {referralBooster.milestones.map((m) => (
+                  <span
+                    key={m}
+                    className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1.5 text-xs font-semibold text-gold"
+                  >
+                    {m} Qualified Miner{m > 1 ? "s" : ""}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-ink-faint">
+                Milestones unlock badges, cosmetics, and titles — never additional uncapped DOM
+                rewards.
+              </p>
+            </div>
+          </Reveal>
 
           <Reveal delay={0.18}>
             <div className="surface-panel mx-auto mt-6 max-w-4xl p-8 sm:p-10">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
                 How a referral qualifies
               </h3>
-              <p className="body-lg mt-3 text-sm">
-                A referral only qualifies once your friend claims on 3 different days. Self-referrals,
-                automated accounts, and multi-account farming are not allowed and can invalidate
-                rewards.
+              <ul className="mt-4 flex flex-col gap-2">
+                {referralBooster.qualificationRules.map((rule) => (
+                  <li key={rule} className="flex items-start gap-2 text-sm text-ink-muted">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold/60" />
+                    {rule}
+                  </li>
+                ))}
+              </ul>
+              <p className="body-lg mt-4 text-sm">
+                Referral ownership is immutable once attributed — a referred account can never
+                switch referrers later, and the same referral is never credited twice.
               </p>
               <div className="mt-5 flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
                 <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint" />
                 <p className="text-xs text-ink-faint">
-                  Referral manipulation is covered by our{" "}
+                  Self-referrals, automated accounts, and multi-account farming are not allowed
+                  and can invalidate rewards. Referral manipulation is covered by our{" "}
                   <a href="/fair-play" className="text-gold underline-offset-4 hover:underline">
                     Fair Play Policy
                   </a>{" "}
