@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 const flowSteps = [
-  `Connect a TON wallet via ${withdrawalConfig.walletConnector}`,
+  `Connect a BEP20 wallet via ${withdrawalConfig.walletConnector}`,
   "Enter withdrawal amount",
   "Server validates your Available Balance",
   "Confirm withdrawal",
@@ -43,8 +43,8 @@ export function PreTgeSection() {
                 </span>
               </div>
               <p className="mt-4 text-xs leading-relaxed text-ink-faint">
-                This describes the fee the miner pays — not the blockchain itself. The TON
-                network still has a real transaction cost; the ecosystem covers it on the
+                This describes the fee the miner pays — not the blockchain itself. BNB Smart
+                Chain still has a real transaction cost; the ecosystem covers it on the
                 miner&apos;s behalf.
               </p>
             </div>

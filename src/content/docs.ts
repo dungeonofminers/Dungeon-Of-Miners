@@ -105,7 +105,7 @@ export const docsIntro: DocPage = {
         { label: "Fixed Supply", value: `${totalSupply}, created once. ${economyConfig.mintingStatus}.` },
         { label: "Six Halvings", value: "Equal 91,666,667 DOM eras, each with a halved daily emission ceiling." },
         { label: "Global Emission Pool", value: "Rewards are a capped, shared pool — more miners divide it, never exceed it." },
-        { label: "Instant On-Chain Withdrawal", value: "Automated backend validation and broadcast on TON, via TON Connect." },
+        { label: "Instant On-Chain Withdrawal", value: "Automated backend validation and broadcast on BNB Smart Chain, via WalletConnect." },
       ],
     },
     { type: "heading", id: "where-things-stand", text: "Where the ecosystem stands today" },
@@ -395,13 +395,13 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "Zero fee describes what the miner pays, not the blockchain itself — the TON network still has a real transaction cost, which the ecosystem covers on the miner's behalf.",
+        text: "Zero fee describes what the miner pays, not the blockchain itself — BNB Smart Chain still has a real transaction cost, which the ecosystem covers on the miner's behalf.",
       },
       { type: "heading", id: "withdrawal-flow", text: "Withdrawal flow" },
       {
         type: "steps",
         items: [
-          { title: `Connect a TON wallet via ${withdrawalConfig.walletConnector}` },
+          { title: `Connect a BEP20 wallet via ${withdrawalConfig.walletConnector}` },
           { title: "Enter withdrawal amount" },
           { title: "Server validates your Available Balance" },
           { title: "Confirm withdrawal" },

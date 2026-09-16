@@ -11,7 +11,8 @@
 //
 // There is no Holding/Pool wallet split. 100% of every claim becomes
 // Available DOM Balance, which is eligible for instant, automated on-chain
-// withdrawal (TON, via TON Connect) at zero fee to the miner.
+// withdrawal (BNB Smart Chain / BEP20, via WalletConnect) at zero fee to
+// the miner.
 //
 // Progression is Pickaxe Level 1–6 (driven by Mining XP, not wallet
 // balance) — there is no separate Rank System and no Pickaxe Equipment
@@ -163,7 +164,7 @@ export const coreLoop = [
     step: "06",
     title: "Withdraw On-Chain",
     description:
-      "Connect a TON wallet and withdraw eligible Available Balance instantly — zero withdrawal fee, network fee sponsored.",
+      "Connect a BEP20 wallet and withdraw eligible Available Balance instantly — zero withdrawal fee, network fee sponsored.",
   },
 ];
 
@@ -254,8 +255,8 @@ export const economyConfig = {
   tgeStatus: "COMING SOON" as LaunchStatus,
   exchangeListingStatus: "COMING SOON" as LaunchStatus,
   currentHalving: 1,
-  network: "TON",
-  walletConnector: "TON Connect",
+  network: "BNB Smart Chain (BEP20)",
+  walletConnector: "WalletConnect",
   mintingStatus: "Disabled — No Additional Minting",
   economyVersion: "v3.0",
   economyLastUpdated: "2026-09-17",
@@ -488,7 +489,7 @@ export const balanceModel = {
     },
     {
       label: "Connected Wallet",
-      description: "Your external TON wallet, connected via TON Connect.",
+      description: "Your external BEP20 wallet, connected via WalletConnect.",
     },
   ],
   accountingStates: ["miningStorage", "availableBalance", "pendingWithdrawal", "withdrawnBalance"],
@@ -552,6 +553,7 @@ export const economyChangelog = [
       "Added TGE (Coming Soon) and Exchange Listing (Coming Soon) status.",
       "Removed the Protocol Revenue Backing row from the Tokenomics & Valuation Model.",
       "Removed remaining legacy Pre-TGE, Floor-system, and 6,000,000,000 DOM references from documentation.",
+      "Confirmed the launch network as BNB Smart Chain (BEP20), connected via WalletConnect.",
     ],
   },
   {
@@ -577,16 +579,16 @@ export const withdrawalConfig = {
   feeDom: 0,
   feeLabel: "Zero Withdrawal Fee",
   networkFeeLabel: "Sponsored",
-  network: "TON",
-  walletConnector: "TON Connect",
-  chainId: "TBA",
+  network: "BNB Smart Chain (BEP20)",
+  walletConnector: "WalletConnect",
+  chainId: "56 (BNB Smart Chain Mainnet)",
   domContractAddress: "TBA",
-  blockExplorerUrl: "TBA",
+  blockExplorerUrl: "BscScan (bscscan.com)",
   statuses: ["Processing", "Broadcasted", "Confirmed", "Failed"] as const,
   minimumWithdrawal: "TBA",
   maximumWithdrawal: "TBA",
   instantNote:
-    "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. The TON network itself can still take a short time to confirm the transaction on-chain.",
+    "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. BNB Smart Chain itself can still take a short time to confirm the transaction on-chain.",
 };
 
 export const riskDisclosure =
@@ -732,7 +734,7 @@ export const featureGroups: FeatureGroup[] = [
   {
     group: "On-Chain",
     items: [
-      { title: "TON Connect Wallet", description: "Connect an external TON wallet — Dungeon of Miners never asks for your seed phrase.", icon: "wallet" },
+      { title: "WalletConnect", description: "Connect an external BEP20 wallet — Dungeon of Miners never asks for your seed phrase.", icon: "wallet" },
       { title: "Available DOM Balance", description: "The spendable, withdrawal-eligible balance created the moment you claim.", icon: "coins" },
       { title: "Instant On-Chain Withdrawal", description: "Automated backend validation and broadcast — no manual approval queue.", icon: "send" },
       { title: "Zero DOM Withdrawal Fee", description: "Dungeon of Miners charges 0 DOM to withdraw. Network fee: sponsored.", icon: "shield" },
@@ -858,15 +860,15 @@ export const faqs = [
   {
     question: "How does on-chain withdrawal work?",
     answer:
-      "Connect your TON wallet, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction — no manual approval queue. You'll see a real transaction hash, a block explorer link, and a status of Processing, Broadcasted, Confirmed, or Failed.",
+      "Connect your BEP20 wallet, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction — no manual approval queue. You'll see a real transaction hash, a BscScan link, and a status of Processing, Broadcasted, Confirmed, or Failed.",
   },
   {
     question: "What network does Dungeon of Miners use?",
-    answer: "The TON blockchain, for DOM token distribution and on-chain withdrawal.",
+    answer: "BNB Smart Chain (BEP20), for DOM token distribution and on-chain withdrawal.",
   },
   {
     question: "What wallet can I connect?",
-    answer: "Any TON Connect–compatible wallet.",
+    answer: "Any BEP20-compatible wallet via WalletConnect — including MetaMask and Trust Wallet.",
   },
   {
     question: "Does Dungeon of Miners request my seed phrase?",
@@ -875,7 +877,7 @@ export const faqs = [
   {
     question: "What does zero withdrawal fee mean?",
     answer:
-      "Dungeon of Miners charges you 0 DOM to withdraw. This describes the fee the miner pays, not the blockchain itself — the TON network still has a real transaction cost, which the ecosystem sponsors on your behalf.",
+      "Dungeon of Miners charges you 0 DOM to withdraw. This describes the fee the miner pays, not the blockchain itself — BNB Smart Chain still has a real transaction cost, which the ecosystem sponsors on your behalf.",
   },
   {
     question: "What is a Guild?",
