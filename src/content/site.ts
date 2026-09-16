@@ -68,7 +68,7 @@ export const navGroups: NavGroup[] = [
   {
     label: "Docs",
     items: [
-      { label: "Documentation", href: "#", comingSoon: true },
+      { label: "Documentation", href: "/docs" },
       { label: "FAQ", href: "/faq" },
       { label: "Fair Play", href: "/fair-play" },
       { label: "Changelog", href: "/changelog" },
