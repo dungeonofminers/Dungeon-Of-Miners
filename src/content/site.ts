@@ -1,31 +1,70 @@
 // ---------------------------------------------------------------------------
 // Dungeon of Miners — central content & config file.
-// Edit copy, links, and asset paths here. Nothing else needs to change.
+// Edit copy, links, and asset paths here. Raw economy numbers live in
+// economy.config.ts — this file turns them into the display-shaped data
+// every page/component reads. Nothing else needs to change.
 //
-// ECONOMY v3.0 — CORE MODEL
-// DOM has a permanently FIXED max supply of 1,000,000,000. The entire supply
-// is created once; minting is disabled after deployment. 55% (550,000,000
-// DOM) is the Mining Allocation, distributed — never minted — to miners
-// through a shared Global Emission Pool across six Halving eras. Mining is
-// distribution of a finite, pre-allocated pool, not token creation.
+// ECONOMY v4.0 — CURRENT MODEL (see economyChangelog for full history)
+// DOM has a permanently FIXED max supply of 1,000,000,000 on BNB Smart
+// Chain (BEP-20). The entire supply is created once; minting is disabled
+// after deployment. 55% (550,000,000 DOM) is the Mining Allocation,
+// distributed — never minted — to miners through a server-authoritative
+// Global Emission System across six equal Halving eras.
 //
 // There is no Holding/Pool wallet split. 100% of every claim becomes
-// Available DOM Balance, which is eligible for instant, automated on-chain
-// withdrawal (BNB Smart Chain / BEP20, via WalletConnect) at zero fee to
-// the miner.
+// Available DOM Balance, eligible for instant, automated BSC withdrawal at
+// zero fee to the miner.
 //
-// Progression is Pickaxe Level 1–6 (driven by Mining XP, not wallet
-// balance) — there is no separate Rank System and no Pickaxe Equipment
-// Multiplier. TGE (public market launch) and Exchange Listing are both
-// status: Coming Soon.
+// Progression is Pickaxe Level 1–6, driven by Mining XP (not wallet
+// balance or an Equipment Multiplier — neither exists). TGE (public market
+// launch) and Exchange Listing are both status: Coming Soon.
 // ---------------------------------------------------------------------------
+
+import {
+  NETWORK,
+  TOKEN_STANDARD,
+  CHAIN_ID,
+  BLOCK_EXPLORER_NAME,
+  BLOCK_EXPLORER_URL,
+  TOTAL_SUPPLY,
+  MINING_ALLOCATION,
+  LIQUIDITY_ALLOCATION,
+  TEAM_ALLOCATION,
+  TREASURE_ALLOCATION,
+  ECOSYSTEM_ALLOCATION,
+  PUBLIC_STRATEGIC_ALLOCATION,
+  HALVING_COUNT,
+  CURRENT_HALVING,
+  HALVING_ALLOCATIONS,
+  HALVING_EMISSION_RATES,
+  EPOCH_DURATION_MINUTES,
+  PICKAXE_POWER,
+  XP_THRESHOLDS,
+  STORAGE_CAPACITY,
+  REFERRAL_BOOST_PER_ACTIVE_USER,
+  MAX_REFERRAL_BOOST,
+  MAX_QUALIFIED_REFERRALS,
+  REFERRAL_ACTIVE_WINDOW_DAYS,
+  REFERRAL_STARTER_BOOST_PERCENT,
+  REFERRAL_STARTER_BOOST_HOURS,
+  MAX_GUILD_MEMBERS,
+  GUILD_COOLDOWN_HOURS,
+  MAX_GUILD_BOOST,
+  GUILD_BOOSTER_TIERS,
+  BOOST_CAP,
+  MIN_WITHDRAWAL,
+  WITHDRAWAL_COOLDOWN_HOURS,
+  formatDOM,
+  formatPercent,
+} from "./economy.config";
 
 export const siteConfig = {
   name: "Dungeon of Miners",
   ticker: "DOM",
-  tagline: "Mine DOM. Withdraw On-Chain. Survive the Halving.",
+  tagline: "Mine DOM. Upgrade Your Pickaxe. Build Your Guild. Survive the Halving.",
+  taglineShort: "Mine DOM. Withdraw On-Chain. Survive the Halving.",
   description:
-    "Dungeon of Miners is a Telegram mining ecosystem powered by a fixed supply of 1 billion DOM, six Halving eras, community Guilds, and instant on-chain withdrawals.",
+    "Dungeon of Miners is a mining ecosystem powered by a fixed supply of 1 billion DOM, six Halving eras, Pickaxe progression, community Guilds and on-chain BSC withdrawals.",
   url: "https://dungeonofminers.com",
 };
 
@@ -62,6 +101,7 @@ export const navGroups: NavGroup[] = [
       { label: "Mining Economy", href: "/economy" },
       { label: "Tokenomics", href: "/tokenomics" },
       { label: "Halvings", href: "/halving" },
+      { label: "Live Dashboard", href: "/#dashboard" },
       { label: "On-Chain Withdrawal", href: "/economy#withdrawal" },
     ],
   },
@@ -78,6 +118,7 @@ export const navGroups: NavGroup[] = [
     label: "Docs",
     items: [
       { label: "Documentation", href: "/docs" },
+      { label: "Transparency", href: "/transparency" },
       { label: "FAQ", href: "/faq" },
       { label: "Fair Play", href: "/fair-play" },
       { label: "Changelog", href: "/changelog" },
@@ -87,6 +128,16 @@ export const navGroups: NavGroup[] = [
 ];
 
 export const navTopLevel: NavItem = { label: "Roadmap", href: "/roadmap" };
+
+export const footerLegalLinks: NavItem[] = [
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Risk Disclosure", href: "/risk-disclosure" },
+  { label: "Fair Play", href: "/fair-play" },
+  { label: "Token Disclaimer", href: "/token-disclaimer" },
+  { label: "Data Deletion", href: "/data-deletion" },
+  { label: "Support", href: "/support" },
+];
 
 // ---------------------------------------------------------------------------
 // Assets — drop your files into /public/assets using these exact names
@@ -152,7 +203,7 @@ export const coreLoop = [
     step: "04",
     title: "Level Up Your Pickaxe",
     description:
-      "Mining activity earns Mining XP. XP progresses your Pickaxe through Level 1–6, permanently raising your Base Mining Power.",
+      "Mining activity earns Mining XP. XP progresses your Pickaxe through Level 1–6, raising your Base Mining Power and Storage Capacity.",
   },
   {
     step: "05",
@@ -164,87 +215,61 @@ export const coreLoop = [
     step: "06",
     title: "Withdraw On-Chain",
     description:
-      "Connect a BEP20 wallet and withdraw eligible Available Balance instantly — zero withdrawal fee, network fee sponsored.",
+      "Connect a BEP-20 wallet and withdraw eligible Available Balance instantly on BNB Smart Chain — zero withdrawal fee, network fee sponsored.",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// The Six Halvings — the 550,000,000 DOM Mining Allocation is split into six
-// EQUAL 91.67M DOM eras. There is NO daily/hourly emission ceiling: each
-// Halving simply mines down its own fixed allocation until it is fully
-// distributed, and only then does the network move on to the next Halving.
-// `status` should ultimately be driven by the backend once real distributed
-// totals exist — CURRENT/UPCOMING/LOCKED reflect today's known state, not an
-// invented date.
+// The Six Halvings — built entirely from economy.config's HALVING_ALLOCATIONS
+// / HALVING_EMISSION_RATES, never restated by hand. Each era is an EQUAL
+// slice of the Mining Allocation; emissionRate is a relative pacing
+// multiplier (halves every era) that governs how fast the backend releases
+// that era's fixed allocation per epoch — it is NOT a separate additional
+// supply, and NOT a publicly fixed "DOM per day" number. `status` should
+// ultimately be backend-driven once real distributed totals exist.
 // ---------------------------------------------------------------------------
 export type HalvingStatus = "CURRENT" | "UPCOMING" | "LOCKED";
 
-export const halvings = [
-  {
-    number: 1,
-    name: "Starting Era",
-    image: assets.halving1,
-    allocation: "91,666,667 DOM",
-    percentOfPool: "16.67%",
-    status: "CURRENT" as HalvingStatus,
-    vibe: "The surface tunnels. The first slice of the mining pool — the richest era to start extracting DOM.",
-  },
-  {
-    number: 2,
-    name: "First Reduction",
-    image: assets.halving2,
-    allocation: "91,666,667 DOM",
-    percentOfPool: "16.67%",
-    status: "UPCOMING" as HalvingStatus,
-    vibe: "Empty caverns swallow sound. Halving 1's allocation is fully mined out — early miners keep their edge.",
-  },
-  {
-    number: 3,
-    name: "Deep Mining",
-    image: assets.halving3,
-    allocation: "91,666,667 DOM",
-    percentOfPool: "16.67%",
-    status: "LOCKED" as HalvingStatus,
-    vibe: "Torchlight barely holds the dark back. Only committed miners make it this far.",
-  },
-  {
-    number: 4,
-    name: "Scarcity Era",
-    image: assets.halving4,
-    allocation: "91,666,667 DOM",
-    percentOfPool: "16.67%",
-    status: "LOCKED" as HalvingStatus,
-    vibe: "Heat rises from the deep rock. DOM is harder to extract, and every claim counts more.",
-  },
-  {
-    number: 5,
-    name: "Last Vein",
-    image: assets.halving5,
-    allocation: "91,666,667 DOM",
-    percentOfPool: "16.67%",
-    status: "LOCKED" as HalvingStatus,
-    vibe: "Ash drifts through cracked tunnels. Scarcity is no longer a warning — it's the reality.",
-  },
-  {
-    number: 6,
-    name: "Final Depth",
-    image: assets.halving6,
-    allocation: "91,666,665 DOM",
-    percentOfPool: "16.67%",
-    status: "LOCKED" as HalvingStatus,
-    vibe: "The deepest chamber. The final slice of the mining pool.",
-  },
+const HALVING_META: { name: string; vibe: string }[] = [
+  { name: "Starting Era", vibe: "The surface tunnels. The first slice of the mining pool — the richest era to start extracting DOM." },
+  { name: "First Reduction", vibe: "Empty caverns swallow sound. Halving 1's allocation is fully mined out — early miners keep their edge." },
+  { name: "Deep Mining", vibe: "Torchlight barely holds the dark back. Only committed miners make it this far." },
+  { name: "Scarcity Era", vibe: "Heat rises from the deep rock. DOM is harder to extract, and every claim counts more." },
+  { name: "Last Vein", vibe: "Ash drifts through cracked tunnels. Scarcity is no longer a warning — it's the reality." },
+  { name: "Final Depth", vibe: "The deepest chamber. The final slice of the mining pool." },
 ];
+
+const HALVING_IMAGES = [assets.halving1, assets.halving2, assets.halving3, assets.halving4, assets.halving5, assets.halving6];
+
+export const halvings = HALVING_ALLOCATIONS.map((allocation, i) => {
+  const number = i + 1;
+  return {
+    number,
+    name: HALVING_META[i].name,
+    image: HALVING_IMAGES[i],
+    allocation: formatDOM(allocation),
+    percentOfPool: formatPercent(allocation / MINING_ALLOCATION),
+    emissionRate: formatPercent(HALVING_EMISSION_RATES[i]),
+    status: (number === CURRENT_HALVING ? "CURRENT" : number < CURRENT_HALVING ? "LOCKED" : number === CURRENT_HALVING + 1 ? "UPCOMING" : "LOCKED") as HalvingStatus,
+    // Real-time figures — never fabricated. Populated once the backend
+    // surfaces them; the UI shows "Awaiting Live Data" until then.
+    distributed: "Awaiting Live Data",
+    remaining: "Awaiting Live Data",
+    progressPercent: null as number | null,
+    vibe: HALVING_META[i].vibe,
+  };
+});
 
 export const halvingTrigger =
   "Allocation-Based — the next Halving begins once the current era's mining allocation is fully distributed. There is no fixed date or timer.";
 
-export const totalSupply = "1,000,000,000 DOM";
+export const totalSupply = formatDOM(TOTAL_SUPPLY);
 
 // ---------------------------------------------------------------------------
 // Economy status — SINGLE SOURCE OF TRUTH for live mining/Halving/withdrawal
 // state. Every component that shows this state reads from this object
-// instead of hardcoding its own copy.
+// instead of hardcoding its own copy. Only flip a status to "LIVE" once the
+// corresponding backend functionality is actually deployed.
 // ---------------------------------------------------------------------------
 export type MiningStatus = "LIVE" | "MAINTENANCE";
 export type LaunchStatus = "LIVE" | "COMING SOON";
@@ -254,11 +279,11 @@ export const economyConfig = {
   withdrawalStatus: "LIVE" as LaunchStatus,
   tgeStatus: "COMING SOON" as LaunchStatus,
   exchangeListingStatus: "COMING SOON" as LaunchStatus,
-  currentHalving: 1,
-  network: "BNB Smart Chain (BEP20)",
+  currentHalving: CURRENT_HALVING,
+  network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "WalletConnect",
   mintingStatus: "Disabled — No Additional Minting",
-  economyVersion: "v3.0",
+  economyVersion: "v4.0",
   economyLastUpdated: "2026-09-17",
 };
 
@@ -269,66 +294,70 @@ export const economyConfig = {
 export const supplyFacts = [
   { label: "Fixed Supply", value: totalSupply },
   { label: "Minting", value: economyConfig.mintingStatus },
-  { label: "Mining Allocation", value: "550,000,000 DOM" },
-  { label: "Halving Eras", value: "6" },
+  { label: "Mining Allocation", value: formatDOM(MINING_ALLOCATION) },
+  { label: "Halving Eras", value: String(HALVING_COUNT) },
+  { label: "Network", value: NETWORK },
+  { label: "Token Standard", value: TOKEN_STANDARD },
 ];
 
 // ---------------------------------------------------------------------------
-// Token allocation — exact 1,000,000,000 DOM split. Percentages and amounts
-// must never be changed without an explicit, approved economic decision.
+// Token allocation — exact 1,000,000,000 DOM split, derived from
+// economy.config (which enforces the sum at import time). Percentages and
+// amounts must never be changed without an explicit, approved economic
+// decision — change the numbers in economy.config.ts, not here.
 // ---------------------------------------------------------------------------
 export const tokenAllocation = [
   {
     id: "mining",
     label: "Mining Rewards",
-    percent: 55,
-    amount: "550,000,000 DOM",
+    percent: Math.round((MINING_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(MINING_ALLOCATION),
     color: "#F4B544", // primary gold
     description: "The largest allocation belongs to miners and community distribution.",
   },
   {
     id: "liquidity",
     label: "Liquidity",
-    percent: 10,
-    amount: "100,000,000 DOM",
+    percent: Math.round((LIQUIDITY_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(LIQUIDITY_ALLOCATION),
     color: "#D98A1E", // amber
     description: "Reserved to support healthy DOM market liquidity.",
   },
   {
     id: "team",
     label: "Team",
-    percent: 5,
-    amount: "50,000,000 DOM",
+    percent: Math.round((TEAM_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(TEAM_ALLOCATION),
     color: "#8a5a3c", // bronze
     description: "Long-term allocation for the core team.",
   },
   {
     id: "treasury",
     label: "Treasure & Ecosystem Reserve",
-    percent: 10,
-    amount: "100,000,000 DOM",
+    percent: Math.round((TREASURE_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(TREASURE_ALLOCATION),
     color: "#B8860B", // deep gold
     description: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
   },
   {
     id: "ecosystem",
     label: "Ecosystem",
-    percent: 15,
-    amount: "150,000,000 DOM",
+    percent: Math.round((ECOSYSTEM_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(ECOSYSTEM_ALLOCATION),
     color: "#FF8A2A", // warm orange
     description: "Allocated for product growth, guilds, partnerships, integrations, and ecosystem expansion.",
   },
   {
     id: "public",
     label: "Public / Strategic",
-    percent: 5,
-    amount: "50,000,000 DOM",
+    percent: Math.round((PUBLIC_STRATEGIC_ALLOCATION / TOTAL_SUPPLY) * 100),
+    amount: formatDOM(PUBLIC_STRATEGIC_ALLOCATION),
     color: "#a9825a", // muted copper
     description: "Reserved for public and strategic ecosystem opportunities.",
   },
 ];
 
-export const MINING_ALLOCATION_DOM = "550,000,000 DOM";
+export const MINING_ALLOCATION_DOM = formatDOM(MINING_ALLOCATION);
 
 // ---------------------------------------------------------------------------
 // Live mining status strip — every value here must come from the real
@@ -337,7 +366,7 @@ export const MINING_ALLOCATION_DOM = "550,000,000 DOM";
 // ---------------------------------------------------------------------------
 export const miningStatusStrip = {
   miningLabel: economyConfig.miningStatus,
-  currentHalvingLabel: `Halving ${economyConfig.currentHalving} / ${halvings.length}`,
+  currentHalvingLabel: `Halving ${economyConfig.currentHalving} / ${HALVING_COUNT}`,
   withdrawalLabel: "ON-CHAIN",
   withdrawalFeeLabel: "0 DOM",
   tgeLabel: economyConfig.tgeStatus,
@@ -354,14 +383,33 @@ export const halvingFacts = [
   { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
   { label: "Current Era Allocation", value: currentHalvingEntry.allocation },
   { label: "Share of Mining Pool", value: currentHalvingEntry.percentOfPool },
+  { label: "Relative Emission Rate", value: currentHalvingEntry.emissionRate },
   { label: "Mining Status", value: economyConfig.miningStatus },
-  { label: "Total Halvings", value: String(halvings.length) },
+  { label: "Total Halvings", value: String(HALVING_COUNT) },
 ];
 
 // ---------------------------------------------------------------------------
+// Mining XP — the main progression currency. Mining XP is NOT DOM: it never
+// touches the token supply, and it is earned from activity, not holdings.
+// ---------------------------------------------------------------------------
+export const miningXPSources = [
+  "Active mining",
+  "Claim",
+  "Daily check-in",
+  "Stone Breaker",
+  "Daily tasks",
+  "Guild Expedition participation",
+  "Guild contribution",
+  "Achievements",
+  "Qualified referrals",
+];
+
+export const xpThresholds = XP_THRESHOLDS;
+
+// ---------------------------------------------------------------------------
 // Mining activities — live mining is already on, so these are ongoing ways
-// to build progression, not pre-launch busywork. All of these can reward
-// real DOM or in-game progression now that mining is live.
+// to build progression, not pre-launch busywork. Rewards are XP/boosters
+// first — DOM only where it comes from a defined, capped budget.
 // ---------------------------------------------------------------------------
 export const miningActivities = [
   {
@@ -380,13 +428,13 @@ export const miningActivities = [
     icon: "calendar-check",
     title: "Daily Check-In",
     description: "Stay active every day to keep your streak and bonuses going.",
-    reward: "DOM + XP",
+    reward: "Mining XP",
   },
   {
     icon: "user-plus",
     title: "Referrals",
     description: "Invite active miners to grow the Referral Booster on your Mining Weight.",
-    reward: "+0.5% Mining Weight",
+    reward: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight`,
   },
   {
     icon: "users",
@@ -397,8 +445,8 @@ export const miningActivities = [
   {
     icon: "list-checks",
     title: "Daily Tasks",
-    description: "Complete community missions and objectives for steady rewards.",
-    reward: "XP + Chest Key",
+    description: "Complete community missions and objectives for steady progression.",
+    reward: "Mining XP",
   },
 ];
 
@@ -413,51 +461,61 @@ export const miningActivities = [
 export const miningFormula = {
   weightChain: [
     "Pickaxe Base Mining Power",
-    "× Referral Booster",
-    "× Guild Booster",
-    "× Temporary Event Booster",
+    "× (1 + Referral Booster + Guild Booster + Temporary Booster)",
   ],
   example: {
     label: "Effective Mining Weight Example",
     rows: [
-      { label: "Pickaxe Base Mining Power (Level 3)", value: "150" },
+      { label: "Pickaxe Base Mining Power (Level 3)", value: String(PICKAXE_POWER[2]) },
       { label: "Referral Booster (16 active referrals)", value: "+8%" },
       { label: "Guild Booster (guild 50%+ active)", value: "+5%" },
     ],
-    final: { label: "Effective Mining Weight", value: "≈ 170.1" },
+    final: { label: "Effective Mining Weight", value: `≈ ${Math.round(PICKAXE_POWER[2] * (1 + 0.08 + 0.05))}` },
   },
 };
 
 // ---------------------------------------------------------------------------
-// Global Emission Model — there is no daily/hourly emission ceiling. Each
-// Halving simply has a fixed, finite allocation (91,666,667 DOM), and
-// miners draw down that same shared pool proportional to their mining
-// weight until it is fully distributed — only then does the network
-// advance to the next Halving. This is the hard ceiling that protects the
-// 550,000,000 DOM Mining Allocation no matter how many miners join or how
-// many boosters they stack.
+// Global Emission System — no per-user daily cap, no infinite mint. Each
+// Halving has a fixed allocation; a relative emission rate paces how much
+// of that fixed pool is released per mining epoch (a short, fixed interval
+// — not a per-second loop, so the backend can scale to any miner count
+// using an accumulated reward-per-weight index rather than recalculating
+// every user on every tick).
 // ---------------------------------------------------------------------------
 export const emissionModel = {
-  shareFormula: "userEmissionShare = userEffectiveMiningWeight ÷ totalEffectiveMiningWeight",
-  rewardFormula: "userReward = currentHalvingRemainingAllocation × userEmissionShare",
-  note: "Every miner receives a proportional share of the current Halving's remaining allocation — never an unbounded per-user rate, and never a fixed amount per day. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool; they can never mine beyond it.",
+  architecture: [
+    "Halving Emission Rate",
+    "→ Epoch Budget",
+    "→ Total Mining Weight",
+    "→ User Mining Weight",
+    "→ User Reward",
+  ],
+  eraRateFormula: "EraEmissionRate = BaseEmissionRate × HalvingEmissionRate(currentHalving)",
+  epochBudgetFormula: "EpochBudget = min(EraEmissionRate × EpochDuration, RemainingHalvingAllocation)",
+  shareFormula: "userShare = userEffectiveMiningWeight ÷ totalNetworkMiningWeight",
+  rewardFormula: "userReward = epochBudget × userShare",
+  epochDurationLabel: `${EPOCH_DURATION_MINUTES}-minute epochs`,
+  note: "Every miner receives a proportional share of the current epoch's budget, itself capped by the current Halving's remaining allocation — never an unbounded per-user rate. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed era pool; they can never mine beyond it. All of this math runs server-side — the frontend only displays the result.",
 };
 
 export const boostRules = [
-  { label: "Referral Booster", value: "+0.5% Mining Weight per active qualified referral (max 30) — up to +15%" },
-  { label: "Guild Booster", value: "Tiered by guild activity — up to +10% Mining Weight" },
+  { label: "Referral Booster", value: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight per active qualified referral (max ${MAX_QUALIFIED_REFERRALS}) — up to +${MAX_REFERRAL_BOOST}%` },
+  { label: "Guild Booster", value: `Tiered by guild activity — up to +${MAX_GUILD_BOOST}% Mining Weight` },
   { label: "Temporary / Event Booster", value: "TBA — configurable, always capped" },
-  { label: "Global Emission Ceiling", value: "Always wins — no booster combination can exceed it" },
+  { label: "Combined Booster Ceiling", value: `+${BOOST_CAP}% before any event booster — the Halving's allocation always wins` },
 ];
 
 export const storageRules = {
   description:
     "Your miner stores earned DOM here until you claim it. DOM accumulates inside Mining Storage; it is never an external crypto wallet, and it is never silently deleted.",
-  baseStorage: "TBA",
-  storageUpgrade: "Higher Pickaxe Levels may unlock higher storage capacity — TBA",
+  capacityByLevel: STORAGE_CAPACITY,
+  baseStorage: formatDOM(STORAGE_CAPACITY[0]),
+  storageUpgrade: "Higher Pickaxe Levels unlock higher storage capacity — see Pickaxe Levels.",
   storageCapacity: "Displayed inside the Mini App",
-  exampleCurrent: 2400,
-  exampleMax: 5000,
+  exampleCurrent: 2482,
+  exampleMax: STORAGE_CAPACITY[0],
+  fullStateTitle: "Mining Paused — Storage Full",
+  fullStateNote: "Claim DOM to resume mining. Earned DOM is never deleted while storage is full.",
 };
 
 export const claimRules = {
@@ -489,17 +547,48 @@ export const balanceModel = {
     },
     {
       label: "Withdraw",
-      description: "Request withdrawal of eligible Available Balance to your connected wallet.",
+      description: "Request withdrawal of eligible Available Balance to your connected BEP-20 wallet.",
     },
     {
       label: "Connected Wallet",
-      description: "Your external BEP20 wallet, connected via WalletConnect.",
+      description: "Your external BEP-20 wallet on BNB Smart Chain, connected via WalletConnect.",
     },
   ],
   accountingStates: ["miningStorage", "availableBalance", "pendingWithdrawal", "withdrawnBalance"],
   integrityNote:
-    "Withdrawal validation always happens server-side with atomic transactions — the frontend only displays state, it never owns it. One reward can never be claimed or withdrawn twice.",
+    "Withdrawal validation always happens server-side with atomic database transactions and idempotency keys — the frontend only displays state, it never owns it. One reward can never be claimed or withdrawn twice.",
 };
+
+// ---------------------------------------------------------------------------
+// Wallet linking — signature-based ownership verification. Dungeon of
+// Miners never asks for a seed phrase, private key, or recovery phrase.
+// ---------------------------------------------------------------------------
+export const walletLinkingFlow = [
+  "Connect an EVM (BSC-compatible) wallet",
+  "Backend issues a single-use nonce",
+  "User signs an ownership message with their wallet — never a transaction, never a key",
+  "Backend verifies the signature against the nonce",
+  "Wallet is linked to the account",
+];
+
+export const walletLinkingRecord = ["wallet_address", "verified_at", "network", "signature_nonce_history"];
+
+// ---------------------------------------------------------------------------
+// Transaction / ledger types — every balance-affecting event is recorded,
+// never a silent edit.
+// ---------------------------------------------------------------------------
+export const transactionTypes = [
+  "MINING_ACCRUAL",
+  "CLAIM",
+  "WITHDRAWAL_PENDING",
+  "WITHDRAWAL_CONFIRMED",
+  "WITHDRAWAL_FAILED",
+  "REFERRAL_REWARD",
+  "EVENT_REWARD",
+  "ADMIN_ADJUSTMENT",
+];
+
+export const transactionHistoryFilters = ["Mining", "Claim", "Withdrawal", "Rewards", "Adjustment"];
 
 // ---------------------------------------------------------------------------
 // Public Halving Ledger — transparency data. Structural shape only; once the
@@ -513,6 +602,7 @@ export const halvingLedger = [
   { label: "Current Halving", value: `Halving ${currentHalvingEntry.number} · ${currentHalvingEntry.name}` },
   { label: "Current Era Allocation", value: currentHalvingEntry.allocation },
   { label: "Remaining Era Allocation", value: "Awaiting Live Data" },
+  { label: "Current Network Mining Weight", value: "Awaiting Live Data" },
   { label: "Number of Active Miners", value: "Awaiting Live Data" },
 ];
 
@@ -521,7 +611,7 @@ export const halvingRecord = [
   { label: "Last Updated", value: economyConfig.economyLastUpdated },
   { label: "Total Supply", value: totalSupply },
   { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
-  { label: "Current Halving", value: `${economyConfig.currentHalving} of ${halvings.length}` },
+  { label: "Current Halving", value: `${economyConfig.currentHalving} of ${HALVING_COUNT}` },
   { label: "Mining Status", value: economyConfig.miningStatus },
 ];
 
@@ -539,26 +629,54 @@ export type HalvingArchiveEntry = {
 };
 export const halvingArchive: HalvingArchiveEntry[] = [];
 
+// ---------------------------------------------------------------------------
+// Live Economy Dashboard — one of the most important sections on the site.
+// Every value is either a known configuration fact or an honest
+// "Awaiting Live Data" placeholder. Never a fabricated statistic.
+// ---------------------------------------------------------------------------
+export const liveDashboardMetrics = [
+  { label: "Total Supply", value: totalSupply },
+  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
+  { label: "Total Mined", value: "Awaiting Live Data" },
+  { label: "Mining Allocation Remaining", value: "Awaiting Live Data" },
+  { label: "Current Halving", value: `${economyConfig.currentHalving} / ${HALVING_COUNT}` },
+  { label: "Current Emission Rate", value: currentHalvingEntry.emissionRate },
+  { label: "Current Network Mining Weight", value: "Awaiting Live Data" },
+  { label: "Active Miners", value: "Awaiting Live Data" },
+  { label: "Total Claimed", value: "Awaiting Live Data" },
+  { label: "Total Withdrawn", value: "Awaiting Live Data" },
+  { label: "Number of Guilds", value: "Awaiting Live Data" },
+  { label: "Qualified Referrals", value: "Awaiting Live Data" },
+];
+
+// Real withdrawals only — this stays empty until the backend can supply
+// genuine on-chain data. Never seed it with example rows.
+export type RecentWithdrawal = { address: string; amount: string; status: string; txUrl: string };
+export const recentWithdrawals: RecentWithdrawal[] = [];
+
 export const economyChangelog = [
   {
-    version: "v3.0",
+    version: "v4.0",
     date: economyConfig.economyLastUpdated,
     summary:
-      "DOM Fixed-Supply Economy Update: removed the retired Holding/Pool Wallet split, migrated Ranks to Pickaxe Level 1–6, removed the Pickaxe Equipment Multiplier, introduced a hard Global Emission Pool, standardized the six Halving allocations, rebuilt Referral and Guild boosters, and added TGE / Exchange Listing status.",
+      "DOM Mining Ecosystem Update: confirmed BNB Smart Chain (BEP-20) as the permanent network, introduced a centralized economy configuration, rebalanced Pickaxe Base Mining Power to a 4.5x (not 100x) spread, added Mining XP as the progression currency, and deepened Guild V2 with Guild XP, Levels, Expeditions, and Seasons.",
     changes: [
-      "Removed the Holding Wallet / Pool Wallet split — 100% of claimed DOM becomes Available Balance.",
-      "Clarified the fixed 1,000,000,000 DOM supply: created once, no additional minting, ever.",
-      "Introduced a Global Emission Pool — total network rewards can never exceed the 550,000,000 DOM mining allocation.",
-      "Standardized the six Halving eras into equal 91,666,667 DOM allocations — each era is mined out fully before the next Halving begins, with no daily emission ceiling.",
-      "Migrated the Rank System to Pickaxe Level 1–6, progressed by Mining XP instead of wallet balance.",
-      "Removed the Pickaxe Equipment Multiplier — Pickaxe Level now sets Base Mining Power directly.",
-      "Redesigned the Referral Program into Referral Booster V2 (+0.5% Mining Weight per active qualified referral, max +15%).",
-      "Redesigned the flat Guild Bonus into a tiered Guild Booster (up to +10% Mining Weight) tied to Telegram-community Guilds.",
-      "Added TGE (Coming Soon) and Exchange Listing (Coming Soon) status.",
-      "Removed the Protocol Revenue Backing row from the Tokenomics & Valuation Model.",
-      "Removed remaining legacy Pre-TGE, Floor-system, and 6,000,000,000 DOM references from documentation.",
-      "Confirmed the launch network as BNB Smart Chain (BEP20), connected via WalletConnect.",
+      "Confirmed BNB Smart Chain (BEP-20) as the final network — DOM does not use TON.",
+      "Centralized every economy number in economy.config.ts — no more independently hardcoded values.",
+      "Rebalanced Pickaxe Base Mining Power from a 100x (10 → 1000) spread to a 4.5x (100 → 450) spread.",
+      "Introduced Mining XP as the main progression currency, separate from DOM, earned from activity rather than holdings.",
+      "Documented the Global Emission System as an epoch-based accumulator (Halving Rate → Epoch Budget → Mining Weight → Reward), not a flat daily/hourly rate.",
+      "Expanded Guild V2 with Guild XP, Guild Levels, Guild Expeditions, and Guild Seasons.",
+      "Rebuilt the Leaderboard into Player (Daily/Weekly/Halving/All-Time) and Guild (Weekly/Season/Halving/All-Time) boards, ranked by XP and activity, never wallet balance.",
+      "Added a Live Economy Dashboard, a BSC Transparency page, and a Treasury & Vesting page — all honestly marked Awaiting Live Data / Pending Final Approval where real figures don't exist yet.",
+      "Documented the signature-based wallet linking flow — Dungeon of Miners never requests a seed phrase, private key, or recovery phrase.",
     ],
+  },
+  {
+    version: "v3.0",
+    date: "2026-09-17",
+    summary:
+      "HISTORICAL / RETIRED — Removed the Holding/Pool Wallet split, migrated Ranks to Pickaxe Level 1–6, removed the Pickaxe Equipment Multiplier, introduced a Global Emission Pool, standardized the six Halving allocations, rebuilt Referral and Guild boosters, and added TGE / Exchange Listing status. Superseded by v4.0.",
   },
   {
     version: "v2.0",
@@ -582,21 +700,67 @@ export const economyChangelog = [
 export const withdrawalConfig = {
   feeDom: 0,
   feeLabel: "Zero Withdrawal Fee",
-  networkFeeLabel: "Sponsored",
-  network: "BNB Smart Chain (BEP20)",
+  networkFeeLabel: "Sponsored by Dungeon of Miners",
+  network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "WalletConnect",
-  chainId: "56 (BNB Smart Chain Mainnet)",
-  domContractAddress: "TBA",
-  blockExplorerUrl: "BscScan (bscscan.com)",
-  statuses: ["Processing", "Broadcasted", "Confirmed", "Failed"] as const,
-  minimumWithdrawal: "TBA",
+  chainId: `${CHAIN_ID} (${NETWORK} Mainnet)`,
+  domContractAddress: "Coming Soon",
+  blockExplorerUrl: `${BLOCK_EXPLORER_NAME} (${BLOCK_EXPLORER_URL.replace("https://", "")})`,
+  statuses: ["Processing", "Broadcasted", "Confirming", "Confirmed", "Failed"] as const,
+  minimumWithdrawal: typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA",
   maximumWithdrawal: "TBA",
+  withdrawalCooldown: typeof WITHDRAWAL_COOLDOWN_HOURS === "number" ? `${WITHDRAWAL_COOLDOWN_HOURS} hours` : "TBA",
   instantNote:
-    "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. BNB Smart Chain itself can still take a short time to confirm the transaction on-chain.",
+    "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
 };
 
+export const withdrawalSecurityMeasures = [
+  "Minimum withdrawal threshold",
+  "Withdrawal cooldown per account",
+  "Per-user rate limiting",
+  "Idempotency keys on every withdrawal request",
+  "Atomic balance locking (no double-spend)",
+  "Hot wallet balance monitoring",
+  "BNB gas monitoring for the sponsoring wallet",
+  "Failed-transaction reconciliation",
+  "Daily treasury safety limit",
+  "Emergency pause capability",
+  "Full withdrawal audit log",
+];
+
+export const antiCheatMeasures = [
+  "Multiple-account detection",
+  "Self-referral detection",
+  "Bot / automation detection",
+  "Referral farm detection",
+  "Duplicate claim prevention",
+  "Duplicate withdrawal prevention",
+  "Guild abuse detection",
+  "Fake activity detection",
+  "API replay protection",
+  "Client-side balance manipulation rejection",
+  "Direct endpoint abuse protection",
+  "Race-condition–safe accounting",
+];
+
+export const serverAuthoritativeState = [
+  "Mining balance",
+  "Mining Storage",
+  "Available Balance",
+  "Mining XP",
+  "Pickaxe Level",
+  "Referral status",
+  "Referral Booster",
+  "Guild membership",
+  "Guild Booster",
+  "Global emission accounting",
+  "Halving progression",
+  "Claim",
+  "Withdrawal",
+];
+
 export const riskDisclosure =
-  "Dungeon of Miners is a live Telegram Mini App mining ecosystem. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: Coming Soon — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
+  "Dungeon of Miners is a live mining ecosystem on BNB Smart Chain. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: Coming Soon — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
 
 // ---------------------------------------------------------------------------
 // Fair Play policy
@@ -637,18 +801,22 @@ export const fairPlay = {
 // only and never creates additional DOM beyond the global emission ceiling.
 // ---------------------------------------------------------------------------
 export const guildConfig = {
-  maxMembers: 30,
-  joinCooldownHours: 72,
-  maxBoostPercent: 10,
+  maxMembers: MAX_GUILD_MEMBERS,
+  joinCooldownHours: GUILD_COOLDOWN_HOURS,
+  maxBoostPercent: MAX_GUILD_BOOST,
   roles: ["Owner", "Officer", "Member"],
 };
 
-export const guildBoosterTiers = [
-  { activeThreshold: 30, weightBonus: 2 },
-  { activeThreshold: 50, weightBonus: 5 },
-  { activeThreshold: 70, weightBonus: 8 },
-  { activeThreshold: 90, weightBonus: 10 },
+export const guildRolePermissions = [
+  { role: "Owner", actions: ["Edit Guild", "Manage Officers", "Remove members", "Transfer ownership", "Manage invitations", "Dissolve Guild"] },
+  { role: "Officer", actions: ["Moderate members", "Manage community activities", "Handle invitations"] },
+  { role: "Member", actions: ["Mine", "Contribute", "Participate in Expeditions", "Leave Guild"] },
 ];
+
+export const guildBoosterTiers = GUILD_BOOSTER_TIERS.map((t) => ({
+  activeThreshold: t.activeThreshold,
+  weightBonus: t.bonusPercent,
+}));
 
 export const guildCreationFlow = [
   "Open the Guild section in the Mini App",
@@ -666,55 +834,138 @@ export const guildRuleDetails = [
   { label: "Guild Creation Cost", value: "TBA" },
 ];
 
+// Guild XP — separate from a member's personal Mining XP. Earned by the
+// guild as a whole; unlocks cosmetics and access, never uncapped DOM.
+export const guildXP = {
+  sources: ["Active members", "Expedition completion", "Mining contribution", "Guild achievements", "Weekly participation"],
+  unlocks: ["Guild Levels", "Cosmetic banners", "Badges", "Titles", "Profile frames", "Special expedition access"],
+};
+
+export const guildExpeditions = {
+  cadences: ["Daily Guild Expedition", "Weekly Guild Expedition"],
+  examples: [
+    "20 members mine today",
+    "15 members claim today",
+    "Complete 100 Daily Tasks (guild-wide)",
+    "Break X Stones in Stone Breaker (guild-wide)",
+    "Reach a cumulative Guild XP target",
+    "Reach a guild activity percentage target",
+  ],
+  rewards: ["Guild XP", "Season Points", "Cosmetic reward", "Temporary capped mining boost", "Achievement"],
+};
+
+export const guildSeasons = {
+  current: "Season 1",
+  tiedTo: "Halving 1",
+  durationNote: "Season duration is configurable — tied to Halving progression rather than a fixed calendar date.",
+  onSeasonEnd: "The season leaderboard resets. The All-Time Hall of Fame is permanent, so new guilds can always compete for it later.",
+};
+
+export const guildProfileFields = [
+  "Guild ID", "Guild Name", "Guild Logo", "Description", "Community link", "Owner", "Officers", "Members",
+  "Member capacity", "Guild Level", "Guild XP", "Activity %", "Current Booster", "Season Points",
+  "Mining Contribution", "Expedition Progress", "Leaderboard Rank", "Invite Link",
+];
+
 // ---------------------------------------------------------------------------
 // Referral Booster V2 — replaces the retired +2%/50-referral/+100%/+50 DOM
-// model. Capped and tied to ACTIVE qualified referrals so it can never
-// create unbounded emission or reward dead/farmed accounts.
+// model. Capped, ONE LEVEL ONLY (no downline/MLM tree), and tied to ACTIVE
+// qualified referrals so it can never create unbounded emission or reward
+// dead/farmed accounts.
 // ---------------------------------------------------------------------------
-export type ReferralStatus = "Pending" | "Qualified" | "Active" | "Inactive" | "Flagged" | "Invalidated";
+export type ReferralStatus = "Invited" | "Pending" | "Qualified" | "Active" | "Inactive" | "Flagged" | "Invalidated";
 
 export const referralBooster = {
-  weightPerActiveReferral: 0.5,
-  maxQualifiedReferrals: 30,
-  maxBoostPercent: 15,
-  starterBoost: { percent: 5, durationHours: 24 },
+  weightPerActiveReferral: REFERRAL_BOOST_PER_ACTIVE_USER,
+  maxQualifiedReferrals: MAX_QUALIFIED_REFERRALS,
+  maxBoostPercent: MAX_REFERRAL_BOOST,
+  activeWindowDays: REFERRAL_ACTIVE_WINDOW_DAYS,
+  starterBoost: { percent: REFERRAL_STARTER_BOOST_PERCENT, durationHours: REFERRAL_STARTER_BOOST_HOURS },
   milestones: [1, 3, 5, 10, 20, 30],
+  levels: "One level only — no downline, no MLM reward tree.",
   qualificationRules: [
     "Unique Telegram account",
-    "Passes account-age / anti-abuse checks",
-    "Mines on at least 3 separate days",
-    "Completes initial onboarding",
-    "No self-referral",
-    "No duplicated referral attribution",
+    "Valid referral attribution, no self-referral",
+    "Completes onboarding",
+    "Mines on multiple separate days",
+    "Passes anti-abuse checks",
+    "Stays active within the rolling activity window to keep contributing to the booster",
   ],
-  statuses: ["Pending", "Qualified", "Active", "Inactive", "Flagged", "Invalidated"] as ReferralStatus[],
+  statuses: ["Invited", "Pending", "Qualified", "Active", "Inactive", "Flagged", "Invalidated"] as ReferralStatus[],
 };
+
+// Example/empty dashboard shape — real numbers are per-account and require
+// a live backend. Shown as "Awaiting Live Data" until then, never guessed.
+export const referralDashboardShape = [
+  { label: "Invited", value: "Awaiting Live Data" },
+  { label: "Qualified", value: "Awaiting Live Data" },
+  { label: "Active", value: "Awaiting Live Data" },
+  { label: "Current Booster", value: "Awaiting Live Data" },
+  { label: "Maximum Booster", value: `+${referralBooster.maxBoostPercent}%` },
+];
 
 // ---------------------------------------------------------------------------
 // Pickaxe Levels — the PRIMARY progression system, replacing the retired
 // Rank System. Progression is driven by persistent Mining XP / lifetime
 // activity, never by current wallet balance — withdrawing DOM must never
 // cost a player their level. Cosmetic names (Novice → Legend) are secondary
-// flavor only. "basePower" is a dimensionless mining-weight unit, not a
-// guaranteed DOM/hour rate — see emissionModel for why.
+// flavor only. Base Mining Power is deliberately kept within a ~4.5x range
+// (not the old 100x spread) so no single level dominates the economy.
 // ---------------------------------------------------------------------------
 export type PickaxeLevel = {
   level: number;
   cosmeticName: string;
-  basePower: string;
-  xpRequired: string;
+  basePower: number;
+  xpRequired: number;
+  xpToNext: number | null;
+  storageCapacity: string;
   image: string;
   accent: string;
+  unlocks: string[];
 };
 
-export const pickaxeLevels: PickaxeLevel[] = [
-  { level: 1, cosmeticName: "Novice", basePower: "10", xpRequired: "0 XP", image: assets.pickaxeLevel1, accent: "from-stone-800 to-stone-900" },
-  { level: 2, cosmeticName: "Bronze", basePower: "50", xpRequired: "TBA", image: assets.pickaxeLevel2, accent: "from-[#8a5a3c] to-[#5a3822]" },
-  { level: 3, cosmeticName: "Silver", basePower: "150", xpRequired: "TBA", image: assets.pickaxeLevel3, accent: "from-[#9aa4b2] to-[#5c6472]" },
-  { level: 4, cosmeticName: "Gold", basePower: "300", xpRequired: "TBA", image: assets.pickaxeLevel4, accent: "from-gold-light to-gold-dark" },
-  { level: 5, cosmeticName: "Diamond", basePower: "600", xpRequired: "TBA", image: assets.pickaxeLevel5, accent: "from-[#9fe8e0] to-[#3fa9a0]" },
-  { level: 6, cosmeticName: "Legend", basePower: "1000", xpRequired: "TBA", image: assets.pickaxeLevel6, accent: "from-torch to-torch-ember" },
+const PICKAXE_COSMETIC_NAMES = ["Novice", "Bronze", "Silver", "Gold", "Diamond", "Legend"];
+const PICKAXE_IMAGES = [assets.pickaxeLevel1, assets.pickaxeLevel2, assets.pickaxeLevel3, assets.pickaxeLevel4, assets.pickaxeLevel5, assets.pickaxeLevel6];
+const PICKAXE_ACCENTS = [
+  "from-stone-800 to-stone-900",
+  "from-[#8a5a3c] to-[#5a3822]",
+  "from-[#9aa4b2] to-[#5c6472]",
+  "from-gold-light to-gold-dark",
+  "from-[#9fe8e0] to-[#3fa9a0]",
+  "from-torch to-torch-ember",
 ];
+const PICKAXE_UNLOCKS = [
+  ["Miner Profile", "Base Storage Capacity"],
+  ["Delver Badge: Bronze", "Expanded Storage"],
+  ["Delver Badge: Silver", "Guild Officer eligibility"],
+  ["Delver Badge: Gold", "Profile prestige frame"],
+  ["Delver Badge: Diamond", "Priority Stone Breaker rewards"],
+  ["Delver Badge: Legend", "Maximum Storage Capacity", "Legend profile effects"],
+];
+
+export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
+  level: i + 1,
+  cosmeticName: PICKAXE_COSMETIC_NAMES[i],
+  basePower: power,
+  xpRequired: XP_THRESHOLDS[i],
+  xpToNext: i < XP_THRESHOLDS.length - 1 ? XP_THRESHOLDS[i + 1] : null,
+  storageCapacity: formatDOM(STORAGE_CAPACITY[i]),
+  image: PICKAXE_IMAGES[i],
+  accent: PICKAXE_ACCENTS[i],
+  unlocks: PICKAXE_UNLOCKS[i],
+}));
+
+// ---------------------------------------------------------------------------
+// Leaderboards — ranked by XP and verified activity, never by wallet
+// balance. Player and Guild boards each span multiple timeframes.
+// ---------------------------------------------------------------------------
+export const leaderboardConfig = {
+  playerTabs: ["Daily", "Weekly", "Halving", "All-Time"],
+  guildTabs: ["Weekly", "Season", "Halving", "All-Time"],
+  playerMetrics: ["Mining XP", "DOM Mined", "Pickaxe Level", "Active Days", "Guild Contribution", "Season Points"],
+  guildMetrics: ["Guild XP", "Verified Activity", "Mining Contribution", "Expedition Completion", "Season Points"],
+  rewardPhilosophy: "Leaderboard rewards favor XP, badges, cosmetics, and titles over large direct DOM payouts, so ranking well never distorts the capped emission model.",
+};
 
 // ---------------------------------------------------------------------------
 // Features — organized by system group. Only real/current/planned systems.
@@ -727,68 +978,68 @@ export const featureGroups: FeatureGroup[] = [
     group: "Core Mining",
     items: [
       { title: "Idle Mining", description: "DOM accumulates around the clock, whether you're online or not.", icon: "pickaxe" },
-      { title: "Fixed Supply Mining", description: "Mining distributes DOM from a capped 550,000,000 DOM allocation — it never creates new supply.", icon: "lock" },
-      { title: "Six Halving Eras", description: "Six equal allocations of the mining pool — each era mines out fully before the next Halving begins.", icon: "flame" },
-      { title: "Global Emission Pool", description: "Rewards are a share of each Halving's fixed allocation — more miners divide the pool, they never exceed it.", icon: "gauge" },
+      { title: "Global Emission", description: "Mining distributes DOM from a capped 550,000,000 DOM allocation via a server-side epoch system — it never creates new supply.", icon: "gauge" },
+      { title: "Six Halvings", description: "Six equal allocations of the mining pool — each era mines out fully before the next Halving begins.", icon: "flame" },
       { title: "Mining Storage", description: "Unclaimed DOM accumulates safely until you claim it — nothing is ever deleted.", icon: "box" },
-      { title: "Claim System", description: "Claim moves stored DOM into your Available Balance — 100%, no split.", icon: "check-circle" },
-      { title: "Pickaxe Level 1–6", description: "Progress your pickaxe through Mining XP to raise your Base Mining Power.", icon: "hammer" },
+      { title: "Claim", description: "Claim moves stored DOM into your Available Balance — 100%, no split.", icon: "check-circle" },
+      { title: "Mining XP", description: "A dedicated progression currency, separate from DOM, earned through activity.", icon: "star" },
+      { title: "Pickaxe Level 1–6", description: "Progress your pickaxe through Mining XP to raise your Base Mining Power and Storage Capacity.", icon: "hammer" },
     ],
   },
   {
-    group: "On-Chain",
+    group: "Blockchain",
     items: [
-      { title: "WalletConnect", description: "Connect an external BEP20 wallet — Dungeon of Miners never asks for your seed phrase.", icon: "wallet" },
+      { title: "BNB Smart Chain", description: "DOM is issued and distributed on BNB Smart Chain.", icon: "link" },
+      { title: "BEP-20 DOM", description: "A standard BEP-20 token — compatible with the BSC wallet ecosystem.", icon: "coins" },
+      { title: "Wallet Linking", description: "Signature-based ownership verification — never a seed phrase or private key.", icon: "wallet" },
       { title: "Available DOM Balance", description: "The spendable, withdrawal-eligible balance created the moment you claim.", icon: "coins" },
-      { title: "Instant On-Chain Withdrawal", description: "Automated backend validation and broadcast — no manual approval queue.", icon: "send" },
-      { title: "Zero DOM Withdrawal Fee", description: "Dungeon of Miners charges 0 DOM to withdraw. Network fee: sponsored.", icon: "shield" },
-      { title: "Transaction Status", description: "Processing, Broadcasted, Confirmed, or Failed — always shown honestly.", icon: "activity" },
-      { title: "Transaction Hash", description: "Every confirmed withdrawal returns a real, verifiable transaction hash.", icon: "hash" },
-      { title: "Block Explorer Verification", description: "Verify any withdrawal directly on a public block explorer.", icon: "search" },
+      { title: "BSC Withdrawal", description: "Instant, automated backend validation and broadcast — no manual approval queue.", icon: "send" },
+      { title: "Transaction Status", description: "Processing, Broadcasted, Confirming, Confirmed, or Failed — always shown honestly.", icon: "activity" },
+      { title: "BscScan Verification", description: "Every confirmed withdrawal is verifiable on a public block explorer.", icon: "search" },
     ],
   },
   {
     group: "Social",
     items: [
-      { title: "Telegram Guilds", description: "Bind your Telegram group or supergroup to its own Dungeon of Miners Guild.", icon: "users" },
-      { title: "Guild Invitations", description: "Deep-link invites bring your Telegram community straight into the Guild.", icon: "user-plus" },
+      { title: "Guilds", description: "Bind your Telegram group or supergroup to its own Dungeon of Miners Guild.", icon: "users" },
+      { title: "Guild XP", description: "Earned from active members, expeditions, and mining contribution.", icon: "star" },
+      { title: "Guild Levels", description: "Guild XP unlocks cosmetic banners, badges, titles, and profile frames.", icon: "trophy" },
       { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords" },
-      { title: "Guild Booster", description: "A tiered mining-weight boost based on how active your guild really is — up to +10%.", icon: "trophy" },
+      { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check" },
       { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks" },
-      { title: "Referral Booster", description: "+0.5% Mining Weight per active qualified referral, up to +15%.", icon: "user-plus" },
+      { title: "Referral Booster", description: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight per active qualified referral, up to +${MAX_REFERRAL_BOOST}%.`, icon: "user-plus" },
       { title: "Referral Milestones", description: "Badges and cosmetics for 1, 3, 5, 10, 20, and 30 qualified referrals.", icon: "shield" },
     ],
   },
   {
     group: "Engagement",
     items: [
-      { title: "Daily Tasks", description: "Community missions and objectives for steady progression.", icon: "check-circle" },
       { title: "Daily Check-In", description: "Stay active every day to keep your streak alive.", icon: "calendar-check" },
-      { title: "Stone Breaker", description: "A quick timing mini-game that rewards bonus DOM.", icon: "gem" },
-      { title: "Watch & Earn", description: "Rewarded ads convert attention into DOM and mining boosts.", icon: "play-circle" },
-      { title: "Delver Badges", description: "Permanent cosmetics earned through milestones and achievements.", icon: "shield" },
-      { title: "Miner Card Sharing", description: "Share your miner profile and progress with your community.", icon: "share-2" },
+      { title: "Daily Tasks", description: "Community missions and objectives for steady progression.", icon: "check-circle" },
+      { title: "Stone Breaker", description: "A quick timing mini-game rewarding Mining XP, boosters, and cosmetics.", icon: "gem" },
+      { title: "Achievements", description: "Permanent milestones tracked across your entire mining history.", icon: "shield" },
+      { title: "Miner Card", description: "Share your miner profile and progress with your community.", icon: "share-2" },
+      { title: "Temporary Boosters", description: "Short-duration, capped mining-weight boosts from events and activities.", icon: "zap" },
     ],
   },
   {
     group: "Transparency",
     items: [
-      { title: "Fixed Supply Counter", description: "1,000,000,000 DOM — always the same number, never inflated.", icon: "lock" },
-      { title: "Mining Allocation Remaining", description: "Live-tracked once the backend surfaces it — never fabricated.", icon: "gauge" },
-      { title: "Current Halving", description: "Which of the six Halving eras the network is in right now.", icon: "flame" },
-      { title: "Global Emission Ledger", description: "A public record of network-wide mining distribution.", icon: "scroll" },
-      { title: "Current Network Emission", description: "Today's live emission ceiling, shown honestly or marked awaiting live data.", icon: "activity" },
+      { title: "Fixed Supply", description: "1,000,000,000 DOM — always the same number, never inflated.", icon: "lock" },
+      { title: "Supply Dashboard", description: "Live-tracked mining allocation and distribution once the backend surfaces it — never fabricated.", icon: "gauge" },
+      { title: "Halving Dashboard", description: "Which of the six Halving eras the network is in right now, and its progress.", icon: "flame" },
+      { title: "Treasury Wallets", description: "Every non-mining allocation's wallet, purpose, and status in one place.", icon: "scroll" },
+      { title: "Vesting", description: "The unlock model for the 45% non-mining supply, published as soon as it's finalized.", icon: "calendar-check" },
+      { title: "Recent Withdrawals", description: "Real on-chain withdrawals, shown with shortened addresses and a BscScan link.", icon: "activity" },
       { title: "Fair Play", description: "The rules that protect a shared, finite mining economy.", icon: "shield" },
-      { title: "Anti-Abuse", description: "Layered protection against Sybil accounts, farming, and reward manipulation.", icon: "shield-alert" },
-      { title: "Economy Version History", description: "Every economy rule change tracked publicly by version.", icon: "scroll" },
+      { title: "Changelog", description: "Every economy rule change tracked publicly by version.", icon: "scroll" },
     ],
   },
   {
     group: "Upcoming",
     items: [
-      { title: "TGE", description: "Official DOM market launch — status: Coming Soon.", icon: "rocket" },
+      { title: "TGE / Public Market Launch", description: "Status: Coming Soon.", icon: "rocket" },
       { title: "Exchange Listing", description: "Announced only through official Dungeon of Miners channels — status: Coming Soon.", icon: "trending-up" },
-      { title: "Android App", description: "A standalone home-screen experience, in development.", icon: "smartphone" },
     ],
   },
 ];
@@ -800,18 +1051,18 @@ export const faqs = [
   {
     question: "What is Dungeon of Miners?",
     answer:
-      "Dungeon of Miners is a live Telegram Mini App mining ecosystem. You mine DOM passively, level up your Pickaxe through Mining XP, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
+      "Dungeon of Miners is a live mining ecosystem. You mine DOM passively, level up your Pickaxe through Mining XP, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
   },
   {
-    question: "Is mining live?",
-    answer: "Yes. Mining is live right now inside the Mini App, and eligible DOM can already be withdrawn on-chain.",
+    question: "What blockchain does DOM use?",
+    answer: "BNB Smart Chain. DOM is a BEP-20 token, compatible with the standard BSC wallet ecosystem (MetaMask, Trust Wallet, and other WalletConnect-compatible wallets).",
   },
   {
     question: "What is DOM?",
-    answer: "DOM is the single token of the Dungeon of Miners economy — mined by players and eligible for on-chain withdrawal.",
+    answer: "DOM is the single token of the Dungeon of Miners economy — mined by players and eligible for on-chain withdrawal on BNB Smart Chain.",
   },
   {
-    question: "What is the maximum DOM supply?",
+    question: "What is the maximum supply?",
     answer: "1,000,000,000 DOM. The entire supply is fixed and created once.",
   },
   {
@@ -820,28 +1071,31 @@ export const faqs = [
       "No. Minting is permanently disabled after the full 1,000,000,000 DOM supply is created. Mining is distribution of the pre-allocated 550,000,000 DOM Mining Allocation — it is never token creation, and it can never push total supply beyond 1 billion.",
   },
   {
-    question: "How much DOM is allocated to mining?",
-    answer: "550,000,000 DOM — 55% of total supply — is the fixed Mining Allocation shared by every miner across all six Halving eras.",
-  },
-  {
     question: "How does mining work?",
     answer:
-      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, which is boosted by your Referral and Guild Boosters into an Effective Mining Weight. Each miner then receives a proportional share of the current Halving's fixed allocation — never an unlimited per-user rate, and never a fixed amount per day.",
+      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, boosted by your Referral and Guild Boosters into an Effective Mining Weight. Each mining epoch, you receive a share of that epoch's budget proportional to your weight — never an unlimited per-user rate.",
   },
   {
-    question: "What are the six Halvings?",
+    question: "What is Global Emission?",
     answer:
-      "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras (16.67% of the pool each). There is no daily emission ceiling — each era is simply mined down until its own allocation is fully exhausted.",
+      "Global Emission is the system that turns a Halving's fixed allocation into rewards: Halving Emission Rate → Epoch Budget → Total Mining Weight → Your Mining Weight → Your Reward. It guarantees the network can never distribute more than the current Halving's allocation, no matter how many miners join.",
   },
   {
-    question: "What happens when a Halving occurs?",
-    answer:
-      "The next Halving begins only once the current era's 91,666,667 DOM allocation is completely mined out — there is no fixed date, timer, or daily cap. The network then moves on to the next era's fixed allocation.",
+    question: "What are the Six Halvings?",
+    answer: `The ${MINING_ALLOCATION_DOM} Mining Allocation is split into six equal eras (${halvings[0].allocation} each, ${halvings[5].allocation} for Halving 6). Each era also has a relative emission rate that halves from the previous era, pacing how quickly that era's allocation is released.`,
+  },
+  {
+    question: "How does a Halving happen?",
+    answer: "The next Halving begins only once the current era's fixed allocation is completely mined out — there is no fixed date, timer, or daily cap.",
+  },
+  {
+    question: "What is Mining XP?",
+    answer: "Mining XP is your main progression currency — it is not DOM and never touches token supply. You earn it from mining, claiming, daily check-ins, Stone Breaker, daily tasks, Guild Expeditions, guild contribution, achievements, and qualified referrals. XP progresses your Pickaxe Level.",
   },
   {
     question: "What are Pickaxe Levels?",
     answer:
-      "Pickaxe Level 1–6 is the primary mining progression system, replacing the old Rank System. Levels are driven by persistent Mining XP and lifetime activity, not by your current wallet balance — withdrawing DOM never costs you progress. Optional cosmetic names (Novice → Legend) map to each level.",
+      "Pickaxe Level 1–6 is the primary mining progression system, replacing the old Rank System. Levels are driven by persistent Mining XP, never by your current wallet balance — withdrawing DOM never costs you progress. Optional cosmetic names (Novice → Legend) map to each level.",
   },
   {
     question: "Does Pickaxe use an Equipment Multiplier?",
@@ -850,33 +1104,28 @@ export const faqs = [
   },
   {
     question: "How does Mining Storage work?",
-    answer:
-      "Mining Storage is server-authoritative state, not an external wallet — your miner stores earned DOM here until you claim it. If storage fills up, mining pauses until you claim; DOM is never deleted.",
+    answer: "Mining Storage is server-authoritative state, not an external wallet — your miner stores earned DOM here until you claim it. Higher Pickaxe Levels unlock higher storage capacity.",
+  },
+  {
+    question: "What happens if storage becomes full?",
+    answer: "Mining pauses — you'll see \"Storage Full, Claim DOM to Resume Mining.\" Earned DOM is never deleted; claim to pick mining back up.",
   },
   {
     question: "How does Claim work?",
     answer: "Pressing Claim moves your stored DOM into your Available DOM Balance. 100% of the claimed amount becomes available — there is no wallet split.",
   },
   {
-    question: "Can I withdraw all eligible claimed DOM?",
-    answer: "Yes. All of your Available DOM Balance is eligible for on-chain withdrawal — there is no separate locked portion.",
-  },
-  {
-    question: "How does on-chain withdrawal work?",
+    question: "How does withdrawal work?",
     answer:
-      "Connect your BEP20 wallet, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction — no manual approval queue. You'll see a real transaction hash, a BscScan link, and a status of Processing, Broadcasted, Confirmed, or Failed.",
+      "Connect your BEP-20 wallet, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction on BNB Smart Chain — no manual approval queue. You'll see a real transaction hash, a BscScan link, and a status of Processing, Broadcasted, Confirming, Confirmed, or Failed.",
   },
   {
-    question: "What network does Dungeon of Miners use?",
-    answer: "BNB Smart Chain (BEP20), for DOM token distribution and on-chain withdrawal.",
+    question: "What wallet can I use?",
+    answer: "Any BEP-20-compatible wallet via WalletConnect — including MetaMask and Trust Wallet.",
   },
   {
-    question: "What wallet can I connect?",
-    answer: "Any BEP20-compatible wallet via WalletConnect — including MetaMask and Trust Wallet.",
-  },
-  {
-    question: "Does Dungeon of Miners request my seed phrase?",
-    answer: "No. Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — for any reason.",
+    question: "Does Dungeon of Miners request a seed phrase?",
+    answer: "No. Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — for any reason. Wallet linking uses a signed message, not your keys.",
   },
   {
     question: "What does zero withdrawal fee mean?",
@@ -884,46 +1133,54 @@ export const faqs = [
       "Dungeon of Miners charges you 0 DOM to withdraw. This describes the fee the miner pays, not the blockchain itself — BNB Smart Chain still has a real transaction cost, which the ecosystem sponsors on your behalf.",
   },
   {
+    question: "What is the minimum withdrawal?",
+    answer: "Not yet finalized — shown as TBA until the team publishes an official minimum.",
+  },
+  {
     question: "What is a Guild?",
     answer: "A Guild is a Telegram-community-based team of up to 30 miners who coordinate expeditions and earn a shared Guild Booster.",
   },
   {
-    question: "Can my Telegram community create a Guild?",
-    answer: "Yes. A Telegram Group or Supergroup admin can create a Guild and connect it directly to their community.",
-  },
-  {
-    question: "How do Guild invitations work?",
-    answer: "Each Guild gets a shareable deep-link invite. Opening it shows the Guild's name, community, member count, and activity, with a one-tap Join Guild action.",
-  },
-  {
-    question: "How does the Guild Booster work?",
+    question: "How does Guild Booster work?",
     answer:
-      "The Guild Booster scales with how active your guild really is: 30% of members active grants +2% Mining Weight, 50% grants +5%, 70% grants +8%, and 90%+ grants the maximum +10%. It's recalculated daily and never rewards empty or inactive guilds.",
+      "The Guild Booster scales with how active your guild really is: 30% of members active grants +2% Mining Weight, 50% grants +5%, 70% grants +8%, and 90%+ grants the maximum +10%. It's recalculated on a regular basis and never rewards empty or inactive guilds.",
   },
   {
-    question: "How does the Referral Booster work?",
-    answer: "Each active, qualified referral adds +0.5% Mining Weight, up to a maximum of 30 referrals for a +15% cap.",
+    question: "What is Guild XP?",
+    answer: "Guild XP is earned by the whole guild from active members, expedition completion, mining contribution, and achievements. It unlocks Guild Levels, cosmetic banners, badges, and titles — never uncapped DOM.",
   },
   {
-    question: "How does a referral qualify?",
+    question: "What is a Guild Expedition?",
+    answer: "A daily or weekly guild-wide target (e.g. a claim quota or a cumulative Stone Breaker goal) that rewards Guild XP, Season Points, and cosmetics when completed together.",
+  },
+  {
+    question: "What is a Guild Season?",
+    answer: "A recurring competitive period (Season 1 runs alongside Halving 1). Season leaderboards reset at the end of each season, while the All-Time Hall of Fame stays permanent.",
+  },
+  {
+    question: "How does Referral Booster work?",
+    answer: `Each active, qualified referral adds +${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight, up to a maximum of ${MAX_QUALIFIED_REFERRALS} referrals for a +${MAX_REFERRAL_BOOST}% cap. It's one level only — there is no downline or multi-level reward tree.`,
+  },
+  {
+    question: "What is a qualified referral?",
     answer:
-      "A referral must be a unique Telegram account that passes anti-abuse checks, mines on at least 3 separate days, and completes onboarding. Self-referrals and duplicated attribution are never counted.",
+      "A unique Telegram account with valid attribution (no self-referral) that completes onboarding and mines on multiple separate days. It must also stay active within a rolling window to keep contributing to your booster — otherwise it stops counting until it's active again.",
   },
   {
-    question: "How does Dungeon of Miners prevent referral farming?",
+    question: "How does anti-fraud work?",
     answer:
-      "Layered anti-abuse checks watch for self-referrals, multi-account farms, duplicated identities, abnormal signup bursts, and referral rings. Referrals move through Pending → Qualified → Active status, and any confirmed fraud can reverse the reward. Exact detection thresholds are intentionally not published.",
+      "Layered anti-abuse checks watch for self-referrals, multi-account farms, duplicated identities, abnormal signup bursts, bot activity, and referral rings. Referrals and accounts move through clear statuses, and any confirmed fraud can reverse the reward. Exact detection thresholds are intentionally not published.",
   },
   {
     question: "When is the TGE?",
-    answer: "Status: Coming Soon. No TGE date has been set — one will be announced only through official Dungeon of Miners channels.",
+    answer: "Status: Coming Soon. Mining and on-chain withdrawal already operate before the public market launch. No TGE date has been set — one will be announced only through official Dungeon of Miners channels.",
   },
   {
-    question: "When will DOM be listed on an exchange?",
+    question: "When will DOM be listed?",
     answer: "Status: Coming Soon. No exchange, venue, or listing date has been confirmed — announcements will come only through official Dungeon of Miners channels.",
   },
   {
-    question: "Is DOM guaranteed to have a particular price?",
+    question: "Is DOM guaranteed to have a particular value?",
     answer: "No. Dungeon of Miners never guarantees a price, return, exchange venue, or liquidity outcome for DOM.",
   },
 ];
@@ -933,14 +1190,15 @@ export const faqs = [
 // ---------------------------------------------------------------------------
 export const guildStats = [
   { label: "Max Members", value: String(guildConfig.maxMembers) },
-  { label: "Booster Tiers", value: "4" },
+  { label: "Booster Tiers", value: String(guildBoosterTiers.length) },
   { label: "Max Guild Booster", value: `+${guildConfig.maxBoostPercent}%` },
-  { label: "Leaderboard", value: "Recorded Live" },
+  { label: "Current Season", value: guildSeasons.current },
 ];
 
 // ---------------------------------------------------------------------------
 // Roadmap — qualitative phases, not fixed dates. Update `status` as each
-// phase actually ships.
+// phase actually ships. No governance/staking/DAO/swap/NFT/launchpad items
+// — none of those are approved features.
 // ---------------------------------------------------------------------------
 export type RoadmapStatus = "done" | "active" | "comingSoon" | "planned" | "future";
 
@@ -949,82 +1207,140 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
     phase: "Phase 1",
     title: "Foundation",
     status: "done",
-    items: [
-      "Website",
-      "Telegram Mini App",
-      "Account System",
-      "Mining Engine",
-      "Fixed 1B Supply Economy",
-      "Halving 1",
-      "Mining Storage",
-      "Claim System",
-      "On-Chain Withdrawal",
-    ],
+    items: ["Website", "Mining engine", "Fixed Supply Economy", "BSC architecture", "Mining Storage", "Claim"],
   },
   {
     phase: "Phase 2",
     title: "Mining Network V2",
     status: "active",
-    items: [
-      "Pickaxe Level 1–6",
-      "Mining XP",
-      "Storage progression",
-      "Referral Booster V2",
-      "Anti-Sybil system",
-      "Global emission dashboard",
-      "Public mining ledger",
-    ],
+    items: ["Six Halvings", "Global Emission", "Pickaxe Level 1–6", "Mining XP", "Storage progression", "Referral Booster V2"],
   },
   {
     phase: "Phase 3",
     title: "Social Mining",
     status: "active",
-    items: [
-      "Telegram Group → Guild creation",
-      "Guild deep links",
-      "Guild roles",
-      "Guild expeditions",
-      "Guild booster",
-      "Guild leaderboard",
-      "Community mining statistics",
-    ],
+    items: ["Guild system", "Guild XP", "Guild Levels", "Guild Expeditions", "Guild Seasons", "Leaderboards"],
   },
   {
     phase: "Phase 4",
-    title: "TGE & Market",
-    status: "comingSoon",
-    items: [
-      "Final token contract verification",
-      "Fixed supply verification",
-      "Liquidity deployment",
-      "TGE / Market Launch",
-      "Public contract information",
-      "Exchange Listing announcements",
-    ],
+    title: "On-Chain Economy",
+    status: "active",
+    items: ["DOM BEP-20", "Supply verification", "BSC withdrawal", "Treasury transparency", "Vesting", "Explorer integration"],
   },
   {
     phase: "Phase 5",
-    title: "Expansion",
-    status: "planned",
-    items: [
-      "Halving progression",
-      "Android app",
-      "Advanced guild events",
-      "More mining activities",
-      "Ecosystem integrations",
-    ],
+    title: "Public Market Launch",
+    status: "comingSoon",
+    items: ["TGE / public market launch", "Liquidity", "Contract information", "Exchange listing announcements"],
   },
   {
     phase: "Phase 6",
-    title: "Deep Economy",
+    title: "Long-Term Dungeon",
     status: "future",
-    items: [
-      "Halving 6 / final emission era",
-      "Long-term ecosystem utilities",
-      "Community-driven features",
-    ],
+    items: ["Halving progression", "Advanced Guild content", "New activities", "Ecosystem expansion"],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// BSC Transparency page data — never fabricate a contract address. Show
+// "Coming Soon" until the contract is actually deployed and verified.
+// ---------------------------------------------------------------------------
+export const transparencyConfig = {
+  network: NETWORK,
+  token: siteConfig.ticker,
+  standard: TOKEN_STANDARD,
+  contractAddress: "Coming Soon",
+  totalSupply,
+  additionalMinting: "None",
+  contractStatus: "Not Yet Deployed",
+  explorerName: BLOCK_EXPLORER_NAME,
+  explorerUrl: "Coming Soon",
+};
+
+// ---------------------------------------------------------------------------
+// Treasury — one row per non-mining (and mining distribution) wallet. Never
+// fabricate an address or balance; both stay honest placeholders until the
+// team publishes real wallets.
+// ---------------------------------------------------------------------------
+export type TreasuryWallet = {
+  id: string;
+  label: string;
+  purpose: string;
+  allocation: string;
+  address: string;
+  balance: string;
+  vesting: string;
+  explorer: string;
+};
+
+export const treasuryWallets: TreasuryWallet[] = [
+  {
+    id: "mining",
+    label: "Mining Distribution Wallet",
+    purpose: "Source of all mining rewards released to players through the Global Emission System.",
+    allocation: formatDOM(MINING_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Released via mining, paced by the Halving schedule",
+    explorer: "Coming Soon",
+  },
+  {
+    id: "liquidity",
+    label: "Liquidity Wallet",
+    purpose: "Reserved to support healthy DOM market liquidity at and after TGE.",
+    allocation: formatDOM(LIQUIDITY_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Pending Final Approval",
+    explorer: "Coming Soon",
+  },
+  {
+    id: "team",
+    label: "Team Wallet / Vesting Contract",
+    purpose: "Long-term allocation for the core team.",
+    allocation: formatDOM(TEAM_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Pending Final Approval",
+    explorer: "Coming Soon",
+  },
+  {
+    id: "treasure",
+    label: "Treasure & Ecosystem Reserve",
+    purpose: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
+    allocation: formatDOM(TREASURE_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Pending Final Approval",
+    explorer: "Coming Soon",
+  },
+  {
+    id: "ecosystem",
+    label: "Ecosystem Wallet",
+    purpose: "Product growth, guilds, partnerships, integrations, and ecosystem expansion.",
+    allocation: formatDOM(ECOSYSTEM_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Pending Final Approval",
+    explorer: "Coming Soon",
+  },
+  {
+    id: "public",
+    label: "Public / Strategic Wallet",
+    purpose: "Reserved for public and strategic ecosystem opportunities.",
+    allocation: formatDOM(PUBLIC_STRATEGIC_ALLOCATION),
+    address: "Coming Soon",
+    balance: "Awaiting Live Data",
+    vesting: "Pending Final Approval",
+    explorer: "Coming Soon",
+  },
+];
+
+export const vestingConfig = {
+  status: "Pending Final Approval",
+  note: "The 45% non-mining supply (Liquidity, Team, Treasure & Reserve, Ecosystem, Public/Strategic) needs a published unlock schedule. No cliff, vesting curve, or release date has been approved yet — this page will be updated the moment one is finalized, and will never show an invented number before then.",
+  covers: ["Team", "Ecosystem", "Public / Strategic", "Treasure & Reserve", "Liquidity (where relevant)"],
+};
 
 // ---------------------------------------------------------------------------
 // DOM Ecosystem — cinematic storytelling section (between About and the
@@ -1125,15 +1441,15 @@ export const domEcosystem = {
       tooltip: { title: "Guilds", text: "Coordinate miners and strengthen your expedition." },
     },
     {
-      id: "dao",
+      id: "expansion",
       x: 86,
       y: 46,
       status: "PLANNED",
       narrative: {
-        primary: "Beyond mining comes coordination.",
-        secondary: "Community governance for the evolving DOM ecosystem.",
+        primary: "Beyond mining comes growth.",
+        secondary: "Long-term ecosystem utilities for the evolving DOM economy.",
       },
-      tooltip: { title: "Governance", text: "Community governance for the evolving ecosystem." },
+      tooltip: { title: "Expansion", text: "Long-term ecosystem utilities, expanded as they're approved." },
     },
     {
       id: "liquidity",
@@ -1147,15 +1463,15 @@ export const domEcosystem = {
       tooltip: { title: "Liquidity", text: "Supports DOM market liquidity." },
     },
     {
-      id: "swap",
+      id: "market",
       x: 74,
       y: 27,
       status: "COMING SOON",
       narrative: {
         primary: "From mining utility to an open token economy.",
-        secondary: "Move between supported ecosystem assets after TGE.",
+        secondary: "Public market access after TGE.",
       },
-      tooltip: { title: "Swap", text: "Move between supported ecosystem assets." },
+      tooltip: { title: "Public Market", text: "Public market access once TGE is live." },
     },
   ] satisfies EcosystemNode[],
 };

@@ -55,7 +55,9 @@ export function Hero() {
             >
               Mine DOM.
               <br />
-              Withdraw On-Chain.
+              Upgrade Your Pickaxe.
+              <br />
+              Build Your Guild.
               <br />
               <span className="text-gradient-gold">Survive the Halving.</span>
             </motion.h1>
@@ -66,10 +68,9 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="body-lg mt-5 max-w-lg"
             >
-              Mine DOM directly through Telegram. Fixed{" "}
-              <span className="font-semibold text-ink">1 billion DOM</span> supply, no additional
-              minting, six Halving eras, Telegram community Guilds, and instant automated
-              on-chain withdrawals.
+              Mine DOM through the Dungeon of Miners ecosystem. Fixed{" "}
+              <span className="font-semibold text-ink">1B supply</span>, six Halving eras,
+              community Guilds, and on-chain BSC withdrawals.
             </motion.p>
 
             <motion.div
@@ -95,8 +96,8 @@ export function Hero() {
                 Start Mining
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="/tokenomics" className="btn-secondary">
-                Explore Tokenomics
+              <a href="/economy" className="btn-secondary">
+                View Economy
               </a>
             </motion.div>
 

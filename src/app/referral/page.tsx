@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight, UserPlus, Gift, ShieldAlert, Zap } from "lucide-react";
-import { siteConfig, links, referralBooster } from "@/content/site";
+import { siteConfig, links, referralBooster, referralDashboardShape } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -57,6 +57,29 @@ export default function ReferralPage() {
               </div>
             </Reveal>
           </div>
+
+          <Reveal delay={0.14}>
+            <div className="surface-panel mx-auto mt-6 max-w-4xl p-8 sm:p-10">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">Your Referral Stats</h3>
+              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
+                {referralDashboardShape.map((stat) => (
+                  <div key={stat.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-3 text-center">
+                    <p
+                      className={`font-display text-sm sm:text-base ${
+                        stat.value === "Awaiting Live Data" ? "text-ink-faint" : "text-gold"
+                      }`}
+                    >
+                      {stat.value}
+                    </p>
+                    <p className="mt-1 text-[10px] uppercase tracking-wider text-ink-faint">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-ink-faint">
+                One level only — there is no downline, and no Level 2 or Level 3 referral reward.
+              </p>
+            </div>
+          </Reveal>
 
           <Reveal delay={0.16}>
             <div className="surface-panel mx-auto mt-6 max-w-4xl p-8 sm:p-10">

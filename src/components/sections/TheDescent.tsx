@@ -58,10 +58,23 @@ export function TheDescent() {
               <GenesisStatusBadge />
             </div>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
+            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
               <Stat label="Era Allocation" value={current.allocation} accent />
+              <Stat label="Distributed" value={current.distributed} muted />
+              <Stat label="Remaining" value={current.remaining} muted />
+              <Stat label="Relative Emission Rate" value={current.emissionRate} />
               <Stat label="Share of Mining Pool" value={current.percentOfPool} />
               <Stat label="Next Halving Allocation" value={next?.allocation ?? "—"} />
+            </div>
+
+            <div className="mt-6 border-t border-white/[0.06] pt-6">
+              <div className="flex items-center justify-between text-xs">
+                <span className="uppercase tracking-wider text-ink-faint">Progress</span>
+                <span className="font-semibold text-ink-faint">Awaiting Live Data</span>
+              </div>
+              <div className="relative mt-2 h-2.5 w-full overflow-hidden rounded-full bg-white/5">
+                <div className="absolute inset-y-0 left-0 w-0 rounded-full bg-gradient-to-r from-torch-ember to-torch" />
+              </div>
             </div>
           </div>
         </Reveal>
@@ -132,7 +145,9 @@ export function TheDescent() {
                       <Gauge className="h-3 w-3" />
                       {halving.allocation}
                     </span>
-                    <span className="mt-1.5 text-[10px] text-ink-faint">{halving.percentOfPool} of pool</span>
+                    <span className="mt-1.5 text-[10px] text-ink-faint">
+                      {halving.percentOfPool} of pool · rate {halving.emissionRate}
+                    </span>
                   </div>
                 </Reveal>
 
@@ -163,11 +178,11 @@ export function TheDescent() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+function Stat({ label, value, accent, muted }: { label: string; value: string; accent?: boolean; muted?: boolean }) {
   return (
     <div>
       <p className="text-xs uppercase tracking-wider text-ink-faint">{label}</p>
-      <p className={`mt-1 font-display text-lg ${accent ? "text-torch" : "text-ink"}`}>{value}</p>
+      <p className={`mt-1 font-display text-lg ${accent ? "text-torch" : muted ? "text-ink-faint" : "text-ink"}`}>{value}</p>
     </div>
   );
 }

@@ -21,17 +21,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: `${siteConfig.name} | Mine DOM & Withdraw On-Chain`,
+  title: `${siteConfig.name} | Mine DOM on BNB Smart Chain`,
   description: siteConfig.description,
   keywords: [
     "Dungeon of Miners",
     "DOM Token",
     "DOM Mining",
+    "BNB Smart Chain",
+    "BEP-20",
     "Crypto Mining Game",
     "Telegram Mining Game",
     "Web3 Mining",
     "On-Chain Withdrawal",
     "Crypto Halving",
+    "Pickaxe Progression",
   ],
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.tagline}`,

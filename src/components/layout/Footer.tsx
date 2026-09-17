@@ -1,5 +1,5 @@
 import { Send, Twitter, MessageCircle } from "lucide-react";
-import { siteConfig, links, navTopLevel, assets } from "@/content/site";
+import { siteConfig, links, navTopLevel, assets, footerLegalLinks } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 const exploreLinks = [
@@ -12,17 +12,18 @@ const exploreLinks = [
 ];
 
 const resourceLinks = [
+  { label: "Documentation", href: "/docs" },
+  { label: "Transparency", href: "/transparency" },
+  { label: "Treasury", href: "/treasury" },
   { label: "FAQ", href: "/faq" },
-  { label: "Fair Play", href: "/fair-play" },
   { label: "Changelog", href: "/changelog" },
-  { label: "Risk Disclosure", href: "/risk-disclosure" },
 ];
 
 export function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-void-200">
       <div className="section-shell py-10 sm:py-12">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-5">
           <div className="col-span-2">
             <a href="/#top" className="flex items-center gap-2.5">
               <PlaceholderImage
@@ -88,16 +89,19 @@ export function Footer() {
                   </a>
                 </li>
               ))}
-              <li>
-                <a
-                  href={links.telegramCommunity}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block py-0.5 text-sm text-ink-muted transition-colors hover:text-gold"
-                >
-                  Contact / Support
-                </a>
-              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-ink">Legal</h4>
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {footerLegalLinks.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="inline-block py-0.5 text-sm text-ink-muted transition-colors hover:text-gold">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -109,7 +113,7 @@ export function Footer() {
             © {new Date().getFullYear()} Dungeon of Miners. All rights reserved.
           </p>
           <p className="text-xs text-ink-faint">
-            Live mining ecosystem. Terms of Service and Privacy Policy — Soon.
+            Live mining ecosystem on BNB Smart Chain. Not financial advice — see Risk Disclosure.
           </p>
         </div>
       </div>

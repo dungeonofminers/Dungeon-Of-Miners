@@ -1,5 +1,5 @@
-import { Trophy, Send, Crown, ShieldPlus, LogIn, LogOut, ArrowLeftRight, UserMinus } from "lucide-react";
-import { guildStats, guildRuleDetails, guildBoosterTiers, guildCreationFlow, guildConfig } from "@/content/site";
+import { Trophy, Send, Crown, ShieldPlus, LogIn, LogOut, ArrowLeftRight, UserMinus, Star, Swords, CalendarClock } from "lucide-react";
+import { guildStats, guildRuleDetails, guildBoosterTiers, guildCreationFlow, guildConfig, guildXP, guildExpeditions, guildSeasons } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -75,6 +75,57 @@ export function Guild() {
                 </div>
               ))}
             </div>
+          </div>
+        </Reveal>
+
+        <div className="mx-auto mt-6 grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-2">
+          <Reveal delay={0.24}>
+            <div className="surface-panel h-full p-7">
+              <div className="flex items-center gap-2">
+                <Star className="h-4 w-4 text-gold" />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">Guild XP & Levels</h3>
+              </div>
+              <p className="body-lg mt-3 text-sm">
+                Guild XP is earned by the whole guild — not any one member — and unlocks cosmetic
+                banners, badges, titles, and profile frames. It never creates uncapped DOM.
+              </p>
+              <p className="mt-3 text-xs uppercase tracking-wider text-ink-faint">Earned from</p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {guildXP.sources.map((source) => (
+                  <li key={source} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-ink-muted">
+                    {source}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.28}>
+            <div className="surface-panel h-full p-7">
+              <div className="flex items-center gap-2">
+                <Swords className="h-4 w-4 text-emerald-glow" />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">Guild Expeditions</h3>
+              </div>
+              <p className="body-lg mt-3 text-sm">
+                {guildExpeditions.cadences.join(" and ")} targets the whole guild completes
+                together — for example: {guildExpeditions.examples.slice(0, 3).join("; ")}.
+              </p>
+              <p className="mt-3 text-xs text-ink-faint">
+                Rewards: {guildExpeditions.rewards.join(", ")} — never an unlimited DOM faucet.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.32}>
+          <div className="mx-auto mt-6 flex max-w-5xl flex-col items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 text-center sm:flex-row sm:justify-between sm:text-left">
+            <div className="flex items-center gap-2">
+              <CalendarClock className="h-4 w-4 text-gold" />
+              <span className="text-sm font-semibold text-ink">
+                {guildSeasons.current} — running alongside {guildSeasons.tiedTo}
+              </span>
+            </div>
+            <p className="text-xs text-ink-faint">{guildSeasons.onSeasonEnd}</p>
           </div>
         </Reveal>
 

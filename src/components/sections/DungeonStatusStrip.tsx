@@ -1,5 +1,5 @@
-import { Zap, Gauge, ArrowDownCircle, Rocket, TrendingUp } from "lucide-react";
-import { economyConfig, halvings, miningStatusStrip } from "@/content/site";
+import { Link2, Zap, Coins, ArrowDownCircle, Rocket, TrendingUp } from "lucide-react";
+import { economyConfig, halvings, miningStatusStrip, totalSupply } from "@/content/site";
 import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
 
 export function DungeonStatusStrip() {
@@ -8,14 +8,19 @@ export function DungeonStatusStrip() {
 
   const items = [
     {
-      icon: Zap,
-      label: "Current Halving",
-      value: `Halving ${currentHalving.number} / ${halvings.length}`,
+      icon: Link2,
+      label: "Network",
+      value: "BSC",
     },
     {
-      icon: Gauge,
-      label: "Era Allocation",
-      value: currentHalving.allocation,
+      icon: Zap,
+      label: "Halving",
+      value: `${currentHalving.number} / ${halvings.length}`,
+    },
+    {
+      icon: Coins,
+      label: "Max Supply",
+      value: totalSupply,
     },
     {
       icon: ArrowDownCircle,

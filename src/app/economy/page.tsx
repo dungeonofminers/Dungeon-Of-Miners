@@ -6,6 +6,7 @@ import { EmberField } from "@/components/ui/EmberField";
 import { MiningFormula } from "@/components/sections/MiningFormula";
 import { Wallets } from "@/components/sections/Wallets";
 import { PreTgeSection } from "@/components/sections/PreTgeSection";
+import { RecentWithdrawals } from "@/components/sections/RecentWithdrawals";
 
 export const metadata: Metadata = {
   title: `Mining Economy — ${siteConfig.name} (${siteConfig.ticker})`,
@@ -34,6 +35,7 @@ export default function EconomyPage() {
       <MiningFormula />
       <Wallets />
       <PreTgeSection />
+      <RecentWithdrawals />
     </>
   );
 }

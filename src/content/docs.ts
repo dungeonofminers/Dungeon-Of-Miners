@@ -12,6 +12,7 @@
 // ---------------------------------------------------------------------------
 
 import type { DocBadgeTone, DocPage, DocsNavCategory } from "./docsBlocks";
+import { formatNumber } from "./economy.config";
 import {
   siteConfig,
   totalSupply,
@@ -35,11 +36,24 @@ import {
   guildCreationFlow,
   guildRuleDetails,
   guildStats,
+  guildXP,
+  guildExpeditions,
+  guildSeasons,
   referralBooster,
+  referralDashboardShape,
   featureGroups,
   roadmap,
   economyChangelog,
   riskDisclosure,
+  transparencyConfig,
+  treasuryWallets,
+  vestingConfig,
+  walletLinkingFlow,
+  withdrawalSecurityMeasures,
+  antiCheatMeasures,
+  serverAuthoritativeState,
+  transactionTypes,
+  miningXPSources,
 } from "./site";
 
 export const docsNav: DocsNavCategory[] = [
@@ -68,6 +82,8 @@ export const docsNav: DocsNavCategory[] = [
     title: "Trust & Policy",
     items: [
       { slug: "transparency", title: "Transparency Commitments" },
+      { slug: "treasury", title: "Treasury & Vesting" },
+      { slug: "security", title: "Security & Anti-Cheat" },
       { slug: "fair-play", title: "Fair Play Policy" },
       { slug: "risk-disclosure", title: "Risk Disclosure" },
     ],
@@ -316,19 +332,27 @@ export const docsPages: Record<string, DocPage> = {
         type: "lede",
         text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. Levels are driven by persistent Mining XP and lifetime activity — never by your current wallet balance, so withdrawing DOM never costs you progress.",
       },
+      { type: "heading", id: "mining-xp", text: "Mining XP — the progression currency" },
+      {
+        type: "note",
+        text: "Mining XP is not DOM and never touches token supply. It's earned from activity, not holdings, and it's the only thing that moves you toward the next Pickaxe Level.",
+      },
+      { type: "list", items: miningXPSources },
+      { type: "heading", id: "level-table", text: "Level table" },
       {
         type: "table",
-        headers: ["Level", "Cosmetic Name", "Base Mining Power", "XP Required"],
+        headers: ["Level", "Cosmetic Name", "Base Mining Power", "XP Required", "Storage Capacity"],
         rows: pickaxeLevels.map((p) => [
           `Level ${p.level}`,
           p.cosmeticName,
-          { text: p.basePower, align: "right" as const },
-          p.xpRequired === "TBA" ? { text: "TBA", badge: "tba" as const } : p.xpRequired,
+          { text: String(p.basePower), align: "right" as const },
+          { text: formatNumber(p.xpRequired), align: "right" as const },
+          { text: p.storageCapacity, align: "right" as const },
         ]),
       },
       {
         type: "note",
-        text: "Base Mining Power sets your share of the current Halving's fixed allocation — it is not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
+        text: "Base Mining Power and XP thresholds above are example default configuration — they are meant to be tuned once the live mining engine is built, not a final published figure. Base Mining Power sets your share of the current Halving's fixed allocation, not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
       },
       {
         type: "callout",
@@ -494,6 +518,27 @@ export const docsPages: Record<string, DocPage> = {
         type: "note",
         text: "Recalculated daily. Empty or inactive guilds earn no booster. The Guild Booster modifies mining weight only — it never creates additional DOM beyond the global emission ceiling.",
       },
+      { type: "heading", id: "guild-xp", text: "Guild XP & Levels" },
+      {
+        type: "paragraph",
+        text: "Guild XP is earned by the whole guild, not any one member. It unlocks Guild Levels, cosmetic banners, badges, titles, and profile frames — never uncapped DOM.",
+      },
+      { type: "list", items: guildXP.sources },
+      { type: "heading", id: "expeditions", text: "Guild Expeditions" },
+      {
+        type: "paragraph",
+        text: `${guildExpeditions.cadences.join(" and ")} targets the whole guild completes together.`,
+      },
+      { type: "list", items: guildExpeditions.examples },
+      {
+        type: "note",
+        text: `Rewards: ${guildExpeditions.rewards.join(", ")} — expeditions never pay out from an unlimited DOM faucet.`,
+      },
+      { type: "heading", id: "seasons", text: "Guild Seasons" },
+      {
+        type: "paragraph",
+        text: `${guildSeasons.current} runs alongside ${guildSeasons.tiedTo}. ${guildSeasons.durationNote} ${guildSeasons.onSeasonEnd}`,
+      },
     ],
   },
 
@@ -515,6 +560,15 @@ export const docsPages: Record<string, DocPage> = {
           { label: "Starter Boost", value: `+${referralBooster.starterBoost.percent}% for ${referralBooster.starterBoost.durationHours}h`, accent: "emerald" },
           { label: "Qualification", value: "3 active days" },
         ],
+      },
+      {
+        type: "note",
+        text: referralBooster.levels,
+      },
+      { type: "heading", id: "dashboard", text: "Your referral stats" },
+      {
+        type: "tiles",
+        items: referralDashboardShape.map((s) => ({ label: s.label, value: s.value })),
       },
       { type: "heading", id: "qualification", text: "How a referral qualifies" },
       { type: "list", items: referralBooster.qualificationRules },
@@ -621,7 +675,7 @@ export const docsPages: Record<string, DocPage> = {
         type: "list",
         items: [
           "Eligible DOM withdrawals are broadcast on-chain with a real transaction hash and a block explorer link.",
-          "Every withdrawal request shows its real status — Processing, Broadcasted, Confirmed, or Failed — never a vague placeholder.",
+          `Every withdrawal request shows its real status — ${withdrawalConfig.statuses.join(", ")} — never a vague placeholder.`,
           "No manufactured transaction proofs, no fabricated hashes, no fake payout screenshots — ever.",
           "No placeholder or fake leaderboard entries — live mining totals and rankings render only once the connected backend is live.",
           "No TGE date, exchange name, listing date, opening price, market cap, or liquidity amount is published until officially confirmed.",
@@ -632,12 +686,76 @@ export const docsPages: Record<string, DocPage> = {
         type: "note",
         text: "A permanent Halving Archive will preserve every completed era's history — duration, DOM mined, participating miners, top guild — once the first Halving closes.",
       },
+      {
+        type: "linkGrid",
+        items: [
+          { title: "BSC contract transparency", description: "Network, standard, contract status, and block explorer.", href: "/transparency" },
+          { title: "Treasury & Vesting", description: "Every non-mining wallet, its purpose, and its unlock status.", href: "/treasury" },
+        ],
+      },
+    ],
+  },
+
+  treasury: {
+    slug: "treasury",
+    eyebrow: "Trust & Policy — 13",
+    title: "Treasury & Vesting",
+    description: "Every non-mining DOM wallet, its purpose, and its unlock status.",
+    blocks: [
+      {
+        type: "lede",
+        text: "Each wallet below will carry a real, verifiable BNB Smart Chain address once published. Address, Balance, and Vesting stay honest placeholders until then — never invented.",
+      },
+      {
+        type: "table",
+        headers: ["Wallet", "Allocation", "Vesting / Lock"],
+        rows: treasuryWallets.map((w) => [w.label, { text: w.allocation, align: "right" as const }, w.vesting]),
+      },
+      { type: "heading", id: "unlock-schedule", text: "Token Unlock Schedule" },
+      { type: "badgeRow", items: [{ label: vestingConfig.status, tone: "tba" }] },
+      { type: "paragraph", text: vestingConfig.note },
+      {
+        type: "linkGrid",
+        items: [{ title: "See the full Treasury page", description: "Purpose, allocation, balance, and explorer link per wallet.", href: "/treasury" }],
+      },
+    ],
+  },
+
+  security: {
+    slug: "security",
+    eyebrow: "Trust & Policy — 14",
+    title: "Security & Anti-Cheat",
+    description: "What protects the economy, and what the backend owns.",
+    blocks: [
+      {
+        type: "lede",
+        text: "The frontend only displays state — it never decides a balance. Every mining, claim, referral, guild, and withdrawal calculation happens server-side.",
+      },
+      { type: "heading", id: "server-authoritative", text: "Server-authoritative state" },
+      { type: "list", items: serverAuthoritativeState },
+      { type: "heading", id: "withdrawal-security", text: "Withdrawal security" },
+      { type: "list", items: withdrawalSecurityMeasures },
+      { type: "heading", id: "anti-cheat", text: "Anti-cheat" },
+      { type: "list", items: antiCheatMeasures },
+      { type: "heading", id: "wallet-linking", text: "Wallet linking (signature-based)" },
+      { type: "steps", items: walletLinkingFlow.map((step) => ({ title: step })) },
+      {
+        type: "callout",
+        tone: "danger",
+        title: "No seed phrases, ever",
+        text: "Dungeon of Miners never asks for a seed phrase, private key, or recovery phrase. Wallet ownership is verified with a signed message and a single-use nonce — never your keys.",
+      },
+      { type: "heading", id: "ledger", text: "Ledger & accounting" },
+      {
+        type: "note",
+        text: `Every balance-affecting event is recorded as an immutable transaction, never a silent balance edit: ${transactionTypes.join(", ")}.`,
+      },
     ],
   },
 
   "fair-play": {
     slug: "fair-play",
-    eyebrow: "Trust & Policy — 13",
+    eyebrow: "Trust & Policy — 15",
     title: "Fair Play Policy",
     description: "Protecting a shared, finite supply.",
     blocks: [
@@ -668,7 +786,7 @@ export const docsPages: Record<string, DocPage> = {
 
   "risk-disclosure": {
     slug: "risk-disclosure",
-    eyebrow: "Trust & Policy — 14",
+    eyebrow: "Trust & Policy — 16",
     title: "Risk Disclosure",
     description: "Read this before you participate.",
     blocks: [
@@ -682,7 +800,7 @@ export const docsPages: Record<string, DocPage> = {
 
   roadmap: {
     slug: "roadmap",
-    eyebrow: "Reference — 15",
+    eyebrow: "Reference — 17",
     title: "Roadmap",
     description: "Qualitative phases, not marketing dates.",
     blocks: [
@@ -714,7 +832,7 @@ export const docsPages: Record<string, DocPage> = {
 
   changelog: {
     slug: "changelog",
-    eyebrow: "Reference — 16",
+    eyebrow: "Reference — 18",
     title: "Version History",
     description: "What changed, and why.",
     blocks: [
@@ -736,7 +854,7 @@ export const docsPages: Record<string, DocPage> = {
 
   "valuation-model": {
     slug: "valuation-model",
-    eyebrow: "Reference — 17",
+    eyebrow: "Reference — 19",
     title: "Tokenomics & Valuation Model",
     description: "An independent, illustrative analysis — not an official specification, not investment advice, not a price prediction.",
     blocks: [
