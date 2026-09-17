@@ -34,8 +34,8 @@ export default function GamePage() {
             A live dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
           </h1>
           <p className="body-lg mx-auto mt-5 max-w-xl">
-            Idle mining, Pickaxe Level progression, and six Halving eras that progressively cut
-            mining emissions as the shared supply is mined.
+            Idle mining, Pickaxe Level progression, and six equal Halving eras that each mine out
+            their own fixed share of the supply before the next begins.
           </p>
           <div className="mx-auto mt-7 flex flex-wrap justify-center gap-2.5">
             {overviewStats.map((stat) => (

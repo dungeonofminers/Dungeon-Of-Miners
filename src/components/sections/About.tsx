@@ -13,7 +13,7 @@ const pillars = [
     image: assets.iconScarcityWatch,
     title: "Six Halvings",
     description:
-      "Mining emissions decrease as the ecosystem advances through six Halving eras — the deeper it goes, the scarcer new DOM becomes.",
+      "The mining pool is split into six equal eras — each Halving mines out its own fixed share before the network moves to the next, all the way to the final DOM.",
   },
   {
     image: assets.iconHonestPretge,

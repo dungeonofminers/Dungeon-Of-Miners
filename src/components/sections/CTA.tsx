@@ -22,8 +22,8 @@ export function CTA() {
               Ready to <span className="text-gradient-gold">Start Mining?</span>
             </h2>
             <p className="body-lg mx-auto mt-5 max-w-xl">
-              Mining is live right now. Join the community, start your miner, and survive the
-              Halving before emissions drop.
+              Mining is live right now. Join the community, start your miner, and build your
+              position before Halving 1&apos;s allocation is fully mined out.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
               <a

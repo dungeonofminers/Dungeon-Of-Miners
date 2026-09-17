@@ -20,7 +20,7 @@ export function TheGenesis() {
         <SectionHeading
           eyebrow="The Halving Status"
           title="Mining Is Live — Halving 1 Is Underway"
-          description="DOM mining runs at its highest emission rate during Halving 1. As the network advances through six Halving eras, mining emissions progressively decrease, making every new DOM harder to extract."
+          description="Halving 1 is the first of six equal eras carved from the mining pool. Each Halving must be fully mined out before the network advances to the next."
         />
 
         <Reveal delay={0.1}>

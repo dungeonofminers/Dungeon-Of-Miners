@@ -92,18 +92,18 @@ export const docsIntro: DocPage = {
   blocks: [
     {
       type: "lede",
-      text: "Players mine idly, level up their Pickaxe through Mining XP, join Telegram-community Guilds, and advance through six Halving eras that progressively cut the network's daily emission ceiling — and eligible DOM can be withdrawn on-chain today, instantly.",
+      text: "Players mine idly, level up their Pickaxe through Mining XP, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain today, instantly.",
     },
     {
       type: "paragraph",
-      text: "There is no Holding Wallet / Pool Wallet split. 100% of every claim becomes Available DOM Balance. Mining began at Halving 1 — the highest daily emission ceiling the economy will ever run at — and will step down five more times before settling at its final, lowest ceiling.",
+      text: "There is no Holding Wallet / Pool Wallet split. 100% of every claim becomes Available DOM Balance. Mining began at Halving 1 — the first of six equal 91,666,667 DOM eras — and will advance five more times, once each era's own allocation is fully mined out.",
     },
     { type: "heading", id: "why-different", text: "Why it's built differently" },
     {
       type: "keyValueGrid",
       items: [
         { label: "Fixed Supply", value: `${totalSupply}, created once. ${economyConfig.mintingStatus}.` },
-        { label: "Six Halvings", value: "Equal 91,666,667 DOM eras, each with a halved daily emission ceiling." },
+        { label: "Six Halvings", value: "Six equal 91,666,667 DOM eras — no daily cap, each simply mines out before the next begins." },
         { label: "Global Emission Pool", value: "Rewards are a capped, shared pool — more miners divide it, never exceed it." },
         { label: "Instant On-Chain Withdrawal", value: "Automated backend validation and broadcast on BNB Smart Chain, via WalletConnect." },
       ],
@@ -214,35 +214,35 @@ export const docsPages: Record<string, DocPage> = {
     slug: "halvings",
     eyebrow: "The Economy — 03",
     title: "The Halvings",
-    description: "Six equal eras of the mining allocation, each with a halved daily emission ceiling.",
+    description: "Six equal eras of the mining allocation — no daily cap, each mines out before the next begins.",
     blocks: [
       {
         type: "lede",
-        text: "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras. Each era carries its own daily global emission ceiling, halved from the previous era — the network's highest ceiling runs at Halving 1, its lowest at Halving 6.",
+        text: "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras (16.67% of the pool each). There is no daily or hourly emission ceiling — each era is simply mined down by the network until its own fixed allocation is fully distributed.",
       },
       {
         type: "callout",
         tone: "gold",
         title: "Halving trigger",
-        text: `${halvingTrigger} There is no Halving 7: once Halving 6 is reached, DOM mining runs permanently at its lowest, final emission ceiling.`,
+        text: `${halvingTrigger} There is no Halving 7: once Halving 6's allocation is fully mined out, the entire Mining Allocation will be completely distributed.`,
       },
       {
         type: "tiles",
         items: [
           { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
           { label: "Current Era Allocation", value: currentHalving.allocation },
-          { label: "Current Emission Ceiling", value: currentHalving.emissionCeiling },
+          { label: "Share of Mining Pool", value: currentHalving.percentOfPool },
           { label: "Total Halvings", value: String(halvings.length) },
         ],
       },
-      { type: "heading", id: "eras", text: "Six eras, one shrinking emission ceiling" },
+      { type: "heading", id: "eras", text: "Six equal eras, mined out in sequence" },
       {
         type: "table",
-        headers: ["Era", "Allocation", "Daily Emission Ceiling", "Status"],
+        headers: ["Era", "Allocation", "Share of Pool", "Status"],
         rows: halvings.map((h) => [
           `H${h.number} · ${h.name}`,
           { text: h.allocation, align: "right" as const },
-          { text: h.emissionCeiling, align: "right" as const },
+          { text: h.percentOfPool, align: "right" as const },
           {
             text: h.status,
             badge: h.status === "CURRENT" ? "live" : h.status === "UPCOMING" ? "gold" : "tba",
@@ -251,7 +251,7 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "Each era's 91,666,667 DOM allocation (91,666,665 DOM for Halving 6) is a fixed slice of the shared 550,000,000 DOM pool — not a separate, additional supply. The Halving does not multiply an individual miner's rate; it sets the finite global emission ceiling the entire network shares.",
+        text: "Each era's 91,666,667 DOM allocation (91,666,665 DOM for Halving 6) is a fixed, equal slice of the shared 550,000,000 DOM pool — not a separate, additional supply. The Halving does not multiply an individual miner's rate; it sets the finite allocation the entire network shares for that era.",
       },
       {
         type: "linkGrid",
@@ -328,7 +328,7 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "Base Mining Power sets your share of the network's daily emission — it is not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
+        text: "Base Mining Power sets your share of the current Halving's fixed allocation — it is not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
       },
       {
         type: "callout",
@@ -754,7 +754,7 @@ export const docsPages: Record<string, DocPage> = {
       {
         type: "list",
         items: [
-          "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v3.0: total supply, the six allocations, the six Halving allocations and emission ceilings, Pickaxe base mining power, and booster caps.",
+          "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v3.0: total supply, the six allocations, the six equal Halving allocations, Pickaxe base mining power, and booster caps.",
           "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, minimum/maximum withdrawal, and listing venue/timing. No number is invented to fill these gaps.",
         ],
       },
@@ -770,26 +770,23 @@ export const docsPages: Record<string, DocPage> = {
       { type: "heading", id: "emission-schedule", text: "Emission schedule across six Halvings" },
       {
         type: "table",
-        headers: ["Era", "Allocation", "Daily Emission Ceiling", "Illustrative Duration at Ceiling"],
-        rows: [
-          ["H1 · Starting Era", { text: "91,666,667 DOM", align: "right" }, { text: "1,000,000 DOM/day", align: "right" }, { text: "≈ 91.7 days", align: "right" }],
-          ["H2 · First Reduction", { text: "91,666,667 DOM", align: "right" }, { text: "500,000 DOM/day", align: "right" }, { text: "≈ 183.3 days", align: "right" }],
-          ["H3 · Deep Mining", { text: "91,666,667 DOM", align: "right" }, { text: "250,000 DOM/day", align: "right" }, { text: "≈ 366.7 days", align: "right" }],
-          ["H4 · Scarcity Era", { text: "91,666,667 DOM", align: "right" }, { text: "125,000 DOM/day", align: "right" }, { text: "≈ 733.3 days", align: "right" }],
-          ["H5 · Last Vein", { text: "91,666,667 DOM", align: "right" }, { text: "62,500 DOM/day", align: "right" }, { text: "≈ 1,466.7 days", align: "right" }],
-          ["H6 · Final Depth", { text: "91,666,665 DOM", align: "right" }, { text: "31,250 DOM/day", align: "right" }, { text: "≈ 2,933.3 days", align: "right" }],
-        ],
+        headers: ["Era", "Allocation", "Share of Mining Pool"],
+        rows: halvings.map((h) => [
+          `H${h.number} · ${h.name}`,
+          { text: h.allocation, align: "right" as const },
+          { text: h.percentOfPool, align: "right" as const },
+        ]),
       },
       {
         type: "note",
-        text: "Illustrative Duration assumes every era's daily emission ceiling is fully claimed every single day — a theoretical upper bound, not a forecast. In practice a Halving advances only once its era's allocation is fully distributed, which depends on real network activity. Total theoretical emission lifecycle at these ceilings is roughly 5,775 days (≈ 15.8 years).",
+        text: "There is no daily or hourly emission ceiling. Each era simply mines out its own fixed 91,666,667 DOM allocation (91,666,665 DOM for Halving 6) before the network advances to the next — how long that takes depends entirely on real network mining activity, which this model does not forecast.",
       },
       { type: "heading", id: "emission-pool", text: "Why 1,000,000 users can't out-mine the pool" },
       { type: "formula", text: emissionModel.shareFormula },
       { type: "formula", text: emissionModel.rewardFormula },
       {
         type: "note",
-        text: "Referral, Guild, and event boosters change how the emission pool is split between miners — they never change the size of the pool. 10 miners, 10,000 miners, or 1,000,000 miners all divide the same finite daily ceiling.",
+        text: "Referral, Guild, and event boosters change how each era's allocation is split between miners — they never change the size of that allocation. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool.",
       },
       { type: "heading", id: "value-drivers", text: "Value driver assessment" },
       {

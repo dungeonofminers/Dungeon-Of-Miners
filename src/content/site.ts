@@ -169,10 +169,10 @@ export const coreLoop = [
 ];
 
 // ---------------------------------------------------------------------------
-// The Six Halvings — the mining allocation is split into six EQUAL 91.67M
-// DOM eras. Each era carries its own daily global emission ceiling, halved
-// from the previous era. A new Halving begins once the current era's
-// allocation is fully distributed — there is no time-based forced Halving.
+// The Six Halvings — the 550,000,000 DOM Mining Allocation is split into six
+// EQUAL 91.67M DOM eras. There is NO daily/hourly emission ceiling: each
+// Halving simply mines down its own fixed allocation until it is fully
+// distributed, and only then does the network move on to the next Halving.
 // `status` should ultimately be driven by the backend once real distributed
 // totals exist — CURRENT/UPCOMING/LOCKED reflect today's known state, not an
 // invented date.
@@ -185,25 +185,25 @@ export const halvings = [
     name: "Starting Era",
     image: assets.halving1,
     allocation: "91,666,667 DOM",
-    emissionCeiling: "1,000,000 DOM/day",
+    percentOfPool: "16.67%",
     status: "CURRENT" as HalvingStatus,
-    vibe: "The surface tunnels. The network's highest daily emission ceiling — the richest era to start extracting DOM.",
+    vibe: "The surface tunnels. The first slice of the mining pool — the richest era to start extracting DOM.",
   },
   {
     number: 2,
     name: "First Reduction",
     image: assets.halving2,
     allocation: "91,666,667 DOM",
-    emissionCeiling: "500,000 DOM/day",
+    percentOfPool: "16.67%",
     status: "UPCOMING" as HalvingStatus,
-    vibe: "Empty caverns swallow sound. The daily emission ceiling is cut in half — early miners keep their edge.",
+    vibe: "Empty caverns swallow sound. Halving 1's allocation is fully mined out — early miners keep their edge.",
   },
   {
     number: 3,
     name: "Deep Mining",
     image: assets.halving3,
     allocation: "91,666,667 DOM",
-    emissionCeiling: "250,000 DOM/day",
+    percentOfPool: "16.67%",
     status: "LOCKED" as HalvingStatus,
     vibe: "Torchlight barely holds the dark back. Only committed miners make it this far.",
   },
@@ -212,7 +212,7 @@ export const halvings = [
     name: "Scarcity Era",
     image: assets.halving4,
     allocation: "91,666,667 DOM",
-    emissionCeiling: "125,000 DOM/day",
+    percentOfPool: "16.67%",
     status: "LOCKED" as HalvingStatus,
     vibe: "Heat rises from the deep rock. DOM is harder to extract, and every claim counts more.",
   },
@@ -221,7 +221,7 @@ export const halvings = [
     name: "Last Vein",
     image: assets.halving5,
     allocation: "91,666,667 DOM",
-    emissionCeiling: "62,500 DOM/day",
+    percentOfPool: "16.67%",
     status: "LOCKED" as HalvingStatus,
     vibe: "Ash drifts through cracked tunnels. Scarcity is no longer a warning — it's the reality.",
   },
@@ -230,9 +230,9 @@ export const halvings = [
     name: "Final Depth",
     image: assets.halving6,
     allocation: "91,666,665 DOM",
-    emissionCeiling: "31,250 DOM/day",
+    percentOfPool: "16.67%",
     status: "LOCKED" as HalvingStatus,
-    vibe: "The deepest chamber. The lowest emission ceiling the mining era will ever reach.",
+    vibe: "The deepest chamber. The final slice of the mining pool.",
   },
 ];
 
@@ -353,7 +353,7 @@ export const halvingFacts = [
   { label: "Current Halving", value: `Halving ${currentHalvingEntry.number} · ${currentHalvingEntry.name}` },
   { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
   { label: "Current Era Allocation", value: currentHalvingEntry.allocation },
-  { label: "Current Emission Ceiling", value: currentHalvingEntry.emissionCeiling },
+  { label: "Share of Mining Pool", value: currentHalvingEntry.percentOfPool },
   { label: "Mining Status", value: economyConfig.miningStatus },
   { label: "Total Halvings", value: String(halvings.length) },
 ];
@@ -405,8 +405,8 @@ export const miningActivities = [
 // ---------------------------------------------------------------------------
 // Effective Mining Weight — Pickaxe Base Mining Power stacked with capped
 // boosters. This is NOT a per-user DOM/hour guarantee: the Halving does not
-// multiply an individual's rate, it sets the finite GLOBAL daily emission
-// ceiling the entire network shares (see emissionModel below). A miner's
+// multiply an individual's rate, it sets the finite GLOBAL allocation the
+// entire network shares for that era (see emissionModel below). A miner's
 // actual reward is their share of that shared, capped pool — never an
 // unbounded number, no matter how many boosters stack.
 // ---------------------------------------------------------------------------
@@ -429,14 +429,18 @@ export const miningFormula = {
 };
 
 // ---------------------------------------------------------------------------
-// Global Emission Model — the hard ceiling that protects the 550,000,000
-// DOM Mining Allocation no matter how many miners join or how many boosters
-// they stack.
+// Global Emission Model — there is no daily/hourly emission ceiling. Each
+// Halving simply has a fixed, finite allocation (91,666,667 DOM), and
+// miners draw down that same shared pool proportional to their mining
+// weight until it is fully distributed — only then does the network
+// advance to the next Halving. This is the hard ceiling that protects the
+// 550,000,000 DOM Mining Allocation no matter how many miners join or how
+// many boosters they stack.
 // ---------------------------------------------------------------------------
 export const emissionModel = {
   shareFormula: "userEmissionShare = userEffectiveMiningWeight ÷ totalEffectiveMiningWeight",
-  rewardFormula: "userReward = globalEmissionForPeriod × userEmissionShare",
-  note: "Every miner receives a proportional share of the current Halving's daily emission ceiling — never an unbounded per-user rate. 10 miners, 10,000 miners, or 1,000,000 miners all divide the same finite emission budget; they can never exceed it.",
+  rewardFormula: "userReward = currentHalvingRemainingAllocation × userEmissionShare",
+  note: "Every miner receives a proportional share of the current Halving's remaining allocation — never an unbounded per-user rate, and never a fixed amount per day. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool; they can never mine beyond it.",
 };
 
 export const boostRules = [
@@ -508,7 +512,7 @@ export const halvingLedger = [
   { label: "Remaining Mining Allocation", value: "Awaiting Live Data" },
   { label: "Current Halving", value: `Halving ${currentHalvingEntry.number} · ${currentHalvingEntry.name}` },
   { label: "Current Era Allocation", value: currentHalvingEntry.allocation },
-  { label: "Current Emission Ceiling", value: currentHalvingEntry.emissionCeiling },
+  { label: "Remaining Era Allocation", value: "Awaiting Live Data" },
   { label: "Number of Active Miners", value: "Awaiting Live Data" },
 ];
 
@@ -545,7 +549,7 @@ export const economyChangelog = [
       "Removed the Holding Wallet / Pool Wallet split — 100% of claimed DOM becomes Available Balance.",
       "Clarified the fixed 1,000,000,000 DOM supply: created once, no additional minting, ever.",
       "Introduced a Global Emission Pool — total network rewards can never exceed the 550,000,000 DOM mining allocation.",
-      "Standardized the six Halving eras into equal 91,666,667 DOM allocations with halving daily emission ceilings.",
+      "Standardized the six Halving eras into equal 91,666,667 DOM allocations — each era is mined out fully before the next Halving begins, with no daily emission ceiling.",
       "Migrated the Rank System to Pickaxe Level 1–6, progressed by Mining XP instead of wallet balance.",
       "Removed the Pickaxe Equipment Multiplier — Pickaxe Level now sets Base Mining Power directly.",
       "Redesigned the Referral Program into Referral Booster V2 (+0.5% Mining Weight per active qualified referral, max +15%).",
@@ -724,8 +728,8 @@ export const featureGroups: FeatureGroup[] = [
     items: [
       { title: "Idle Mining", description: "DOM accumulates around the clock, whether you're online or not.", icon: "pickaxe" },
       { title: "Fixed Supply Mining", description: "Mining distributes DOM from a capped 550,000,000 DOM allocation — it never creates new supply.", icon: "lock" },
-      { title: "Six Halving Eras", description: "Six equal allocations of the mining pool, each with a halved daily emission ceiling.", icon: "flame" },
-      { title: "Global Emission Pool", description: "Rewards are a share of a finite daily emission — more miners divide the pool, they never exceed it.", icon: "gauge" },
+      { title: "Six Halving Eras", description: "Six equal allocations of the mining pool — each era mines out fully before the next Halving begins.", icon: "flame" },
+      { title: "Global Emission Pool", description: "Rewards are a share of each Halving's fixed allocation — more miners divide the pool, they never exceed it.", icon: "gauge" },
       { title: "Mining Storage", description: "Unclaimed DOM accumulates safely until you claim it — nothing is ever deleted.", icon: "box" },
       { title: "Claim System", description: "Claim moves stored DOM into your Available Balance — 100%, no split.", icon: "check-circle" },
       { title: "Pickaxe Level 1–6", description: "Progress your pickaxe through Mining XP to raise your Base Mining Power.", icon: "hammer" },
@@ -822,17 +826,17 @@ export const faqs = [
   {
     question: "How does mining work?",
     answer:
-      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, which is boosted by your Referral and Guild Boosters into an Effective Mining Weight. Each miner then receives a proportional share of the network's capped daily emission — never an unlimited per-user rate.",
+      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, which is boosted by your Referral and Guild Boosters into an Effective Mining Weight. Each miner then receives a proportional share of the current Halving's fixed allocation — never an unlimited per-user rate, and never a fixed amount per day.",
   },
   {
     question: "What are the six Halvings?",
     answer:
-      "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras. Each era has its own daily global emission ceiling, halved from the previous era — 1,000,000 DOM/day at Halving 1 down to 31,250 DOM/day at Halving 6.",
+      "The 550,000,000 DOM Mining Allocation is split into six equal 91,666,667 DOM eras (16.67% of the pool each). There is no daily emission ceiling — each era is simply mined down until its own allocation is fully exhausted.",
   },
   {
     question: "What happens when a Halving occurs?",
     answer:
-      "The next Halving begins once the current era's 91,666,667 DOM allocation is completely distributed — there is no fixed date or timer. The daily emission ceiling then halves for the new era.",
+      "The next Halving begins only once the current era's 91,666,667 DOM allocation is completely mined out — there is no fixed date, timer, or daily cap. The network then moves on to the next era's fixed allocation.",
   },
   {
     question: "What are Pickaxe Levels?",

@@ -7,6 +7,7 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { GlowOrb } from "@/components/ui/GlowOrb";
 import { EmberField } from "@/components/ui/EmberField";
 import { TokenDistributionChart } from "@/components/tokenomics/TokenDistributionChart";
+import { AllocationCard } from "@/components/tokenomics/AllocationCard";
 
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
@@ -109,20 +110,7 @@ export default function TokenomicsPage() {
           <div className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {tokenAllocation.map((entry, i) => (
               <Reveal key={entry.id} delay={i * 0.05}>
-                <div className="surface-panel h-full p-6">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{ backgroundColor: entry.color }}
-                    />
-                    <span className="font-display text-2xl text-ink">{entry.percent}%</span>
-                  </div>
-                  <h3 className="mt-3 text-sm font-semibold uppercase tracking-wider text-ink">
-                    {entry.label}
-                  </h3>
-                  <p className="mt-1 text-xs text-ink-faint">{entry.amount}</p>
-                  <p className="mt-3 text-sm text-ink-muted">{entry.description}</p>
-                </div>
+                <AllocationCard entry={entry} />
               </Reveal>
             ))}
           </div>

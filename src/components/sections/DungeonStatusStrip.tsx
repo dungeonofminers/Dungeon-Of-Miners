@@ -14,8 +14,8 @@ export function DungeonStatusStrip() {
     },
     {
       icon: Gauge,
-      label: "Emission Ceiling",
-      value: currentHalving.emissionCeiling,
+      label: "Era Allocation",
+      value: currentHalving.allocation,
     },
     {
       icon: ArrowDownCircle,

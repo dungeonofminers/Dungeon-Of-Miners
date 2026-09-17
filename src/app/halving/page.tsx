@@ -50,8 +50,8 @@ export default function HalvingPage() {
             <div className="surface-panel mx-auto max-w-2xl px-8 py-14 text-center sm:px-12">
               <h2 className="heading-lg">Start mining before the next Halving</h2>
               <p className="body-lg mx-auto mt-4 max-w-lg">
-                Every Halving reduces DOM emissions. Mine now, level up your Pickaxe, and build
-                your position while the daily emission ceiling is at its highest.
+                Every Halving mines out its own fixed allocation. Mine now, level up your
+                Pickaxe, and build your position before Halving 1&apos;s allocation runs out.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">

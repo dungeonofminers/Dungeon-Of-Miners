@@ -30,7 +30,7 @@ export function TheDescent() {
         <SectionHeading
           eyebrow="The Six Halvings"
           title="Every Halving Makes DOM Harder to Mine."
-          description="DOM mining begins at its highest emission rate. As the network advances through six Halving eras, mining emissions progressively decrease, making every new DOM harder to extract. The deeper the ecosystem goes, the scarcer the rewards become."
+          description="The 550,000,000 DOM Mining Allocation is split into six equal eras. Each Halving must be fully mined out before the network moves on to the next — there's no daily cap and no fixed date, only a fixed supply for each era."
         />
 
         <Reveal delay={0.15}>
@@ -59,9 +59,9 @@ export function TheDescent() {
             </div>
 
             <div className="mt-8 grid grid-cols-1 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
-              <Stat label="Current Emission Ceiling" value={current.emissionCeiling} accent />
-              <Stat label="Next Halving Ceiling" value={next?.emissionCeiling ?? "—"} />
-              <Stat label="Era Allocation" value={current.allocation} />
+              <Stat label="Era Allocation" value={current.allocation} accent />
+              <Stat label="Share of Mining Pool" value={current.percentOfPool} />
+              <Stat label="Next Halving Allocation" value={next?.allocation ?? "—"} />
             </div>
           </div>
         </Reveal>
@@ -130,9 +130,9 @@ export function TheDescent() {
                     <span className="mt-1 text-sm font-semibold text-ink">{halving.name}</span>
                     <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] px-3 py-1 font-mono text-xs font-bold text-torch">
                       <Gauge className="h-3 w-3" />
-                      {halving.emissionCeiling}
+                      {halving.allocation}
                     </span>
-                    <span className="mt-1.5 text-[10px] text-ink-faint">{halving.allocation}</span>
+                    <span className="mt-1.5 text-[10px] text-ink-faint">{halving.percentOfPool} of pool</span>
                   </div>
                 </Reveal>
 
@@ -153,8 +153,8 @@ export function TheDescent() {
 
           <Reveal delay={halvings.length * 0.12 + 0.1}>
             <p className="mx-auto mt-8 max-w-sm text-center text-xs text-ink-faint">
-              There is no Halving 7. Once Halving 6 is reached, DOM mining emission runs at its
-              lowest, final rate.
+              There is no Halving 7. Once Halving 6&apos;s allocation is fully mined out, the
+              entire 550,000,000 DOM Mining Allocation will be completely distributed.
             </p>
           </Reveal>
         </div>

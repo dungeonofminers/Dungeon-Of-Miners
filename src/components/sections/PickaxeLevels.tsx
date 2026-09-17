@@ -52,8 +52,8 @@ export function PickaxeLevels() {
         <Reveal delay={0.4}>
           <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 text-center">
             <p className="text-sm text-ink-muted">
-              Base Mining Power sets your share of the network&apos;s daily emission — it is not a
-              guaranteed DOM/hour rate.{" "}
+              Base Mining Power sets your share of the current Halving&apos;s fixed allocation —
+              it is not a guaranteed DOM/hour rate.{" "}
               <span className="text-ink-faint">There is no Pickaxe Equipment Multiplier.</span> See{" "}
               <a href="/economy#mining-formula" className="text-gold underline-offset-4 hover:underline">
                 how mining rewards work
