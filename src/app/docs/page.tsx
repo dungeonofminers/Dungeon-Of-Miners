@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { siteConfig, links } from "@/content/site";
+import { siteConfig } from "@/content/site";
 import { docsIntro, docsNav } from "@/content/docs";
 import { DocsContent } from "@/components/docs/DocsContent";
 
@@ -45,19 +45,6 @@ export default function DocsIndexPage() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="surface-panel flex flex-col items-start gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-ink">Ready to start mining?</p>
-          <p className="mt-1 text-xs text-ink-muted sm:text-sm">
-            Mining is live right now inside the {siteConfig.name} Mini App.
-          </p>
-        </div>
-        <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary shrink-0">
-          Enter Mini App
-          <ArrowRight className="h-4 w-4" />
-        </a>
       </div>
     </article>
   );

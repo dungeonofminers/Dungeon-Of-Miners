@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { siteConfig, links, totalSupply, halvings, pickaxeLevels } from "@/content/site";
+import { siteConfig, totalSupply, halvings, pickaxeLevels } from "@/content/site";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { TheDescent } from "@/components/sections/TheDescent";
 import { PickaxeLevels } from "@/components/sections/PickaxeLevels";
@@ -47,12 +47,6 @@ export default function GamePage() {
                 <span className="text-ink-muted">{stat.label}</span>
               </div>
             ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-              Enter Mini App
-              <ArrowRight className="h-4 w-4" />
-            </a>
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
-import { Send, Smartphone, ArrowRight, Bell } from "lucide-react";
-import { assets, links } from "@/content/site";
+import { Send, Smartphone, Bell } from "lucide-react";
+import { assets } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -34,15 +34,6 @@ export function Platforms() {
                     Open it directly inside Telegram — nothing to install.
                   </p>
                 </div>
-                <a
-                  href={links.miniApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary shrink-0 !px-4 !py-2.5 text-sm"
-                >
-                  Open
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
               </div>
             </Reveal>
 

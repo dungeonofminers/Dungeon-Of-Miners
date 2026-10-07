@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { domEcosystem, links } from "@/content/site";
+import { domEcosystem } from "@/content/site";
 import { Reveal } from "@/components/ui/Reveal";
 import { EcosystemDiagram } from "@/components/ecosystem/EcosystemDiagram";
 
@@ -60,10 +60,6 @@ export function DomEcosystem() {
                 transition={{ duration: 0.6, delay: prefersReduced ? 0 : 9.2 }}
                 className="mt-4"
               >
-                <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-                  {domEcosystem.finalScene.cta}
-                  <ArrowRight className="h-4 w-4" />
-                </a>
               </motion.div>
             </Reveal>
           </div>

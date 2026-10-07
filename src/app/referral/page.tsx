@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { ArrowRight, UserPlus, Gift, ShieldAlert, Zap } from "lucide-react";
-import { siteConfig, links, referralBooster, referralDashboardShape } from "@/content/site";
+import { UserPlus, Gift, ShieldAlert, Zap } from "lucide-react";
+import { siteConfig, referralBooster, referralDashboardShape } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -129,15 +129,6 @@ export default function ReferralPage() {
                   — we don&apos;t publish exact detection logic.
                 </p>
               </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.22}>
-            <div className="mx-auto mt-8 flex max-w-4xl justify-center">
-              <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Enter Mini App
-                <ArrowRight className="h-4 w-4" />
-              </a>
             </div>
           </Reveal>
         </div>

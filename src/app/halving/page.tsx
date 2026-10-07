@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
-import { siteConfig, links, faqs } from "@/content/site";
+import { siteConfig, faqs } from "@/content/site";
 import { TheGenesis } from "@/components/sections/TheGenesis";
 import { PrepareForGenesis } from "@/components/sections/PrepareForGenesis";
 import { GenesisLedger } from "@/components/sections/GenesisLedger";
@@ -54,10 +54,6 @@ export default function HalvingPage() {
                 Pickaxe, and build your position before Halving 1&apos;s allocation runs out.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-                <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  Start Mining
-                  <ArrowRight className="h-4 w-4" />
-                </a>
                 <a href="/game#halvings" className="btn-secondary">
                   View Halving Data
                 </a>

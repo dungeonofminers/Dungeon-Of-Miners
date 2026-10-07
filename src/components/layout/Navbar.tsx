@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { navGroups, navTopLevel, links, assets, economyConfig } from "@/content/site";
+import { navGroups, navTopLevel, assets, economyConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
@@ -72,14 +72,6 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:block">
-          <a
-            href={links.miniApp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-gold/25 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/15"
-          >
-            Enter Mini App
-          </a>
         </div>
 
         <button
@@ -149,15 +141,6 @@ export function Navbar() {
               {navTopLevel.label}
             </a>
 
-            <a
-              href={links.miniApp}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="btn-primary mt-3 justify-center"
-            >
-              Enter Mini App
-            </a>
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
               <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-glow">

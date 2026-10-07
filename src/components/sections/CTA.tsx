@@ -1,4 +1,4 @@
-import { ArrowRight, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { links } from "@/content/site";
 import { Reveal } from "@/components/ui/Reveal";
 import { EmberField } from "@/components/ui/EmberField";
@@ -26,15 +26,6 @@ export function CTA() {
               position before Halving 1&apos;s allocation is fully mined out.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
-              <a
-                href={links.miniApp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary"
-              >
-                Enter Mini App
-                <ArrowRight className="h-4 w-4" />
-              </a>
               <a
                 href={links.telegramCommunity}
                 target="_blank"

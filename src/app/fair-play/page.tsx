@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { XCircle, ShieldAlert, ArrowRight } from "lucide-react";
-import { siteConfig, links, fairPlay } from "@/content/site";
+import { XCircle, ShieldAlert } from "lucide-react";
+import { siteConfig, fairPlay } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -83,12 +83,6 @@ export default function FairPlayPage() {
                 Fair Play protects a shared, finite supply — which means it protects your share of
                 it too.
               </p>
-              <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-                <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                  Enter Mini App
-                  <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
             </div>
           </Reveal>
         </div>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Users, Wallet } from "lucide-react";
-import { links, assets } from "@/content/site";
+import { assets } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -92,10 +92,6 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.4 }}
               className="mt-8 flex flex-col gap-4 sm:flex-row"
             >
-              <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                Start Mining
-                <ArrowRight className="h-4 w-4" />
-              </a>
               <a href="/economy" className="btn-secondary">
                 View Economy
               </a>

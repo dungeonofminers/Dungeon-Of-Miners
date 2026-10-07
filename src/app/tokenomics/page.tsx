@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ShieldCheck, ArrowRight, Send, Zap } from "lucide-react";
+import { ShieldCheck, Send, Zap } from "lucide-react";
 import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation, supplyFacts, balanceModel } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -170,15 +170,6 @@ export default function TokenomicsPage() {
                 DOM can be withdrawn directly to your wallet.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-                <a
-                  href={links.miniApp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary"
-                >
-                  Open Mini App
-                  <ArrowRight className="h-4 w-4" />
-                </a>
                 <a
                   href={links.telegramCommunity}
                   target="_blank"

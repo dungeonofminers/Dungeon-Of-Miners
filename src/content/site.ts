@@ -70,7 +70,6 @@ export const siteConfig = {
 
 // Replace these with your real links.
 export const links = {
-  miniApp: "https://t.me/DungeonOfMinersBot",
   telegramCommunity: "https://t.me/DungeonOfMiners",
   telegramChannel: "https://t.me/DungeonOfMinersAnnouncements",
   twitter: "https://x.com/DungeonOfMiners",
