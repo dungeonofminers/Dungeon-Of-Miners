@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Send, MessageCircle, ArrowRight } from "lucide-react";
-import { siteConfig, links } from "@/content/site";
+import { Send, MessageCircle, Mail, ArrowRight } from "lucide-react";
+import { siteConfig, links, contactEmail } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -11,11 +11,20 @@ export const metadata: Metadata = {
 
 const channels = [
   {
+    icon: Mail,
+    title: "Email",
+    description: "For official inquiries, data requests, and anything that needs a written reply.",
+    href: `mailto:${contactEmail}`,
+    cta: contactEmail,
+    external: false,
+  },
+  {
     icon: Send,
     title: "Community Chat",
     description: "Ask questions and get help from the community and moderators.",
     href: links.telegramCommunity,
     cta: "Open Telegram",
+    external: true,
   },
   {
     icon: MessageCircle,
@@ -23,6 +32,7 @@ const channels = [
     description: "Follow this channel for verified updates — economy changes, maintenance, and official news.",
     href: links.telegramChannel,
     cta: "Follow Channel",
+    external: true,
   },
 ];
 
@@ -37,7 +47,7 @@ export default function SupportPage() {
             description="Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — not in support chat, not anywhere. Treat any request for these as a scam."
           />
 
-          <div className="mx-auto mt-14 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
             {channels.map((channel, i) => (
               <Reveal key={channel.title} delay={i * 0.08}>
                 <div className="surface-panel flex h-full flex-col p-7">
@@ -48,9 +58,8 @@ export default function SupportPage() {
                   <p className="body-lg mt-2 flex-1 text-sm">{channel.description}</p>
                   <a
                     href={channel.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-secondary mt-5 justify-center"
+                    {...(channel.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="btn-secondary mt-5 justify-center break-all text-center"
                   >
                     {channel.cta}
                     <ArrowRight className="h-4 w-4" />

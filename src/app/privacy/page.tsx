@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig, economyConfig } from "@/content/site";
+import { siteConfig, economyConfig, contactEmail } from "@/content/site";
 import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
         {
           heading: "7. Contact",
           body: [
-            "Questions about this Privacy Policy can be sent through the official Dungeon of Miners Telegram community — see the Support page.",
+            `Questions about this Privacy Policy can be sent to ${contactEmail} or through the official Dungeon of Miners Telegram community — see the Support page.`,
           ],
         },
       ]}

@@ -69,6 +69,8 @@ export const siteConfig = {
 };
 
 // Replace these with your real links.
+export const contactEmail = "official@dungeonofminers.xyz";
+
 export const links = {
   telegramCommunity: "https://t.me/DungeonOfMiners",
   telegramChannel: "https://t.me/DungeonOfMinersAnnouncements",

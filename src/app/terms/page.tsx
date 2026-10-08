@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig, economyConfig } from "@/content/site";
+import { siteConfig, economyConfig, contactEmail } from "@/content/site";
 import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
@@ -61,7 +61,7 @@ export default function TermsPage() {
         {
           heading: "8. Contact",
           body: [
-            "Questions about these Terms can be sent through the official Dungeon of Miners Telegram community — see the Support page for details.",
+            `Questions about these Terms can be sent to ${contactEmail} or through the official Dungeon of Miners Telegram community — see the Support page for details.`,
           ],
         },
       ]}

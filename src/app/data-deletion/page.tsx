@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig, links, economyConfig } from "@/content/site";
+import { siteConfig, links, economyConfig, contactEmail } from "@/content/site";
 import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function DataDeletionPage() {
         {
           heading: "How to request deletion",
           body: [
-            `Send a deletion request through the official Dungeon of Miners Telegram community (${links.telegramCommunity}) from the Telegram account associated with your mining account, so we can verify the request belongs to you.`,
+            `Email ${contactEmail} or send a deletion request through the official Dungeon of Miners Telegram community (${links.telegramCommunity}) from the Telegram account associated with your mining account, so we can verify the request belongs to you.`,
           ],
         },
         {

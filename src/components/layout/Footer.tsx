@@ -1,5 +1,5 @@
-import { Send, Twitter, MessageCircle } from "lucide-react";
-import { siteConfig, links, navTopLevel, assets, footerLegalLinks } from "@/content/site";
+import { Send, Twitter, MessageCircle, Mail } from "lucide-react";
+import { siteConfig, links, contactEmail, navTopLevel, assets, footerLegalLinks } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 const exploreLinks = [
@@ -35,6 +35,9 @@ export function Footer() {
               <span className="font-display text-lg text-ink">Dungeon of Miners</span>
             </a>
             <p className="body-lg mt-3 max-w-sm text-sm">{siteConfig.description}</p>
+            <a href={`mailto:${contactEmail}`} className="mt-3 inline-block text-sm text-gold underline-offset-4 hover:underline">
+              {contactEmail}
+            </a>
             <div className="mt-5 flex items-center gap-3">
               <a
                 href={links.telegramCommunity}
@@ -53,6 +56,13 @@ export function Footer() {
                 className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-ink-muted transition-colors hover:border-gold/40 hover:text-gold"
               >
                 <Twitter className="h-4 w-4" />
+              </a>
+              <a
+                href={`mailto:${contactEmail}`}
+                aria-label={`Email ${contactEmail}`}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 text-ink-muted transition-colors hover:border-gold/40 hover:text-gold"
+              >
+                <Mail className="h-4 w-4" />
               </a>
               <a
                 href={links.telegramChannel}
