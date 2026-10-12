@@ -10,8 +10,8 @@ export function LiveEconomyDashboard() {
     <section id="dashboard" className="relative py-24 sm:py-32">
       <div className="section-shell">
         <SectionHeading
-          eyebrow="Live Economy"
-          title="The Dungeon Is Mining"
+          eyebrow="Economy Dashboard"
+          title="Mining Is Coming Soon"
           description="Every value below is either a known configuration fact or an honest placeholder — never a fabricated statistic. Live figures appear the moment the backend can supply them."
         />
 
@@ -21,7 +21,7 @@ export function LiveEconomyDashboard() {
               <p className="text-sm font-semibold text-ink">
                 Current Halving — {currentHalving.number} / {halvings.length} · {currentHalving.name}
               </p>
-              <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-glow">
+              <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-gold">
                 <Activity className="h-3 w-3" />
                 {economyConfig.miningStatus}
               </span>

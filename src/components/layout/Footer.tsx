@@ -122,7 +122,7 @@ export function Footer() {
             © {new Date().getFullYear()} Dungeon of Miners. All rights reserved.
           </p>
           <p className="text-xs text-ink-faint">
-            Live mining ecosystem on BNB Smart Chain. Not financial advice — see Risk Disclosure.
+            Mining ecosystem on BNB Smart Chain. Not financial advice — see Risk Disclosure.
           </p>
         </div>
       </div>

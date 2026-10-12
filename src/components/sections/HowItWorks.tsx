@@ -9,7 +9,7 @@ export function HowItWorks() {
         <SectionHeading
           eyebrow="How It Works"
           title="From first tap to guild expedition"
-          description="Mining is live. Six simple steps take you from opening the Mini App to withdrawing your rewards on-chain with a full guild behind you."
+          description="Mining is coming soon. Six simple steps take you from opening the Mini App to withdrawing your rewards on-chain with a full guild behind you."
         />
 
         <div className="relative mt-16">

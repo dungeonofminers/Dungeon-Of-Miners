@@ -11,7 +11,7 @@ import { RecentWithdrawals } from "@/components/sections/RecentWithdrawals";
 export const metadata: Metadata = {
   title: `Mining Economy — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "How the Dungeon of Miners live mining economy works end to end: Pickaxe Base Mining Power, boosters, the Global Emission Pool, claims, and instant on-chain withdrawal.",
+    "How the Dungeon of Miners mining economy works end to end: Pickaxe Base Mining Power, boosters, the Global Emission Pool, claims, and on-chain withdrawal.",
 };
 
 export default function EconomyPage() {
@@ -25,7 +25,7 @@ export default function EconomyPage() {
 
         <div className="section-shell relative">
           <SectionHeading
-            eyebrow="Live Mining Economy"
+            eyebrow="Mining Economy"
             title="Every booster, one shared, capped supply"
             description="From your Pickaxe's Base Mining Power to a claim that's 100% yours to instant on-chain withdrawal — here's exactly how DOM moves through the economy."
           />

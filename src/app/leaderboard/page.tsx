@@ -5,7 +5,7 @@ import { LeaderboardBoard } from "@/components/sections/LeaderboardBoard";
 
 export const metadata: Metadata = {
   title: `Leaderboard — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "The live Dungeon of Miners Player and Guild leaderboards. No fake rankings, ever.",
+  description: "The Dungeon of Miners Player and Guild leaderboards. No fake rankings, ever.",
 };
 
 export default function LeaderboardPage() {
@@ -14,7 +14,7 @@ export default function LeaderboardPage() {
       <section className="relative py-16">
         <div className="section-shell">
           <SectionHeading
-            eyebrow="Live Rankings"
+            eyebrow="Rankings"
             title="Leaderboard"
             description="Ranked by verified activity — DOM mined, active days, and guild contribution — never by wallet balance. No placeholder or fake entries, ever."
           />

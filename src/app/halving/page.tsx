@@ -10,10 +10,10 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 export const metadata: Metadata = {
   title: `Halving — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "Everything about the DOM Halving system: current Halving status, mining allocation, how to build your position, and the public Halving Ledger. Mining is live.",
+    "Everything about the DOM Halving system: current Halving status, mining allocation, how to build your position, and the public Halving Ledger. Mining is coming soon.",
 };
 
-const halvingFaqSlugs = ["Is mining live?", "What are the six Halvings?", "What happens when a Halving occurs?"];
+const halvingFaqSlugs = ["What are the Six Halvings?", "How does a Halving happen?", "What is Global Emission?"];
 const halvingFaqs = faqs.filter((faq) => halvingFaqSlugs.includes(faq.question));
 
 export default function HalvingPage() {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter } from "next/font/google";
 import "./globals.css";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { siteConfig } from "@/content/site";
@@ -54,8 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${cinzel.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-void-300 font-body antialiased">
+        <AnnouncementBar />
         <Navbar />
-        <main>{children}</main>
+        <main className="pt-9">{children}</main>
         <Footer />
       </body>
     </html>

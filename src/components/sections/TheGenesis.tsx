@@ -19,7 +19,7 @@ export function TheGenesis() {
       <div className="section-shell relative">
         <SectionHeading
           eyebrow="The Halving Status"
-          title="Mining Is Live — Halving 1 Is Underway"
+          title="Mining Is Coming Soon — Halving 1 Is First"
           description="Halving 1 is the first of six equal eras carved from the mining pool. Each Halving must be fully mined out before the network advances to the next."
         />
 
@@ -41,8 +41,8 @@ export function TheGenesis() {
             </div>
 
             <div className="mt-8 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 text-sm text-ink-muted">
-              Live mining totals (DOM mined, remaining allocation, active miners) are displayed
-              once the connected backend is live. This page never shows a fabricated number.
+              Live mining totals (DOM mined, remaining allocation, active miners) will be displayed
+              once mining begins. This page never shows a fabricated number.
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-6 border-t border-white/[0.06] pt-8 sm:grid-cols-3">

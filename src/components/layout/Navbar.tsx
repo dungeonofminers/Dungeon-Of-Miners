@@ -33,7 +33,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-9 z-50 transition-all duration-300",
         scrolled
           ? "border-b border-white/[0.05] bg-void-300/55 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
@@ -84,7 +84,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-white/[0.06] bg-void-300 backdrop-blur-xl xl:hidden">
+        <div className="max-h-[calc(100vh-6.25rem)] overflow-y-auto border-t border-white/[0.06] bg-void-300 backdrop-blur-xl xl:hidden">
           <div className="section-shell flex flex-col gap-1 py-4">
             {navGroups.map((group) => {
               const isOpen = openAccordion === group.label;
@@ -143,8 +143,8 @@ export function Navbar() {
 
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-glow">
-                Mining Live
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
+                Mining Coming Soon
               </span>
               <span className="text-[10px] text-ink-faint">· Halving 1 · Starting Era</span>
             </div>

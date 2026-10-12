@@ -111,11 +111,11 @@ export const docsIntro: DocPage = {
   slug: "",
   eyebrow: "Documentation — 00",
   title: "A fixed-supply mining economy",
-  description: `${siteConfig.name} is a live mining ecosystem powered by a permanently fixed supply of ${totalSupply}.`,
+  description: `${siteConfig.name} is a mining ecosystem powered by a permanently fixed supply of ${totalSupply}.`,
   blocks: [
     {
       type: "lede",
-      text: "Players mine idly, unlock higher Pickaxe levels by holding DOM, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain today, instantly.",
+      text: "Players mine idly, unlock higher Pickaxe levels by holding DOM, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain.",
     },
     {
       type: "paragraph",
@@ -135,8 +135,8 @@ export const docsIntro: DocPage = {
     {
       type: "tiles",
       items: [
-        { label: "Mining Status", value: economyConfig.miningStatus, accent: "emerald" },
-        { label: "Withdrawal", value: economyConfig.withdrawalStatus, accent: "emerald" },
+        { label: "Mining Status", value: economyConfig.miningStatus, accent: "gold" },
+        { label: "Withdrawal", value: economyConfig.withdrawalStatus, accent: "gold" },
         { label: "TGE", value: economyConfig.tgeStatus },
         { label: "Exchange Listing", value: economyConfig.exchangeListingStatus },
       ],
@@ -168,8 +168,8 @@ export const docsPages: Record<string, DocPage> = {
           ["Wallet Connector", withdrawalConfig.walletConnector],
           ["Max supply", totalSupply],
           ["Minting", economyConfig.mintingStatus],
-          ["Mining status", { text: economyConfig.miningStatus, badge: "live" }],
-          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "live" }],
+          ["Mining status", { text: economyConfig.miningStatus, badge: "tba" }],
+          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "tba" }],
           ["TGE", { text: economyConfig.tgeStatus, badge: "tba" }],
           ["Exchange listing", { text: economyConfig.exchangeListingStatus, badge: "tba" }],
           ["Withdrawal fee", withdrawalConfig.feeLabel],
@@ -354,7 +354,7 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "Base Mining Power above is example default configuration — they are meant to be tuned once the live mining engine is built, not a final published figure. Base Mining Power sets your share of the current Halving's fixed allocation, not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
+        text: "Base Mining Power above is example default configuration — they are meant to be tuned once the mining engine is built, not a final published figure. Base Mining Power sets your share of the current Halving's fixed allocation, not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
       },
       {
         type: "callout",
@@ -669,7 +669,7 @@ export const docsPages: Record<string, DocPage> = {
     slug: "activities",
     eyebrow: "Player Systems — 11",
     title: "Mining Activities",
-    description: "Mining is live — here's how to build your position.",
+    description: "Mining is coming soon — here's how to build your position.",
     blocks: [
       {
         type: "lede",
@@ -719,7 +719,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "Dungeon of Miners is a live mining economy with real, instant on-chain withdrawal. That's stated clearly, everywhere it matters, so expectations stay accurate.",
+        text: "Dungeon of Miners is a mining economy with on-chain withdrawal. That's stated clearly, everywhere it matters, so expectations stay accurate.",
       },
       {
         type: "table",
@@ -731,8 +731,8 @@ export const docsPages: Record<string, DocPage> = {
           ["Minting", economyConfig.mintingStatus],
           ["Mining allocation", MINING_ALLOCATION_DOM],
           ["Current Halving", `${economyConfig.currentHalving} of ${halvings.length}`],
-          ["Mining status", { text: economyConfig.miningStatus, badge: "live" }],
-          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "live" }],
+          ["Mining status", { text: economyConfig.miningStatus, badge: "tba" }],
+          ["Withdrawal status", { text: economyConfig.withdrawalStatus, badge: "tba" }],
           ["TGE", { text: economyConfig.tgeStatus, badge: "tba" }],
           ["Exchange listing", { text: economyConfig.exchangeListingStatus, badge: "tba" }],
         ],
@@ -744,7 +744,7 @@ export const docsPages: Record<string, DocPage> = {
           "Eligible DOM withdrawals are broadcast on-chain with a real transaction hash and a block explorer link.",
           `Every withdrawal request shows its real status — ${withdrawalConfig.statuses.join(", ")} — never a vague placeholder.`,
           "No manufactured transaction proofs, no fabricated hashes, no fake payout screenshots — ever.",
-          "No placeholder or fake leaderboard entries — live mining totals and rankings render only once the connected backend is live.",
+          "No placeholder or fake leaderboard entries — mining totals and rankings render only once the connected backend is live.",
           "No TGE date, exchange name, listing date, opening price, market cap, or liquidity amount is published until officially confirmed.",
           "Mining or holding DOM does not guarantee financial value or profit. Dungeon of Miners does not promise price appreciation, exchange listing, or guaranteed liquidity — stated plainly, not buried in terms.",
         ],

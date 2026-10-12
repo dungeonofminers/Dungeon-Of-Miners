@@ -44,7 +44,7 @@ export function Hero() {
               className="eyebrow"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              Live Mining Ecosystem
+              Mining Ecosystem
             </motion.div>
 
             <motion.h1

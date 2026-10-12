@@ -33,7 +33,7 @@ export function Honesty() {
               align="left"
               eyebrow="Transparency"
               title="We tell you exactly where DOM stands today"
-              description="Dungeon of Miners is a live mining economy with real on-chain withdrawal. That's stated clearly, everywhere it matters, so your expectations are always accurate."
+              description="Dungeon of Miners is a mining economy with on-chain withdrawal. That's stated clearly, everywhere it matters, so your expectations are always accurate."
               className="items-start text-left"
             />
 

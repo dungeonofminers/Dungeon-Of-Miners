@@ -10,7 +10,7 @@ import { EmberField } from "@/components/ui/EmberField";
 
 export const metadata: Metadata = {
   title: `Game — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "How Dungeon of Miners plays: the live mining loop, the six Halvings, Pickaxe Levels, and features.",
+  description: "How Dungeon of Miners plays: the mining loop, the six Halvings, Pickaxe Levels, and features.",
 };
 
 const overviewStats = [
@@ -31,7 +31,7 @@ export default function GamePage() {
         <div className="section-shell relative text-center">
           <span className="eyebrow mx-auto">The Game</span>
           <h1 className="heading-xl mx-auto mt-6 max-w-2xl">
-            A live dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
+            A dungeon-mining loop built on <span className="text-gradient-gold">real scarcity</span>
           </h1>
           <p className="body-lg mx-auto mt-5 max-w-xl">
             Idle mining, Pickaxe Level progression, and six equal Halving eras that each mine out

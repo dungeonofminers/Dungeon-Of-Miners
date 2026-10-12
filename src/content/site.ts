@@ -91,6 +91,15 @@ export const links = {
 };
 
 // ---------------------------------------------------------------------------
+// Announcement bar — a slim, always-on banner shown above the navbar.
+// Set `visible` to false to hide it site-wide.
+// ---------------------------------------------------------------------------
+export const announcementBar = {
+  text: "DOM Mining Coming Soon",
+  visible: true,
+};
+
+// ---------------------------------------------------------------------------
 // Navigation — grouped for the desktop dropdown / mobile accordion navbar.
 // Hash links are prefixed with "/" so they resolve correctly from any page,
 // not just the page that owns the section. "Rank" is intentionally absent —
@@ -202,7 +211,7 @@ export const coreLoop = [
   },
   {
     step: "02",
-    title: "Start Mining — It's Live",
+    title: "Start Mining — Coming Soon",
     description:
       "Your rig runs idle, mining DOM around the clock at a rate set by your Pickaxe Level and the current Halving era.",
   },
@@ -284,12 +293,12 @@ export const totalSupply = formatDOM(TOTAL_SUPPLY);
 // instead of hardcoding its own copy. Only flip a status to "LIVE" once the
 // corresponding backend functionality is actually deployed.
 // ---------------------------------------------------------------------------
-export type MiningStatus = "LIVE" | "MAINTENANCE";
+export type MiningStatus = "LIVE" | "MAINTENANCE" | "COMING SOON";
 export type LaunchStatus = "LIVE" | "COMING SOON";
 
 export const economyConfig = {
-  miningStatus: "LIVE" as MiningStatus,
-  withdrawalStatus: "LIVE" as LaunchStatus,
+  miningStatus: "COMING SOON" as MiningStatus,
+  withdrawalStatus: "COMING SOON" as LaunchStatus,
   tgeStatus: "COMING SOON" as LaunchStatus,
   exchangeListingStatus: "COMING SOON" as LaunchStatus,
   currentHalving: CURRENT_HALVING,
@@ -806,7 +815,7 @@ export const serverAuthoritativeState = [
 ];
 
 export const riskDisclosure =
-  "Dungeon of Miners is a live mining ecosystem on BNB Smart Chain. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: Coming Soon — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
+  "Dungeon of Miners is a mining ecosystem on BNB Smart Chain. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: Coming Soon — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
 
 // ---------------------------------------------------------------------------
 // Fair Play policy
@@ -1208,7 +1217,7 @@ export const faqs = [
   {
     question: "What is Dungeon of Miners?",
     answer:
-      "Dungeon of Miners is a live mining ecosystem. You mine DOM passively, unlock higher Pickaxe levels by holding DOM, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
+      "Dungeon of Miners is a mining ecosystem. You mine DOM passively, unlock higher Pickaxe levels by holding DOM, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
   },
   {
     question: "What blockchain does DOM use?",
@@ -1371,7 +1380,7 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
   {
     phase: "Phase 1",
     title: "Foundation",
-    status: "done",
+    status: "active",
     items: ["Website", "Mining engine", "Fixed Supply Economy", "BSC architecture", "Mining Storage", "Claim"],
   },
   {
@@ -1535,7 +1544,7 @@ export const domEcosystem = {
   tagline: "Mine. Progress. Connect. Withdraw.",
   intro: {
     lineOne: "The dungeon is more than a mine.",
-    lineTwo: "It is a live economy.",
+    lineTwo: "It is a growing economy.",
   },
   core: {
     lineOne: "At its center is DOM.",
@@ -1565,9 +1574,9 @@ export const domEcosystem = {
       id: "mining",
       x: 27.5,
       y: 27,
-      status: "LIVE",
+      status: "COMING SOON",
       narrative: {
-        primary: "Mine DOM through the live mining economy.",
+        primary: "Mine DOM through the mining economy.",
         secondary: "Level up your Pickaxe and increase your mining weight before the next Halving.",
       },
       tooltip: { title: "Mining", text: "Extract DOM and improve your mining power." },
