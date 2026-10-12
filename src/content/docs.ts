@@ -128,7 +128,7 @@ export const docsIntro: DocPage = {
         { label: "Fixed Supply", value: `${totalSupply}, created once. ${economyConfig.mintingStatus}.` },
         { label: "Six Halvings", value: "Six equal 91,666,667 DOM eras — no daily cap, each simply mines out before the next begins." },
         { label: "Global Emission Pool", value: "Rewards are a capped, shared pool — more miners divide it, never exceed it." },
-        { label: "Instant On-Chain Withdrawal", value: "Automated backend validation and broadcast on BNB Smart Chain, via WalletConnect." },
+        { label: "On-Chain Withdrawal", value: "Automated validation and broadcast on BNB Smart Chain, processed in order." },
       ],
     },
     { type: "heading", id: "where-things-stand", text: "Where the ecosystem stands today" },
@@ -165,7 +165,7 @@ export const docsPages: Record<string, DocPage> = {
         rows: [
           ["Ticker", siteConfig.ticker],
           ["Network", withdrawalConfig.network],
-          ["Wallet Connector", withdrawalConfig.walletConnector],
+          ["Wallet", withdrawalConfig.walletConnector],
           ["Max supply", totalSupply],
           ["Minting", economyConfig.mintingStatus],
           ["Mining status", { text: economyConfig.miningStatus, badge: "tba" }],
@@ -416,7 +416,7 @@ export const docsPages: Record<string, DocPage> = {
           { label: "Withdrawal fee", value: `${withdrawalConfig.feeDom} DOM` },
           { label: "Network fee", value: withdrawalConfig.networkFeeLabel, accent: "emerald" },
           { label: "Network", value: withdrawalConfig.network },
-          { label: "Wallet Connector", value: withdrawalConfig.walletConnector },
+          { label: "Wallet", value: withdrawalConfig.walletConnector },
         ],
       },
       {
@@ -427,7 +427,7 @@ export const docsPages: Record<string, DocPage> = {
       {
         type: "steps",
         items: [
-          { title: `Connect a BEP20 wallet via ${withdrawalConfig.walletConnector}` },
+          { title: "Paste your BEP-20 wallet address (BNB Smart Chain)" },
           { title: "Enter withdrawal amount" },
           { title: "Server validates your Available Balance" },
           { title: "Confirm withdrawal" },
@@ -466,7 +466,7 @@ export const docsPages: Record<string, DocPage> = {
         headers: ["Property", "Value"],
         rows: [
           ["Network", withdrawalConfig.network],
-          ["Wallet Connector", withdrawalConfig.walletConnector],
+          ["Wallet", withdrawalConfig.walletConnector],
           ["DOM contract", { text: withdrawalConfig.domContractAddress, badge: "tba" }],
           ["Block explorer", { text: withdrawalConfig.blockExplorerUrl, badge: "tba" }],
           ["Minimum withdrawal", withdrawalConfig.minimumWithdrawal],

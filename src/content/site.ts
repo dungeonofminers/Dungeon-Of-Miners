@@ -303,7 +303,7 @@ export const economyConfig = {
   exchangeListingStatus: "COMING SOON" as LaunchStatus,
   currentHalving: CURRENT_HALVING,
   network: `${NETWORK} (${TOKEN_STANDARD})`,
-  walletConnector: "WalletConnect",
+  walletConnector: "any BEP-20 address (pasted)",
   mintingStatus: "Disabled — No Additional Minting",
   economyVersion: "v4.2",
   economyLastUpdated: "2026-10-12",
@@ -574,7 +574,7 @@ export const balanceModel = {
     },
     {
       label: "Connected Wallet",
-      description: "Your external BEP-20 wallet on BNB Smart Chain, connected via WalletConnect.",
+      description: "Your external BEP-20 wallet on BNB Smart Chain — the BEP-20 address you enter when withdrawing.",
     },
   ],
   accountingStates: ["miningStorage", "availableBalance", "pendingWithdrawal", "withdrawnBalance"],
@@ -757,7 +757,7 @@ export const withdrawalConfig = {
   feeLabel: "Zero Withdrawal Fee",
   networkFeeLabel: "Sponsored by Dungeon of Miners",
   network: `${NETWORK} (${TOKEN_STANDARD})`,
-  walletConnector: "WalletConnect",
+  walletConnector: "any BEP-20 address (pasted)",
   chainId: `${CHAIN_ID} (${NETWORK} Mainnet)`,
   domContractAddress: "Coming Soon",
   blockExplorerUrl: `${BLOCK_EXPLORER_NAME} (${BLOCK_EXPLORER_URL.replace("https://", "")})`,
@@ -1160,7 +1160,7 @@ export const featureGroups: FeatureGroup[] = [
     items: [
       { title: "BNB Smart Chain", description: "DOM is issued and distributed on BNB Smart Chain.", icon: "link" },
       { title: "BEP-20 DOM", description: "A standard BEP-20 token — compatible with the BSC wallet ecosystem.", icon: "coins" },
-      { title: "Wallet Linking", description: "Signature-based ownership verification — never a seed phrase or private key.", icon: "wallet" },
+      { title: "Wallet Address", description: "Paste any BEP-20 address; double-check it, on-chain transfers can't be reversed.", icon: "wallet" },
       { title: "Available DOM Balance", description: "The spendable, withdrawal-eligible balance created the moment you claim.", icon: "coins" },
       { title: "BSC Withdrawal", description: "Automated backend validation and broadcast, processed in order — no manual approval. Unlocks after you claim mined DOM on 3 different days.", icon: "send" },
       { title: "Transaction Status", description: "Processing, Broadcasted, Confirming, Confirmed, or Failed — always shown honestly.", icon: "activity" },
@@ -1223,7 +1223,7 @@ export const faqs = [
   },
   {
     question: "What blockchain does DOM use?",
-    answer: "BNB Smart Chain. DOM is a BEP-20 token, compatible with the standard BSC wallet ecosystem (MetaMask, Trust Wallet, and other WalletConnect-compatible wallets).",
+    answer: "BNB Smart Chain. DOM is a BEP-20 token, compatible with the standard BSC wallet ecosystem (MetaMask, Trust Wallet, and other BEP-20 wallets).",
   },
   {
     question: "What is DOM?",
@@ -1289,11 +1289,11 @@ export const faqs = [
   },
   {
     question: "What wallet can I use?",
-    answer: "Any BEP-20-compatible wallet via WalletConnect — including MetaMask and Trust Wallet.",
+    answer: "Any BEP-20 wallet on BNB Smart Chain (MetaMask, Trust Wallet, etc.) — just paste its address.",
   },
   {
     question: "Does Dungeon of Miners request a seed phrase?",
-    answer: "No. Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — for any reason. Wallet linking uses a signed message, not your keys.",
+    answer: "No. Dungeon of Miners never asks for your seed phrase, private key, or recovery phrase — for any reason.",
   },
   {
     question: "What does zero withdrawal fee mean?",

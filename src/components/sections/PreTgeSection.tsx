@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 const flowSteps = [
-  `Connect a BEP20 wallet via ${withdrawalConfig.walletConnector}`,
+  "Paste your BEP-20 wallet address (BNB Smart Chain)",
   "Enter withdrawal amount",
   "Server validates your Available Balance",
   "Confirm withdrawal",
@@ -62,7 +62,7 @@ export function PreTgeSection() {
                   <dd className="font-semibold text-ink">{withdrawalConfig.network}</dd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <dt className="text-ink-muted">Wallet Connector</dt>
+                  <dt className="text-ink-muted">Wallet</dt>
                   <dd className="font-semibold text-ink">{withdrawalConfig.walletConnector}</dd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
