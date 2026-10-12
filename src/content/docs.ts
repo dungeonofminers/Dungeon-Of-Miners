@@ -157,7 +157,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "DOM is the single token of the Dungeon of Miners economy — mined by players and eligible for instant on-chain withdrawal.",
+        text: "DOM is the single token of the Dungeon of Miners economy — mined by players and eligible for on-chain withdrawal.",
       },
       {
         type: "table",
@@ -404,11 +404,11 @@ export const docsPages: Record<string, DocPage> = {
     slug: "withdrawal",
     eyebrow: "Player Systems — 07",
     title: "On-Chain Withdrawal",
-    description: "Mine DOM. Withdraw on-chain, instantly.",
+    description: "Mine DOM. Withdraw on-chain.",
     blocks: [
       {
         type: "lede",
-        text: "All of your Available DOM Balance is eligible for withdrawal — there is no separate locked portion. Withdrawal is instant: the backend automatically validates and broadcasts the transaction, with no manual approval queue.",
+        text: "All of your Available DOM Balance is eligible for withdrawal — there is no separate locked portion. Withdrawal is automated: the backend validates and broadcasts the transaction in order, usually within minutes, with no manual approval.",
       },
       {
         type: "tiles",
@@ -554,7 +554,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: `For now, referrals pay a flat DOM reward. When a friend joins the official Telegram channel and verifies, you earn ${referralProgram.rewardDom} DOM — for up to ${referralProgram.maxFriends} friends.`,
+        text: `For now, referrals pay a flat DOM reward. When a friend you invite joins the official Telegram channel and makes their first mining claim, you earn ${referralProgram.rewardDom} DOM — for up to ${referralProgram.maxFriends} friends.`,
       },
       {
         type: "tiles",
@@ -562,7 +562,7 @@ export const docsPages: Record<string, DocPage> = {
           { label: "Reward per friend", value: `${referralProgram.rewardDom} DOM`, accent: "emerald" },
           { label: "Friend limit", value: `${referralProgram.maxFriends} friends` },
           { label: "Maximum per inviter", value: `${formatNumber(referralProgram.maxTotalDom)} DOM` },
-          { label: "Only requirement", value: "Friend verifies the channel" },
+          { label: "Only requirement", value: "Friend makes their first mining claim" },
         ],
       },
       {
@@ -625,7 +625,7 @@ export const docsPages: Record<string, DocPage> = {
         type: "table",
         headers: ["Feature", "Reward", "Condition"],
         rows: [
-          ["Referral", `${referralProgram.rewardDom} DOM per friend`, "Friend must join the Telegram channel and verify"],
+          ["Referral", `${referralProgram.rewardDom} DOM per friend`, "Friend must join the Telegram channel and make their first mining claim"],
           ["Join Telegram channel", earnQuests[0].reward, "Real channel member, checked by the bot"],
           ["Follow on X", earnQuests[1].reward, "Connected X account (honor-mode follow)"],
           ["Daily Check-In", `${dailyCheckIn.streakTable[0].dom}–${dailyCheckIn.streakTable[6].dom} DOM (streak)`, "Once per UTC day"],
@@ -681,7 +681,7 @@ export const docsPages: Record<string, DocPage> = {
           "Miner Profile — set up your profile and start tracking your mining progress.",
           "Delver Badges — earn permanent badges tied to milestones and Halving eras.",
           `Daily Check-In — ${dailyCheckIn.summary}`,
-          `Referrals — invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the Telegram channel and verifies.`,
+          `Referrals — invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the Telegram channel and makes their first mining claim.`,
           `Join Telegram Channel — ${earnQuests[0].reward}, one-time.`,
           `Follow on X — ${earnQuests[1].reward}, one-time.`,
           `Watch an Ad — ${adRewards.summary}`,

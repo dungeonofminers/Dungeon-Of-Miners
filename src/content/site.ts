@@ -12,7 +12,7 @@
 // Global Emission System across six equal Halving eras.
 //
 // There is no Holding/Pool wallet split. 100% of every claim becomes
-// Available DOM Balance, eligible for instant, automated BSC withdrawal at
+// Available DOM Balance, eligible for automated BSC withdrawal at
 // zero fee to the miner.
 //
 // Progression is Pickaxe Level 1–6, unlocked by holding a minimum Available
@@ -237,7 +237,7 @@ export const coreLoop = [
     step: "06",
     title: "Withdraw On-Chain",
     description:
-      "Connect a BEP-20 wallet and withdraw eligible Available Balance instantly on BNB Smart Chain — zero withdrawal fee, network fee sponsored.",
+      "Connect a BEP-20 wallet and withdraw eligible Available Balance on BNB Smart Chain — zero withdrawal fee, network fee sponsored. Withdrawals are processed automatically in order, usually within minutes.",
   },
 ];
 
@@ -437,7 +437,7 @@ export const miningActivities = [
   {
     icon: "user-plus",
     title: "Referrals",
-    description: "Invite friends. Once they join the official Telegram channel and verify, you earn DOM.",
+    description: "Invite friends. Once they join the official Telegram channel and make their first mining claim, you earn DOM.",
     reward: `${REFERRAL_REWARD_DOM} DOM per friend`,
   },
   {
@@ -767,7 +767,7 @@ export const withdrawalConfig = {
   maximumWithdrawal: "No limit for now — a limit will be introduced later",
   withdrawalCooldown: typeof WITHDRAWAL_COOLDOWN_HOURS === "number" ? `${WITHDRAWAL_COOLDOWN_HOURS} hours` : "TBA",
   instantNote:
-    "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
+    "Withdrawals are processed automatically in order, usually within minutes — there is no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
 };
 
 export const withdrawalSecurityMeasures = [
@@ -933,11 +933,11 @@ export const referralProgram = {
   rewardDom: REFERRAL_REWARD_DOM,
   maxFriends: MAX_REWARDED_REFERRALS,
   maxTotalDom: REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS,
-  communityMessage: `Invite a friend — once they join our Telegram channel and verify, you get ${REFERRAL_REWARD_DOM} DOM. Up to ${MAX_REWARDED_REFERRALS} friends.`,
-  friendStatuses: ["Channel not verified", "Qualified"],
+  communityMessage: `Invite a friend — once they join our Telegram channel and make their first mining claim, you get ${REFERRAL_REWARD_DOM} DOM. Up to ${MAX_REWARDED_REFERRALS} friends.`,
+  friendStatuses: ["Pending", "Qualified"],
   rules: [
     "Your inviter is recorded once, when a friend's account is first created. An account that has already played cannot be invited later.",
-    "A referral becomes valid only after your friend completes the Join Telegram Channel quest and the bot confirms they are a channel member. This is the only requirement.",
+    "A referral becomes valid only after your friend joins the official Telegram channel and makes their first mining claim. This is the only requirement.",
     `You earn ${REFERRAL_REWARD_DOM} DOM per valid friend, up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum).`,
     "If a friend leaves the channel after the referral is valid, the reward is not taken back.",
     "You cannot invite yourself. A banned inviter does not receive DOM.",
@@ -945,7 +945,7 @@ export const referralProgram = {
   yourView: [
     "A personal invite link with Copy and Share buttons",
     "How many friends you invited and how many are valid",
-    "Your friend list with each status: Channel not verified or Qualified",
+    "Your friend list with each status: Pending or Qualified",
   ],
   note: "Referral rewards are paid in DOM from a dedicated marketing reward pool. The pool's size and source have not been finalized and are marked TBA.",
 };
@@ -1160,7 +1160,7 @@ export const featureGroups: FeatureGroup[] = [
       { title: "BEP-20 DOM", description: "A standard BEP-20 token — compatible with the BSC wallet ecosystem.", icon: "coins" },
       { title: "Wallet Linking", description: "Signature-based ownership verification — never a seed phrase or private key.", icon: "wallet" },
       { title: "Available DOM Balance", description: "The spendable, withdrawal-eligible balance created the moment you claim.", icon: "coins" },
-      { title: "BSC Withdrawal", description: "Instant, automated backend validation and broadcast — no manual approval queue.", icon: "send" },
+      { title: "BSC Withdrawal", description: "Automated backend validation and broadcast, processed in order — no manual approval. Unlocks after you claim mined DOM on 3 different days.", icon: "send" },
       { title: "Transaction Status", description: "Processing, Broadcasted, Confirming, Confirmed, or Failed — always shown honestly.", icon: "activity" },
       { title: "BscScan Verification", description: "Every confirmed withdrawal is verifiable on a public block explorer.", icon: "search" },
     ],
@@ -1174,7 +1174,7 @@ export const featureGroups: FeatureGroup[] = [
       { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords" },
       { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check" },
       { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks" },
-      { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
+      { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend you invite who joins the official Telegram channel and makes their first mining claim, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
       { title: "Referral Booster (Planned)", description: `A capped mining-weight boost, currently 0% and planned to replace DOM referral rewards later.`, icon: "shield" },
     ],
   },
@@ -1325,12 +1325,12 @@ export const faqs = [
   },
   {
     question: "How does the referral program work?",
-    answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and verifies, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
+    answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and makes their first mining claim, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
   },
   {
     question: "What is a valid referral?",
     answer:
-      "A friend with a brand-new account created through your invite link who completes the Join Telegram Channel quest and passes the bot's membership check. Until they verify, the referral shows as \"Channel not verified\". If they leave the channel later, your reward is not taken back. You cannot invite yourself.",
+      "A friend with a brand-new account created through your invite link who joins the official Telegram channel and makes their first mining claim. Until then, the referral shows as \"Pending\". If they leave the channel later, your reward is not taken back. You cannot invite yourself.",
   },
   {
     question: "How does the Daily Check-In work?",

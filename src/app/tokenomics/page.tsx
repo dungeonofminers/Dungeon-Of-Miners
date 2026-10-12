@@ -57,7 +57,7 @@ export default function TokenomicsPage() {
                   <h3 className="heading-md text-xl">Dungeon of Miners (DOM)</h3>
                   <p className="body-lg mt-2 text-sm">
                     The native token of the Dungeon of Miners economy — mined by players and
-                    eligible for instant on-chain withdrawal.
+                    eligible for on-chain withdrawal.
                   </p>
                   <div className="mt-4 flex justify-center sm:justify-start">
                     <span className="inline-flex items-center gap-2 rounded-lg border border-gold/25 bg-gold/10 px-3.5 py-2 text-xs">

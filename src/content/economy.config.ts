@@ -111,7 +111,7 @@ export const STORAGE_CAPACITY: number[] = [5_000, 7_500, 11_000, 16_000, 23_000,
 // it. All of them are paid in DOM from a dedicated marketing reward pool —
 // the size and source of that pool is still undecided (TBA), and the numbers
 // below are config values that can be changed without a code change.
-export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must verify the Telegram channel quest)
+export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must join the channel and make their first mining claim)
 export const MAX_REWARDED_REFERRALS = 50; // → max 1,000 DOM per inviter
 export const QUEST_JOIN_CHANNEL_DOM = 10; // one-time per account
 export const QUEST_FOLLOW_X_DOM = 10; // one-time per account (honor-mode follow)

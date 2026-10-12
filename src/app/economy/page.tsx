@@ -27,7 +27,7 @@ export default function EconomyPage() {
           <SectionHeading
             eyebrow="Mining Economy"
             title="Every booster, one shared, capped supply"
-            description="From your Pickaxe's Base Mining Power to a claim that's 100% yours to instant on-chain withdrawal — here's exactly how DOM moves through the economy."
+            description="From your Pickaxe's Base Mining Power to a claim that's 100% yours to on-chain withdrawal — here's exactly how DOM moves through the economy."
           />
         </div>
       </section>
