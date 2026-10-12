@@ -436,6 +436,10 @@ export const docsPages: Record<string, DocPage> = {
           { title: "Status tracked to Confirmed" },
         ],
       },
+      {
+        type: "note",
+        text: withdrawalConfig.unlockNote,
+      },
       { type: "heading", id: "status", text: "Status is always shown honestly" },
       {
         type: "badgeRow",
@@ -562,7 +566,7 @@ export const docsPages: Record<string, DocPage> = {
           { label: "Reward per friend", value: `${referralProgram.rewardDom} DOM`, accent: "emerald" },
           { label: "Friend limit", value: `${referralProgram.maxFriends} friends` },
           { label: "Maximum per inviter", value: `${formatNumber(referralProgram.maxTotalDom)} DOM` },
-          { label: "Only requirement", value: "Friend makes their first mining claim" },
+          { label: "Only requirement", value: "Friend joins the Telegram channel and makes their first mining claim" },
         ],
       },
       {

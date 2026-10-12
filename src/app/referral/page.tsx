@@ -56,7 +56,7 @@ export default function ReferralPage() {
                 <Send className="mx-auto h-6 w-6 text-emerald-glow" />
                 <p className="mt-4 font-display text-2xl text-emerald-glow">1 step</p>
                 <p className="mt-1 text-sm text-ink-muted">
-                  Your friend makes their first mining claim — nothing else is required
+                  Your friend joins the Telegram channel and makes their first mining claim
                 </p>
               </div>
             </Reveal>

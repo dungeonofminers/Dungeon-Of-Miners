@@ -91,6 +91,7 @@ export function PreTgeSection() {
             <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
               Withdrawal Flow
             </h3>
+            <p className="mt-3 text-sm text-ink-muted">{withdrawalConfig.unlockNote}</p>
             <ol className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {flowSteps.map((step, i) => (
                 <li key={step} className="flex items-start gap-3 text-sm text-ink-muted">

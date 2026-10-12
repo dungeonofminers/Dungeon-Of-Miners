@@ -764,10 +764,12 @@ export const withdrawalConfig = {
   statuses: ["Processing", "Broadcasted", "Confirming", "Confirmed", "Failed"] as const,
   minimumWithdrawal: typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA",
   minimumNote: "Counted against your combined balance — mined DOM plus every reward you have earned.",
-  maximumWithdrawal: "No limit for now — a limit will be introduced later",
+  maximumWithdrawal: "Daily limit grows with your Pickaxe Level. A new withdrawal address is limited to 500 DOM at first.",
   withdrawalCooldown: typeof WITHDRAWAL_COOLDOWN_HOURS === "number" ? `${WITHDRAWAL_COOLDOWN_HOURS} hours` : "TBA",
   instantNote:
     "Withdrawals are processed automatically in order, usually within minutes — there is no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
+  unlockNote:
+    "Withdrawals unlock after you claim mined DOM on 3 different days. Requests are processed automatically in order, usually within minutes.",
 };
 
 export const withdrawalSecurityMeasures = [
