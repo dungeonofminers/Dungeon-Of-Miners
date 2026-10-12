@@ -16,7 +16,7 @@ export default function LeaderboardPage() {
           <SectionHeading
             eyebrow="Live Rankings"
             title="Leaderboard"
-            description="Ranked by Mining XP and verified activity — never by wallet balance. No placeholder or fake entries, ever."
+            description="Ranked by verified activity — DOM mined, active days, and guild contribution — never by wallet balance. No placeholder or fake entries, ever."
           />
 
           <LeaderboardBoard />

@@ -58,7 +58,8 @@ export function Guild() {
           <div className="surface-panel mx-auto mt-6 max-w-5xl p-8 sm:p-10">
             <h3 className="heading-md text-lg">Guild Booster — tiered, always capped</h3>
             <p className="body-lg mt-2 text-sm">
-              The booster scales with how active your guild really is, recalculated daily.
+              The Guild Booster is 0% during the launch phase. Once enabled, it scales with how
+              active your guild really is, recalculated daily.
               Empty or inactive guilds earn nothing — it modifies mining weight only and never
               creates DOM beyond the global emission ceiling.
             </p>

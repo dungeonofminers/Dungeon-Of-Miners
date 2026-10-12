@@ -24,8 +24,8 @@ export default function TermsPage() {
         {
           heading: "2. The Service",
           body: [
-            "Dungeon of Miners is a mining ecosystem: you accrue DOM through gameplay, level up a Pickaxe through Mining XP, participate in Guilds, and may request on-chain withdrawal of eligible DOM to a BEP-20 wallet on BNB Smart Chain.",
-            "The Service, including specific mechanics, rates, and features, may change over time. Material economy changes are recorded in the public Changelog.",
+            "Dungeon of Miners is a mining ecosystem: you accrue DOM through gameplay, unlock higher Pickaxe levels by holding DOM, participate in Guilds, and may request on-chain withdrawal of eligible DOM to a BEP-20 wallet on BNB Smart Chain.",
+            "The Service, including specific mechanics, rates, and features, may change over time. Material economy changes are announced through official Dungeon of Miners channels.",
           ],
         },
         {
@@ -49,7 +49,7 @@ export default function TermsPage() {
         {
           heading: "6. Changes to the Service",
           body: [
-            "We may modify, suspend, or discontinue any part of the Service, including temporary maintenance windows. We will not silently change previously published economy rules without recording the change in the Changelog.",
+            "We may modify, suspend, or discontinue any part of the Service, including temporary maintenance windows. We will not silently change previously published economy rules without announcing the change through official Dungeon of Miners channels.",
           ],
         },
         {

@@ -43,6 +43,7 @@ export function MiningFormula() {
                     </div>
                   ))}
                 </dl>
+                <p className="mt-3 text-xs text-ink-faint">{miningFormula.example.note}</p>
               </div>
               <div className="flex flex-col items-center justify-center rounded-xl border border-torch/30 bg-torch/10 p-6 text-center">
                 <p className="text-xs uppercase tracking-widest text-torch">

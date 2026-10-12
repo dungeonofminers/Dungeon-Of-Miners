@@ -1,4 +1,4 @@
-import { User, Shield, CalendarCheck, UserPlus, Users, ListChecks, type LucideIcon } from "lucide-react";
+import { User, Shield, CalendarCheck, UserPlus, Users, ListChecks, Send, AtSign, PlayCircle, type LucideIcon } from "lucide-react";
 import { miningActivities } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -10,6 +10,9 @@ const iconMap: Record<string, LucideIcon> = {
   "user-plus": UserPlus,
   users: Users,
   "list-checks": ListChecks,
+  send: Send,
+  "at-sign": AtSign,
+  "play-circle": PlayCircle,
 };
 
 export function PrepareForGenesis() {
@@ -19,7 +22,7 @@ export function PrepareForGenesis() {
         <SectionHeading
           eyebrow="Mining Activities"
           title="Mining is live — here's how to build your position"
-          description="Beyond idle mining, these ongoing activities build your profile, badges, and Mining Weight boosters."
+          description="Beyond idle mining, these ongoing activities earn DOM rewards and build your profile, badges, and progression."
         />
 
         <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">

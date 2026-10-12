@@ -88,19 +88,55 @@ export const EPOCH_DURATION_MINUTES = 5;
 // ---- Pickaxe progression --------------------------------------------------
 // Base Mining Power replaces the retired "Rank" + "Equipment Multiplier"
 // system: a Pickaxe Level sets this value directly, nothing multiplies it.
-// Kept intentionally within a 3x-5x range (not the old 100x spread) so
-// early and late levels stay in the same order of magnitude.
+// Kept intentionally within a ~3x range (not the old 100x spread). Each
+// step adds slightly more than the last (+30, +35, +40, +45, +50), so every
+// upgrade is noticeable, but a higher-DOM-holding miner never snowballs
+// far ahead — rewards are a *share* of a fixed pool, so wide gaps would
+// directly squeeze out lower levels.
 export const PICKAXE_LEVELS = 6;
-export const PICKAXE_POWER: number[] = [100, 135, 180, 245, 330, 450]; // ~4.5x L1→L6, example config
+export const PICKAXE_POWER: number[] = [100, 130, 165, 205, 250, 300]; // 3.0x L1→L6, recommended config
 
-// Mining XP required to REACH each level (index 0 = Level 1 = 0 XP).
-// Examples config — tune once the real mining engine defines XP gain rates.
-export const XP_THRESHOLDS: number[] = [0, 1_000, 3_000, 7_000, 15_000, 30_000];
+// Minimum Available DOM Balance a miner needs to USE each Pickaxe Level
+// (Level 1 is free). Steps of 10,000 DOM. This is the ONLY unlock rule —
+// there is no XP. Measured against the in-game Available DOM Balance, not a
+// linked wallet and not unclaimed Mining Storage.
+export const PICKAXE_MIN_HOLD: number[] = [0, 10_000, 20_000, 30_000, 40_000, 50_000];
 
 // Mining Storage capacity (DOM) unlocked at each Pickaxe Level. Example config.
 export const STORAGE_CAPACITY: number[] = [5_000, 7_500, 11_000, 16_000, 23_000, 32_000];
 
-// ---- Referral Booster V2 --------------------------------------------------
+// ---- Launch-phase marketing rewards (DOM) -----------------------------------
+// Source: DOM-Marketing-v2. These are the rewards ACTIVE during the launch
+// phase and they replace the Referral Booster below until the team re-enables
+// it. All of them are paid in DOM from a dedicated marketing reward pool —
+// the size and source of that pool is still undecided (TBA), and the numbers
+// below are config values that can be changed without a code change.
+export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must verify the Telegram channel quest)
+export const MAX_REWARDED_REFERRALS = 50; // → max 1,000 DOM per inviter
+export const QUEST_JOIN_CHANNEL_DOM = 10; // one-time per account
+export const QUEST_FOLLOW_X_DOM = 10; // one-time per account (honor-mode follow)
+export const AD_WATCH_REWARD_HOURS = 2; // DOM equal to this many hours of mining, final number pending
+export const AD_WATCH_DAILY_LIMIT = 3;
+
+// Daily Check-In — once per UTC day. Days 1–6 climb 5→25, every 7th day is
+// 25 + 25 bonus = 50, other days after day 7 pay 25. Missing a day resets the
+// streak to day 1.
+const CHECKIN_CLIMB = [5, 10, 15, 20, 25, 25];
+export const CHECKIN_BASE_DOM = 25;
+export const CHECKIN_BONUS_DOM = 25; // added on every 7th day
+export function checkInReward(streakDay: number): number {
+  if (streakDay % 7 === 0) return CHECKIN_BASE_DOM + CHECKIN_BONUS_DOM;
+  return streakDay <= CHECKIN_CLIMB.length ? CHECKIN_CLIMB[streakDay - 1] : CHECKIN_BASE_DOM;
+}
+export const CHECKIN_MIN_DOM = checkInReward(1);
+export const CHECKIN_MAX_DOM = checkInReward(7);
+export const CHECKIN_FIRST_WEEK_TOTAL = [1, 2, 3, 4, 5, 6, 7].reduce((sum, d) => sum + checkInReward(d), 0); // 150
+export const CHECKIN_FULL_WEEK_TOTAL = [8, 9, 10, 11, 12, 13, 14].reduce((sum, d) => sum + checkInReward(d), 0); // 200
+
+// ---- Referral Booster V2 (PLANNED — not active in the launch phase) --------
+// Mining-weight boosters (Referral and Guild) sit at 0% during launch. These
+// constants describe the capped design that will replace the DOM-reward
+// referral above when the team enables boosters.
 export const REFERRAL_BOOST_PER_ACTIVE_USER = 0.5; // % Mining Weight per active qualified referral
 export const MAX_REFERRAL_BOOST = 15; // %
 export const MAX_QUALIFIED_REFERRALS = 30;
@@ -125,9 +161,10 @@ export const GUILD_BOOSTER_TIERS: { activeThreshold: number; bonusPercent: numbe
 export const BOOST_CAP = MAX_REFERRAL_BOOST + MAX_GUILD_BOOST; // % — event/temporary boosters still apply on top up to this combined ceiling
 
 // ---- Withdrawal ------------------------------------------------------------
-// Not yet decided by the team — kept as TBA in site.ts rather than guessed
-// here, since a withdrawal limit is an operational/financial commitment.
-export const MIN_WITHDRAWAL: number | "TBA" = "TBA";
+// Minimum is measured against the combined balance (mined DOM + all rewards).
+// There is currently NO maximum limit; one will be introduced later, so it
+// stays TBA rather than guessed. The network fee is covered by the team.
+export const MIN_WITHDRAWAL: number | "TBA" = 250;
 export const WITHDRAWAL_COOLDOWN_HOURS: number | "TBA" = "TBA";
 
 // ---------------------------------------------------------------------------

@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ScrollText } from "lucide-react";
-import { siteConfig, economyConfig, economyChangelog } from "@/content/site";
+import { siteConfig, economyConfig, economyChangelog, SHOW_PUBLIC_CHANGELOG } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: `Changelog — ${siteConfig.name} (${siteConfig.ticker})`,
   description: "Every change to the Dungeon of Miners economy rules, tracked by version.",
+  robots: { index: false, follow: false },
 };
 
 export default function ChangelogPage() {
+  if (!SHOW_PUBLIC_CHANGELOG) notFound();
+
   return (
     <div className="pt-24 sm:pt-28">
       <section className="relative py-16">

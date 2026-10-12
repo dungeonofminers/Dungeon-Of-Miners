@@ -15,8 +15,9 @@
 // Available DOM Balance, eligible for instant, automated BSC withdrawal at
 // zero fee to the miner.
 //
-// Progression is Pickaxe Level 1–6, driven by Mining XP (not wallet
-// balance or an Equipment Multiplier — neither exists). TGE (public market
+// Progression is Pickaxe Level 1–6, unlocked by holding a minimum Available
+// DOM Balance (Level 1 is free). There is no XP and no Equipment
+// Multiplier. TGE (public market
 // launch) and Exchange Listing are both status: Coming Soon.
 // ---------------------------------------------------------------------------
 
@@ -39,8 +40,20 @@ import {
   HALVING_EMISSION_RATES,
   EPOCH_DURATION_MINUTES,
   PICKAXE_POWER,
-  XP_THRESHOLDS,
+  PICKAXE_MIN_HOLD,
   STORAGE_CAPACITY,
+  REFERRAL_REWARD_DOM,
+  MAX_REWARDED_REFERRALS,
+  QUEST_JOIN_CHANNEL_DOM,
+  QUEST_FOLLOW_X_DOM,
+  AD_WATCH_REWARD_HOURS,
+  AD_WATCH_DAILY_LIMIT,
+  CHECKIN_MIN_DOM,
+  CHECKIN_MAX_DOM,
+  CHECKIN_BASE_DOM,
+  CHECKIN_FIRST_WEEK_TOTAL,
+  CHECKIN_FULL_WEEK_TOTAL,
+  checkInReward,
   REFERRAL_BOOST_PER_ACTIVE_USER,
   MAX_REFERRAL_BOOST,
   MAX_QUALIFIED_REFERRALS,
@@ -122,7 +135,6 @@ export const navGroups: NavGroup[] = [
       { label: "Transparency", href: "/transparency" },
       { label: "FAQ", href: "/faq" },
       { label: "Fair Play", href: "/fair-play" },
-      { label: "Changelog", href: "/changelog" },
       { label: "Risk Disclosure", href: "/risk-disclosure" },
     ],
   },
@@ -204,13 +216,13 @@ export const coreLoop = [
     step: "04",
     title: "Level Up Your Pickaxe",
     description:
-      "Mining activity earns Mining XP. XP progresses your Pickaxe through Level 1–6, raising your Base Mining Power and Storage Capacity.",
+      "Hold more Available DOM to unlock higher Pickaxe levels (Level 1 is free, Level 6 needs 50,000 DOM). Each level raises your Base Mining Power and Storage Capacity.",
   },
   {
     step: "05",
     title: "Boost Your Mining Weight",
     description:
-      "Stack a Referral Booster and a Guild Booster on top of your Base Mining Power — both capped, so no one multiplier explodes.",
+      "Planned Referral and Guild Boosters will stack on top of your Base Mining Power — both capped, so no one multiplier explodes. Both are 0% during the launch phase.",
   },
   {
     step: "06",
@@ -284,8 +296,8 @@ export const economyConfig = {
   network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "WalletConnect",
   mintingStatus: "Disabled — No Additional Minting",
-  economyVersion: "v4.0",
-  economyLastUpdated: "2026-09-17",
+  economyVersion: "v4.2",
+  economyLastUpdated: "2026-10-12",
 };
 
 // ---------------------------------------------------------------------------
@@ -390,26 +402,8 @@ export const halvingFacts = [
 ];
 
 // ---------------------------------------------------------------------------
-// Mining XP — the main progression currency. Mining XP is NOT DOM: it never
-// touches the token supply, and it is earned from activity, not holdings.
-// ---------------------------------------------------------------------------
-export const miningXPSources = [
-  "Active mining",
-  "Claim",
-  "Daily check-in",
-  "Stone Breaker",
-  "Daily tasks",
-  "Guild Expedition participation",
-  "Guild contribution",
-  "Achievements",
-  "Qualified referrals",
-];
-
-export const xpThresholds = XP_THRESHOLDS;
-
-// ---------------------------------------------------------------------------
 // Mining activities — live mining is already on, so these are ongoing ways
-// to build progression, not pre-launch busywork. Rewards are XP/boosters
+// to build progression, not pre-launch busywork. Rewards are DOM/boosters
 // first — DOM only where it comes from a defined, capped budget.
 // ---------------------------------------------------------------------------
 export const miningActivities = [
@@ -429,25 +423,43 @@ export const miningActivities = [
     icon: "calendar-check",
     title: "Daily Check-In",
     description: "Stay active every day to keep your streak and bonuses going.",
-    reward: "Mining XP",
+    reward: `${CHECKIN_MIN_DOM}–${CHECKIN_MAX_DOM} DOM (streak)`,
   },
   {
     icon: "user-plus",
     title: "Referrals",
-    description: "Invite active miners to grow the Referral Booster on your Mining Weight.",
-    reward: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight`,
+    description: "Invite friends. Once they join the official Telegram channel and verify, you earn DOM.",
+    reward: `${REFERRAL_REWARD_DOM} DOM per friend`,
+  },
+  {
+    icon: "send",
+    title: "Join Telegram Channel",
+    description: "Join the official channel and tap Verify — the bot confirms your membership.",
+    reward: `${QUEST_JOIN_CHANNEL_DOM} DOM (one-time)`,
+  },
+  {
+    icon: "at-sign",
+    title: "Follow on X",
+    description: "Connect your X account, follow the official profile, and claim.",
+    reward: `${QUEST_FOLLOW_X_DOM} DOM (one-time)`,
+  },
+  {
+    icon: "play-circle",
+    title: "Watch an Ad",
+    description: `Up to ${AD_WATCH_DAILY_LIMIT} ads per day, each paying DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining. Final amount to be confirmed.`,
+    reward: `${AD_WATCH_REWARD_HOURS}h of mining in DOM`,
   },
   {
     icon: "users",
     title: "Guild Registration",
     description: "Connect your Telegram community and coordinate daily expeditions.",
-    reward: "Guild Booster",
+    reward: "Guild XP",
   },
   {
     icon: "list-checks",
     title: "Daily Tasks",
     description: "Complete community missions and objectives for steady progression.",
-    reward: "Mining XP",
+    reward: "Task rewards",
   },
 ];
 
@@ -468,10 +480,11 @@ export const miningFormula = {
     label: "Effective Mining Weight Example",
     rows: [
       { label: "Pickaxe Base Mining Power (Level 3)", value: String(PICKAXE_POWER[2]) },
-      { label: "Referral Booster (16 active referrals)", value: "+8%" },
-      { label: "Guild Booster (guild 50%+ active)", value: "+5%" },
+      { label: "Referral Booster (launch phase)", value: "0%" },
+      { label: "Guild Booster (launch phase)", value: "0%" },
     ],
-    final: { label: "Effective Mining Weight", value: `≈ ${Math.round(PICKAXE_POWER[2] * (1 + 0.08 + 0.05))}` },
+    final: { label: "Effective Mining Weight", value: String(PICKAXE_POWER[2]) },
+    note: "Referral and Guild boosters are 0% during the launch phase, so Effective Mining Weight equals Base Mining Power. The chain above shows how they will stack once enabled.",
   },
 };
 
@@ -500,8 +513,8 @@ export const emissionModel = {
 };
 
 export const boostRules = [
-  { label: "Referral Booster", value: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight per active qualified referral (max ${MAX_QUALIFIED_REFERRALS}) — up to +${MAX_REFERRAL_BOOST}%` },
-  { label: "Guild Booster", value: `Tiered by guild activity — up to +${MAX_GUILD_BOOST}% Mining Weight` },
+  { label: "Referral Booster", value: `0% during the launch phase (referrals pay DOM instead). Planned: +${REFERRAL_BOOST_PER_ACTIVE_USER}% per active qualified referral, up to +${MAX_REFERRAL_BOOST}%` },
+  { label: "Guild Booster", value: `0% during the launch phase. Planned: tiered by guild activity, up to +${MAX_GUILD_BOOST}% Mining Weight` },
   { label: "Temporary / Event Booster", value: "TBA — configurable, always capped" },
   { label: "Combined Booster Ceiling", value: `+${BOOST_CAP}% before any event booster — the Halving's allocation always wins` },
 ];
@@ -655,17 +668,49 @@ export const liveDashboardMetrics = [
 export type RecentWithdrawal = { address: string; amount: string; status: string; txUrl: string };
 export const recentWithdrawals: RecentWithdrawal[] = [];
 
+// Public changelog visibility. While false, the /changelog route, its nav and
+// footer link, the docs "Version History" page, and the version-history list
+// on the home-page ledger are all hidden. The data below is kept; to bring it
+// back, flip this flag and re-add the "Changelog" link to the Docs nav group
+// (navGroups) in this file.
+export const SHOW_PUBLIC_CHANGELOG = false;
+
 export const economyChangelog = [
   {
-    version: "v4.0",
+    version: "v4.2",
     date: economyConfig.economyLastUpdated,
     summary:
-      "DOM Mining Ecosystem Update: confirmed BNB Smart Chain (BEP-20) as the permanent network, introduced a centralized economy configuration, rebalanced Pickaxe Base Mining Power to a 4.5x (not 100x) spread, added Mining XP as the progression currency, and deepened Guild V2 with Guild XP, Levels, Expeditions, and Seasons.",
+      "Launch-phase rewards: referrals temporarily pay DOM instead of a mining-weight booster, Earn quests and a streak-based Daily Check-In are documented, and the minimum withdrawal is set to 250 DOM.",
+    changes: [
+      `Referral Program (temporary): ${REFERRAL_REWARD_DOM} DOM per friend who joins the official Telegram channel and verifies, up to ${MAX_REWARDED_REFERRALS} friends. Referral Booster V2 is paused (0%) and kept as the planned replacement.`,
+      `Earn quests: Join Telegram Channel = ${QUEST_JOIN_CHANNEL_DOM} DOM, Follow on X = ${QUEST_FOLLOW_X_DOM} DOM (both one-time).`,
+      `Daily Check-In: streak rewards from ${CHECKIN_MIN_DOM} to ${CHECKIN_MAX_DOM} DOM per day; a missed day resets the streak.`,
+      `Watch an Ad: up to ${AD_WATCH_DAILY_LIMIT} per day, each paying DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining (final amount pending).`,
+      `Minimum withdrawal set to ${typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA"} on the combined balance; no maximum for now; network fee paid by the team.`,
+      "Guild Booster and Referral Booster are 0% during the launch phase.",
+    ],
+  },
+  {
+    version: "v4.1",
+    date: economyConfig.economyLastUpdated,
+    summary:
+      "Pickaxe update: Mining XP is removed and each Pickaxe Level is now unlocked solely by a minimum Available DOM Balance in the game (Level 1 free, then +10,000 DOM per level up to 50,000 DOM for Level 6), and Base Mining Power was retuned to a 3.0x spread (100 → 300).",
+    changes: [
+      "Added a minimum Available DOM Balance (in-game, claimed DOM) to use each Pickaxe: Level 1 = 0 (free), Level 2 = 10,000, Level 3 = 20,000, Level 4 = 30,000, Level 5 = 40,000, Level 6 = 50,000 DOM.",
+      "Removed Mining XP entirely: the minimum Available DOM Balance is now the only requirement to unlock a Pickaxe level.",
+      "Retuned Pickaxe Base Mining Power from 100 → 450 (4.5x) to 100 → 300 (3.0x) so higher-holding miners do not snowball.",
+    ],
+  },
+  {
+    version: "v4.0",
+    date: "2026-09-17",
+    summary:
+      "HISTORICAL / RETIRED — superseded by v4.1. DOM Mining Ecosystem Update: confirmed BNB Smart Chain (BEP-20) as the permanent network, introduced a centralized economy configuration, rebalanced Pickaxe Base Mining Power to a 4.5x (not 100x) spread, added Mining XP as the progression currency, and deepened Guild V2 with Guild XP, Levels, Expeditions, and Seasons.",
     changes: [
       "Confirmed BNB Smart Chain (BEP-20) as the final network — DOM does not use TON.",
       "Centralized every economy number in economy.config.ts — no more independently hardcoded values.",
       "Rebalanced Pickaxe Base Mining Power from a 100x (10 → 1000) spread to a 4.5x (100 → 450) spread.",
-      "Introduced Mining XP as the main progression currency, separate from DOM, earned from activity rather than holdings.",
+      "Introduced Mining XP as the main progression currency, separate from DOM, earned from activity rather than holdings (using a Pickaxe additionally requires a minimum DOM holding).",
       "Documented the Global Emission System as an epoch-based accumulator (Halving Rate → Epoch Budget → Mining Weight → Reward), not a flat daily/hourly rate.",
       "Expanded Guild V2 with Guild XP, Guild Levels, Guild Expeditions, and Guild Seasons.",
       "Rebuilt the Leaderboard into Player (Daily/Weekly/Halving/All-Time) and Guild (Weekly/Season/Halving/All-Time) boards, ranked by XP and activity, never wallet balance.",
@@ -709,7 +754,8 @@ export const withdrawalConfig = {
   blockExplorerUrl: `${BLOCK_EXPLORER_NAME} (${BLOCK_EXPLORER_URL.replace("https://", "")})`,
   statuses: ["Processing", "Broadcasted", "Confirming", "Confirmed", "Failed"] as const,
   minimumWithdrawal: typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA",
-  maximumWithdrawal: "TBA",
+  minimumNote: "Counted against your combined balance — mined DOM plus every reward you have earned.",
+  maximumWithdrawal: "No limit for now — a limit will be introduced later",
   withdrawalCooldown: typeof WITHDRAWAL_COOLDOWN_HOURS === "number" ? `${WITHDRAWAL_COOLDOWN_HOURS} hours` : "TBA",
   instantNote:
     "Instant withdrawal means the backend automatically validates and broadcasts your transaction — no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
@@ -748,7 +794,6 @@ export const serverAuthoritativeState = [
   "Mining balance",
   "Mining Storage",
   "Available Balance",
-  "Mining XP",
   "Pickaxe Level",
   "Referral status",
   "Referral Booster",
@@ -835,7 +880,7 @@ export const guildRuleDetails = [
   { label: "Guild Creation Cost", value: "TBA" },
 ];
 
-// Guild XP — separate from a member's personal Mining XP. Earned by the
+// Guild XP — a guild-wide stat (there is no personal XP). Earned by the
 // guild as a whole; unlocks cosmetics and access, never uncapped DOM.
 export const guildXP = {
   sources: ["Active members", "Expedition completion", "Mining contribution", "Guild achievements", "Weekly participation"],
@@ -869,10 +914,121 @@ export const guildProfileFields = [
 ];
 
 // ---------------------------------------------------------------------------
-// Referral Booster V2 — replaces the retired +2%/50-referral/+100%/+50 DOM
-// model. Capped, ONE LEVEL ONLY (no downline/MLM tree), and tied to ACTIVE
-// qualified referrals so it can never create unbounded emission or reward
-// dead/farmed accounts.
+// Launch-phase Referral Program (ACTIVE, temporary) — source: DOM-Marketing-v2.
+// For now referrals pay a flat DOM reward instead of a mining-weight booster.
+// One level only (no downline). The reward comes from a marketing reward pool
+// whose size/source is not yet decided, so it is shown as TBA — never guessed.
+// Referral Booster V2 below is the planned replacement.
+// ---------------------------------------------------------------------------
+export const referralProgram = {
+  rewardDom: REFERRAL_REWARD_DOM,
+  maxFriends: MAX_REWARDED_REFERRALS,
+  maxTotalDom: REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS,
+  communityMessage: `Invite a friend — once they join our Telegram channel and verify, you get ${REFERRAL_REWARD_DOM} DOM. Up to ${MAX_REWARDED_REFERRALS} friends.`,
+  friendStatuses: ["Channel not verified", "Qualified"],
+  rules: [
+    "Your inviter is recorded once, when a friend's account is first created. An account that has already played cannot be invited later.",
+    "A referral becomes valid only after your friend completes the Join Telegram Channel quest and the bot confirms they are a channel member. This is the only requirement.",
+    `You earn ${REFERRAL_REWARD_DOM} DOM per valid friend, up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum).`,
+    "If a friend leaves the channel after the referral is valid, the reward is not taken back.",
+    "You cannot invite yourself. A banned inviter does not receive DOM.",
+  ],
+  yourView: [
+    "A personal invite link with Copy and Share buttons",
+    "How many friends you invited and how many are valid",
+    "Your friend list with each status: Channel not verified or Qualified",
+  ],
+  note: "Referral rewards are paid in DOM from a dedicated marketing reward pool. The pool's size and source have not been finalized and are marked TBA.",
+};
+
+// What a miner sees on the Referral tab — real numbers are per-account and
+// need a live backend, so they are "Awaiting Live Data" until then.
+export const referralProgramDashboardShape = [
+  { label: "Friends Invited", value: "Awaiting Live Data" },
+  { label: "Qualified Friends", value: "Awaiting Live Data" },
+  { label: "DOM Earned", value: "Awaiting Live Data" },
+  { label: "Friend Limit", value: `${MAX_REWARDED_REFERRALS}` },
+];
+
+export const marketingRewardPool = { size: "TBA", source: "TBA" };
+
+// ---------------------------------------------------------------------------
+// Launch-phase Earn quests, Daily Check-In, ads, and bot messages — source:
+// DOM-Marketing-v2. Amounts come from economy.config.ts; the backend can
+// change them via config, so treat them as the current published rule.
+// ---------------------------------------------------------------------------
+export const earnQuests = [
+  {
+    title: "Join our Telegram channel",
+    reward: `${QUEST_JOIN_CHANNEL_DOM} DOM`,
+    rules: [
+      "Tap Open to visit the official channel, join it, then tap Verify. The bot asks Telegram directly whether your account is a member.",
+      "If you have not joined yet you will see \"Join the channel first, then tap Verify.\"",
+      `${QUEST_JOIN_CHANNEL_DOM} DOM once per account. Leaving the channel afterwards does not take the DOM back.`,
+      "Completing this quest is also what makes a friend's referral valid.",
+    ],
+  },
+  {
+    title: "Follow us on X",
+    reward: `${QUEST_FOLLOW_X_DOM} DOM`,
+    rules: [
+      "Three steps: Connect X (log in and authorize the app), Open (visit the official profile and follow), then Claim.",
+      "Following is not checked through the X API — it is honor-based. What is checked is that the X account really belongs to you, via X login.",
+      "One X account can be linked to one game account, permanently.",
+      "Your X token is not stored. The app only asks for read permission — it cannot post or follow on your behalf.",
+    ],
+  },
+];
+
+export const dailyCheckIn = {
+  summary: `Once per UTC day. The reward climbs with consecutive days: ${CHECKIN_MIN_DOM} DOM on day 1 up to ${CHECKIN_MAX_DOM} DOM on bonus days.`,
+  streakTable: [
+    { day: "Day 1", dom: checkInReward(1) },
+    { day: "Day 2", dom: checkInReward(2) },
+    { day: "Day 3", dom: checkInReward(3) },
+    { day: "Day 4", dom: checkInReward(4) },
+    { day: "Day 5", dom: checkInReward(5) },
+    { day: "Day 6", dom: checkInReward(6) },
+    { day: "Day 7", dom: checkInReward(7) },
+    { day: "Days 8–13", dom: checkInReward(8) },
+    { day: "Day 14", dom: checkInReward(14) },
+    { day: "Days 15–20", dom: checkInReward(15) },
+    { day: "Day 21", dom: checkInReward(21) },
+  ],
+  rules: [
+    `Day 7 and every multiple of 7 (14, 21, 28 …) pay ${CHECKIN_BASE_DOM} + 25 bonus = ${CHECKIN_MAX_DOM} DOM.`,
+    `After day 7, regular days pay ${CHECKIN_BASE_DOM} DOM.`,
+    `Missing a single day resets your streak to day 1 (${CHECKIN_MIN_DOM} DOM).`,
+    `Totals: ${CHECKIN_FIRST_WEEK_TOTAL} DOM in the first week, then ${CHECKIN_FULL_WEEK_TOTAL} DOM per week while the streak stays unbroken.`,
+  ],
+};
+
+export const adRewards = {
+  summary: `Watch an ad to earn DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining, up to ${AD_WATCH_DAILY_LIMIT} times per day. Ads no longer award XP. The final amount may be adjusted later.`,
+};
+
+export const botMessages = {
+  dailyReport: {
+    time: "12:00 UTC (19:00 WIB)",
+    contents: [
+      "Era progress — what percent of the era's allocation has been released",
+      "Number of active miners",
+      "Estimated DOM per hour for a Level 1 pickaxe",
+      "Total number of players",
+      "A Play button that opens the game",
+    ],
+    note: "Only network-wide totals are posted — never any individual player's data.",
+  },
+  storageFull: "When your Mining Storage is full, the bot sends a reminder with a Claim DOM button that takes you back to the game.",
+  honestyNote:
+    "Your mining result per person goes down as more players join, because each epoch's DOM is split across all active miners. That is how the model works. Do not treat mainnet withdrawal as guaranteed until the team announces it officially.",
+};
+
+// ---------------------------------------------------------------------------
+// Referral Booster V2 (PLANNED — not active in the launch phase). Replaces
+// the retired +2%/50-referral/+100%/+50 DOM model once enabled. Capped, ONE
+// LEVEL ONLY (no downline/MLM tree), and tied to ACTIVE qualified referrals
+// so it can never create unbounded emission or reward dead/farmed accounts.
 // ---------------------------------------------------------------------------
 export type ReferralStatus = "Invited" | "Pending" | "Qualified" | "Active" | "Inactive" | "Flagged" | "Invalidated";
 
@@ -907,18 +1063,20 @@ export const referralDashboardShape = [
 
 // ---------------------------------------------------------------------------
 // Pickaxe Levels — the PRIMARY progression system, replacing the retired
-// Rank System. Progression is driven by persistent Mining XP / lifetime
-// activity, never by current wallet balance — withdrawing DOM must never
-// cost a player their level. Cosmetic names (Novice → Legend) are secondary
-// flavor only. Base Mining Power is deliberately kept within a ~4.5x range
+// Rank System. There is no XP: a level is unlocked solely by holding its
+// minimum Available DOM Balance (Level 1 is free, then +10,000 DOM per
+// level), measured against the in-game Available DOM Balance — so
+// withdrawing below that minimum pauses access to that pickaxe until the
+// balance is restored. Cosmetic names (Novice → Legend) are secondary
+// flavor only. Base Mining Power is deliberately kept within a ~3x range
 // (not the old 100x spread) so no single level dominates the economy.
 // ---------------------------------------------------------------------------
 export type PickaxeLevel = {
   level: number;
   cosmeticName: string;
   basePower: number;
-  xpRequired: number;
-  xpToNext: number | null;
+  minHold: number;
+  minHoldLabel: string;
   storageCapacity: string;
   image: string;
   accent: string;
@@ -948,8 +1106,8 @@ export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
   level: i + 1,
   cosmeticName: PICKAXE_COSMETIC_NAMES[i],
   basePower: power,
-  xpRequired: XP_THRESHOLDS[i],
-  xpToNext: i < XP_THRESHOLDS.length - 1 ? XP_THRESHOLDS[i + 1] : null,
+  minHold: PICKAXE_MIN_HOLD[i],
+  minHoldLabel: PICKAXE_MIN_HOLD[i] === 0 ? "Free — no DOM required" : formatDOM(PICKAXE_MIN_HOLD[i]),
   storageCapacity: formatDOM(STORAGE_CAPACITY[i]),
   image: PICKAXE_IMAGES[i],
   accent: PICKAXE_ACCENTS[i],
@@ -957,15 +1115,15 @@ export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
 }));
 
 // ---------------------------------------------------------------------------
-// Leaderboards — ranked by XP and verified activity, never by wallet
-// balance. Player and Guild boards each span multiple timeframes.
+// Leaderboards — ranked by verified activity (DOM mined, active days,
+// guild contribution). Player and Guild boards each span multiple timeframes.
 // ---------------------------------------------------------------------------
 export const leaderboardConfig = {
   playerTabs: ["Daily", "Weekly", "Halving", "All-Time"],
   guildTabs: ["Weekly", "Season", "Halving", "All-Time"],
-  playerMetrics: ["Mining XP", "DOM Mined", "Pickaxe Level", "Active Days", "Guild Contribution", "Season Points"],
+  playerMetrics: ["DOM Mined", "Pickaxe Level", "Active Days", "Guild Contribution", "Season Points"],
   guildMetrics: ["Guild XP", "Verified Activity", "Mining Contribution", "Expedition Completion", "Season Points"],
-  rewardPhilosophy: "Leaderboard rewards favor XP, badges, cosmetics, and titles over large direct DOM payouts, so ranking well never distorts the capped emission model.",
+  rewardPhilosophy: "Leaderboard rewards favor badges, cosmetics, and titles over large direct DOM payouts, so ranking well never distorts the capped emission model.",
 };
 
 // ---------------------------------------------------------------------------
@@ -983,8 +1141,7 @@ export const featureGroups: FeatureGroup[] = [
       { title: "Six Halvings", description: "Six equal allocations of the mining pool — each era mines out fully before the next Halving begins.", icon: "flame" },
       { title: "Mining Storage", description: "Unclaimed DOM accumulates safely until you claim it — nothing is ever deleted.", icon: "box" },
       { title: "Claim", description: "Claim moves stored DOM into your Available Balance — 100%, no split.", icon: "check-circle" },
-      { title: "Mining XP", description: "A dedicated progression currency, separate from DOM, earned through activity.", icon: "star" },
-      { title: "Pickaxe Level 1–6", description: "Progress your pickaxe through Mining XP to raise your Base Mining Power and Storage Capacity.", icon: "hammer" },
+      { title: "Pickaxe Level 1–6", description: "Hold more Available DOM to unlock higher pickaxes — Level 1 is free, Level 6 needs 50,000 DOM.", icon: "hammer" },
     ],
   },
   {
@@ -1008,16 +1165,16 @@ export const featureGroups: FeatureGroup[] = [
       { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords" },
       { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check" },
       { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks" },
-      { title: "Referral Booster", description: `+${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight per active qualified referral, up to +${MAX_REFERRAL_BOOST}%.`, icon: "user-plus" },
-      { title: "Referral Milestones", description: "Badges and cosmetics for 1, 3, 5, 10, 20, and 30 qualified referrals.", icon: "shield" },
+      { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
+      { title: "Referral Booster (Planned)", description: `A capped mining-weight boost, currently 0% and planned to replace DOM referral rewards later.`, icon: "shield" },
     ],
   },
   {
     group: "Engagement",
     items: [
-      { title: "Daily Check-In", description: "Stay active every day to keep your streak alive.", icon: "calendar-check" },
+      { title: "Daily Check-In", description: `${CHECKIN_MIN_DOM}–${CHECKIN_MAX_DOM} DOM per day, rising with your streak.`, icon: "calendar-check" },
       { title: "Daily Tasks", description: "Community missions and objectives for steady progression.", icon: "check-circle" },
-      { title: "Stone Breaker", description: "A quick timing mini-game rewarding Mining XP, boosters, and cosmetics.", icon: "gem" },
+      { title: "Stone Breaker", description: "A quick timing mini-game rewarding boosters and cosmetics.", icon: "gem" },
       { title: "Achievements", description: "Permanent milestones tracked across your entire mining history.", icon: "shield" },
       { title: "Miner Card", description: "Share your miner profile and progress with your community.", icon: "share-2" },
       { title: "Temporary Boosters", description: "Short-duration, capped mining-weight boosts from events and activities.", icon: "zap" },
@@ -1033,7 +1190,6 @@ export const featureGroups: FeatureGroup[] = [
       { title: "Vesting", description: "The unlock model for the 45% non-mining supply, published as soon as it's finalized.", icon: "calendar-check" },
       { title: "Recent Withdrawals", description: "Real on-chain withdrawals, shown with shortened addresses and a BscScan link.", icon: "activity" },
       { title: "Fair Play", description: "The rules that protect a shared, finite mining economy.", icon: "shield" },
-      { title: "Changelog", description: "Every economy rule change tracked publicly by version.", icon: "scroll" },
     ],
   },
   {
@@ -1052,7 +1208,7 @@ export const faqs = [
   {
     question: "What is Dungeon of Miners?",
     answer:
-      "Dungeon of Miners is a live mining ecosystem. You mine DOM passively, level up your Pickaxe through Mining XP, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
+      "Dungeon of Miners is a live mining ecosystem. You mine DOM passively, unlock higher Pickaxe levels by holding DOM, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
   },
   {
     question: "What blockchain does DOM use?",
@@ -1074,7 +1230,7 @@ export const faqs = [
   {
     question: "How does mining work?",
     answer:
-      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, boosted by your Referral and Guild Boosters into an Effective Mining Weight. Each mining epoch, you receive a share of that epoch's budget proportional to your weight — never an unlimited per-user rate.",
+      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, optionally boosted by capped Referral and Guild Boosters (0% during the launch phase) into an Effective Mining Weight. Each mining epoch, you receive a share of that epoch's budget proportional to your weight — never an unlimited per-user rate.",
   },
   {
     question: "What is Global Emission?",
@@ -1090,13 +1246,13 @@ export const faqs = [
     answer: "The next Halving begins only once the current era's fixed allocation is completely mined out — there is no fixed date, timer, or daily cap.",
   },
   {
-    question: "What is Mining XP?",
-    answer: "Mining XP is your main progression currency — it is not DOM and never touches token supply. You earn it from mining, claiming, daily check-ins, Stone Breaker, daily tasks, Guild Expeditions, guild contribution, achievements, and qualified referrals. XP progresses your Pickaxe Level.",
-  },
-  {
     question: "What are Pickaxe Levels?",
     answer:
-      "Pickaxe Level 1–6 is the primary mining progression system, replacing the old Rank System. Levels are driven by persistent Mining XP, never by your current wallet balance — withdrawing DOM never costs you progress. Optional cosmetic names (Novice → Legend) map to each level.",
+      "Pickaxe Level 1–6 is the primary mining progression system, replacing the old Rank System. You unlock each level by keeping a minimum Available DOM Balance in the game (there is no XP): Level 1 is free (0 DOM), then Level 2 = 10,000, Level 3 = 20,000, Level 4 = 30,000, Level 5 = 40,000, and Level 6 = 50,000 DOM. If your balance drops below a level's minimum, that pickaxe pauses until you hold enough again. Optional cosmetic names (Novice → Legend) map to each level.",
+  },
+  {
+    question: "How much DOM do I need to hold to use a Pickaxe?",
+    answer: "Level 1 is free — no DOM needed. The requirement is measured against your Available DOM Balance in the game (DOM you've claimed — not unclaimed Mining Storage, and not a linked wallet). Level 2 requires 10,000 DOM, Level 3 requires 20,000, Level 4 requires 30,000, Level 5 requires 40,000, and Level 6 requires 50,000 DOM. If your Available DOM Balance drops below a level's minimum (for example after a withdrawal), that pickaxe is paused until you hold enough again.",
   },
   {
     question: "Does Pickaxe use an Equipment Multiplier?",
@@ -1135,7 +1291,7 @@ export const faqs = [
   },
   {
     question: "What is the minimum withdrawal?",
-    answer: "Not yet finalized — shown as TBA until the team publishes an official minimum.",
+    answer: `${withdrawalConfig.minimumWithdrawal}, counted against your combined balance (mined DOM plus all rewards). There is no maximum limit for now — one will be introduced later. The network fee is paid by the team, not by you.`,
   },
   {
     question: "What is a Guild?",
@@ -1144,7 +1300,7 @@ export const faqs = [
   {
     question: "How does Guild Booster work?",
     answer:
-      "The Guild Booster scales with how active your guild really is: 30% of members active grants +2% Mining Weight, 50% grants +5%, 70% grants +8%, and 90%+ grants the maximum +10%. It's recalculated on a regular basis and never rewards empty or inactive guilds.",
+      "The Guild Booster is currently 0% during the launch phase. When enabled, it scales with how active your guild really is: 30% of members active grants +2% Mining Weight, 50% grants +5%, 70% grants +8%, and 90%+ grants the maximum +10%. It's recalculated on a regular basis and never rewards empty or inactive guilds.",
   },
   {
     question: "What is Guild XP?",
@@ -1159,13 +1315,21 @@ export const faqs = [
     answer: "A recurring competitive period (Season 1 runs alongside Halving 1). Season leaderboards reset at the end of each season, while the All-Time Hall of Fame stays permanent.",
   },
   {
-    question: "How does Referral Booster work?",
-    answer: `Each active, qualified referral adds +${REFERRAL_BOOST_PER_ACTIVE_USER}% Mining Weight, up to a maximum of ${MAX_QUALIFIED_REFERRALS} referrals for a +${MAX_REFERRAL_BOOST}% cap. It's one level only — there is no downline or multi-level reward tree.`,
+    question: "How does the referral program work?",
+    answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and verifies, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
   },
   {
-    question: "What is a qualified referral?",
+    question: "What is a valid referral?",
     answer:
-      "A unique Telegram account with valid attribution (no self-referral) that completes onboarding and mines on multiple separate days. It must also stay active within a rolling window to keep contributing to your booster — otherwise it stops counting until it's active again.",
+      "A friend with a brand-new account created through your invite link who completes the Join Telegram Channel quest and passes the bot's membership check. Until they verify, the referral shows as \"Channel not verified\". If they leave the channel later, your reward is not taken back. You cannot invite yourself.",
+  },
+  {
+    question: "How does the Daily Check-In work?",
+    answer: `Once per UTC day. Rewards climb ${CHECKIN_MIN_DOM}, 10, 15, 20, 25, 25, then ${CHECKIN_MAX_DOM} DOM on day 7. After that, regular days pay ${CHECKIN_BASE_DOM} DOM and every multiple of 7 pays ${CHECKIN_MAX_DOM} DOM. Missing a day resets your streak to day 1.`,
+  },
+  {
+    question: "What Earn quests are there?",
+    answer: `Join the official Telegram channel (${QUEST_JOIN_CHANNEL_DOM} DOM, one-time), follow the project on X (${QUEST_FOLLOW_X_DOM} DOM, one-time), and watch up to ${AD_WATCH_DAILY_LIMIT} ads per day for DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining. Amounts can be adjusted through config.`,
   },
   {
     question: "How does anti-fraud work?",
@@ -1214,7 +1378,7 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
     phase: "Phase 2",
     title: "Mining Network V2",
     status: "active",
-    items: ["Six Halvings", "Global Emission", "Pickaxe Level 1–6", "Mining XP", "Storage progression", "Referral Booster V2"],
+    items: ["Six Halvings", "Global Emission", "Pickaxe Level 1–6", "Storage progression", "Referral rewards (DOM)", "Daily Check-In & Earn quests"],
   },
   {
     phase: "Phase 3",
@@ -1415,9 +1579,9 @@ export const domEcosystem = {
       status: "LIVE",
       narrative: {
         primary: "Every action pushes your progress forward.",
-        secondary: "Tasks, Mining XP, achievements, and activity shape your journey.",
+        secondary: "Tasks, achievements, and activity shape your journey.",
       },
-      tooltip: { title: "Progress", text: "Activity, Mining XP, and achievements move you forward." },
+      tooltip: { title: "Progress", text: "Activity and achievements move you forward." },
     },
     {
       id: "treasury",

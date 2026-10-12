@@ -19,7 +19,8 @@ export default function PrivacyPage() {
           heading: "1. Information We Collect",
           body: [
             "Telegram account identifiers (such as your Telegram user ID) needed to operate your mining account, verified server-side via Telegram's own authentication data — never trusted from the frontend alone.",
-            "Gameplay data: mining activity, Mining XP, Pickaxe Level, claims, guild membership, and referral relationships.",
+            "Gameplay data: mining activity, Pickaxe Level, claims, guild membership, and referral relationships.",
+            "Quest data: whether your Telegram account is a member of the official channel, and the identifier of an X account you choose to connect. Your X token is not stored and the app only requests read permission.",
             "If you connect a wallet: the public wallet address and a signed ownership message. We never receive or store your seed phrase or private key.",
             "Standard technical data (such as device/browser type) automatically collected by hosting and analytics infrastructure.",
           ],

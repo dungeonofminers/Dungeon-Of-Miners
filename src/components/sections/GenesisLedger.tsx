@@ -1,5 +1,5 @@
 import { Archive, ScrollText } from "lucide-react";
-import { halvingLedger, halvingRecord, halvingArchive, economyChangelog, economyConfig } from "@/content/site";
+import { halvingLedger, halvingRecord, halvingArchive, economyChangelog, economyConfig, SHOW_PUBLIC_CHANGELOG } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -77,6 +77,7 @@ export function GenesisLedger() {
               <p className="mt-1 text-xs text-ink-faint">
                 Status: Live Mining · Last Updated: {economyConfig.economyLastUpdated}
               </p>
+              {SHOW_PUBLIC_CHANGELOG && (
               <ul className="mt-4 flex flex-col gap-3">
                 {economyChangelog.map((entry) => (
                   <li key={entry.version} className="border-l-2 border-gold/30 pl-3">
@@ -97,6 +98,7 @@ export function GenesisLedger() {
                   </li>
                 ))}
               </ul>
+              )}
             </div>
           </Reveal>
         </div>

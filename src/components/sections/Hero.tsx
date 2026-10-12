@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Users, Wallet } from "lucide-react";
-import { assets } from "@/content/site";
+import { assets, referralProgram } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { EmberField } from "@/components/ui/EmberField";
 import { GlowOrb } from "@/components/ui/GlowOrb";
@@ -199,8 +199,8 @@ export function Hero() {
               className="-bottom-6 right-6 hidden sm:flex lg:right-16"
               delay={0.9}
               icon={<Users className="h-4 w-4 text-emerald-glow" />}
-              label="Guild Booster"
-              value="Up to +10%"
+              label="Referral Reward"
+              value={`${referralProgram.rewardDom} DOM / friend`}
             />
           </motion.div>
         )}

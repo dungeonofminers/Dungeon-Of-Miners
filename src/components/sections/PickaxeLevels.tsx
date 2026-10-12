@@ -29,7 +29,7 @@ export function PickaxeLevels() {
         <SectionHeading
           eyebrow="Pickaxe Levels"
           title="Level up your pickaxe. Raise your mining power."
-          description="Pickaxe Level 1–6 is your core mining progression. It's driven by persistent Mining XP and lifetime activity — never by your current wallet balance, so withdrawing DOM never costs you progress. Tap a pickaxe for full details."
+          description="Pickaxe Level 1–6 is your core mining progression. Keep a minimum Available DOM Balance to unlock each level — Level 1 is free, Level 6 needs 50,000 DOM. Tap a pickaxe for full details."
         />
 
         <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -57,8 +57,8 @@ export function PickaxeLevels() {
                   <h3 className="font-display text-lg text-ink">Level {pickaxe.level}</h3>
                   <p className="mt-1 text-[11px] uppercase tracking-wider text-ink-faint">{pickaxe.cosmeticName}</p>
                   <p className="mt-2 text-sm font-semibold text-gold">Base Mining Power {pickaxe.basePower}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-wider text-ink-faint">
-                    XP Required: {pickaxe.xpRequired.toLocaleString("en-US")}
+                  <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-torch">
+                    {pickaxe.minHold === 0 ? "Free · Hold 0 DOM" : `Hold ${pickaxe.minHold.toLocaleString("en-US")} DOM`}
                   </p>
                 </div>
               </button>
@@ -114,10 +114,9 @@ export function PickaxeLevels() {
             </div>
 
             <dl className="mt-6 flex flex-col gap-3">
+              <Row label="Min. Available DOM Balance" value={active.minHoldLabel} />
               <Row label="Base Mining Power" value={String(active.basePower)} />
               <Row label="Storage Capacity" value={active.storageCapacity} />
-              <Row label="Mining XP Required" value={active.xpRequired.toLocaleString("en-US")} />
-              {active.xpToNext !== null && <Row label="XP for Next Level" value={active.xpToNext.toLocaleString("en-US")} />}
               <Row label="Current Progress" value="Awaiting Live Data" muted />
             </dl>
 

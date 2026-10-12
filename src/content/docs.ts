@@ -40,10 +40,17 @@ import {
   guildExpeditions,
   guildSeasons,
   referralBooster,
-  referralDashboardShape,
+  referralProgram,
+  referralProgramDashboardShape,
+  marketingRewardPool,
+  earnQuests,
+  dailyCheckIn,
+  adRewards,
+  botMessages,
   featureGroups,
   roadmap,
   economyChangelog,
+  SHOW_PUBLIC_CHANGELOG,
   riskDisclosure,
   transparencyConfig,
   treasuryWallets,
@@ -53,7 +60,6 @@ import {
   antiCheatMeasures,
   serverAuthoritativeState,
   transactionTypes,
-  miningXPSources,
 } from "./site";
 
 export const docsNav: DocsNavCategory[] = [
@@ -73,7 +79,8 @@ export const docsNav: DocsNavCategory[] = [
       { slug: "balances", title: "Mining Storage & Balance" },
       { slug: "withdrawal", title: "On-Chain Withdrawal" },
       { slug: "guilds", title: "Guilds" },
-      { slug: "referral", title: "Referral Booster" },
+      { slug: "referral", title: "Referral Program" },
+      { slug: "rewards", title: "Earn & Daily Check-In" },
       { slug: "activities", title: "Mining Activities" },
       { slug: "features", title: "Full Feature List" },
     ],
@@ -92,7 +99,7 @@ export const docsNav: DocsNavCategory[] = [
     title: "Reference",
     items: [
       { slug: "roadmap", title: "Roadmap" },
-      { slug: "changelog", title: "Version History" },
+      ...(SHOW_PUBLIC_CHANGELOG ? [{ slug: "changelog", title: "Version History" }] : []),
       { slug: "valuation-model", title: "Tokenomics & Valuation Model" },
     ],
   },
@@ -108,7 +115,7 @@ export const docsIntro: DocPage = {
   blocks: [
     {
       type: "lede",
-      text: "Players mine idly, level up their Pickaxe through Mining XP, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain today, instantly.",
+      text: "Players mine idly, unlock higher Pickaxe levels by holding DOM, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain today, instantly.",
     },
     {
       type: "paragraph",
@@ -136,7 +143,7 @@ export const docsIntro: DocPage = {
     },
     {
       type: "note",
-      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy Rules ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the retired Pre-TGE / Floor-system and Rank System models — see Version History.`,
+      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy Rules ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the retired Pre-TGE / Floor-system and Rank System models.`,
     },
   ],
 };
@@ -306,6 +313,7 @@ export const docsPages: Record<string, DocPage> = {
           { label: miningFormula.example.final.label, value: miningFormula.example.final.value, accent: "gold" as const },
         ],
       },
+      { type: "note", text: miningFormula.example.note },
       { type: "heading", id: "global-emission", text: "Global Emission Model" },
       { type: "formula", text: emissionModel.shareFormula },
       { type: "formula", text: emissionModel.rewardFormula },
@@ -330,29 +338,23 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. Levels are driven by persistent Mining XP and lifetime activity — never by your current wallet balance, so withdrawing DOM never costs you progress.",
+        text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. There is no XP. A level is unlocked solely by keeping its minimum Available DOM Balance in the game — Level 1 is free (0 DOM), then +10,000 DOM per level up to 50,000 DOM for Level 6. Claim your Mining Storage to count it; a linked wallet's balance does not count. If your Available DOM Balance drops below a level's minimum, that pickaxe is paused until you hold enough again.",
       },
-      { type: "heading", id: "mining-xp", text: "Mining XP — the progression currency" },
-      {
-        type: "note",
-        text: "Mining XP is not DOM and never touches token supply. It's earned from activity, not holdings, and it's the only thing that moves you toward the next Pickaxe Level.",
-      },
-      { type: "list", items: miningXPSources },
       { type: "heading", id: "level-table", text: "Level table" },
       {
         type: "table",
-        headers: ["Level", "Cosmetic Name", "Base Mining Power", "XP Required", "Storage Capacity"],
+        headers: ["Level", "Cosmetic Name", "Min. Available DOM", "Base Mining Power", "Storage Capacity"],
         rows: pickaxeLevels.map((p) => [
           `Level ${p.level}`,
           p.cosmeticName,
+          { text: p.minHold === 0 ? "Free" : formatNumber(p.minHold), align: "right" as const },
           { text: String(p.basePower), align: "right" as const },
-          { text: formatNumber(p.xpRequired), align: "right" as const },
           { text: p.storageCapacity, align: "right" as const },
         ]),
       },
       {
         type: "note",
-        text: "Base Mining Power and XP thresholds above are example default configuration — they are meant to be tuned once the live mining engine is built, not a final published figure. Base Mining Power sets your share of the current Halving's fixed allocation, not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
+        text: "Base Mining Power above is example default configuration — they are meant to be tuned once the live mining engine is built, not a final published figure. Base Mining Power sets your share of the current Halving's fixed allocation, not a guaranteed DOM/hour rate (see Mining Rewards Formula). Cosmetic names (Novice → Legend) are optional secondary flavor; the primary system is the numeric Pickaxe Level.",
       },
       {
         type: "callout",
@@ -463,10 +465,12 @@ export const docsPages: Record<string, DocPage> = {
           ["Wallet Connector", withdrawalConfig.walletConnector],
           ["DOM contract", { text: withdrawalConfig.domContractAddress, badge: "tba" }],
           ["Block explorer", { text: withdrawalConfig.blockExplorerUrl, badge: "tba" }],
-          ["Minimum withdrawal", { text: withdrawalConfig.minimumWithdrawal, badge: "tba" }],
-          ["Maximum withdrawal", { text: withdrawalConfig.maximumWithdrawal, badge: "tba" }],
+          ["Minimum withdrawal", withdrawalConfig.minimumWithdrawal],
+          ["Maximum withdrawal", withdrawalConfig.maximumWithdrawal],
+          ["Withdrawal fee", `${withdrawalConfig.feeLabel} — network gas is paid by the team`],
         ],
       },
+      { type: "note", text: withdrawalConfig.minimumNote },
       {
         type: "callout",
         tone: "danger",
@@ -516,7 +520,7 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "Recalculated daily. Empty or inactive guilds earn no booster. The Guild Booster modifies mining weight only — it never creates additional DOM beyond the global emission ceiling.",
+        text: "The Guild Booster is 0% during the launch phase; the tiers above apply once it is enabled. Recalculated daily. Empty or inactive guilds earn no booster. The Guild Booster modifies mining weight only — it never creates additional DOM beyond the global emission ceiling.",
       },
       { type: "heading", id: "guild-xp", text: "Guild XP & Levels" },
       {
@@ -545,93 +549,156 @@ export const docsPages: Record<string, DocPage> = {
   referral: {
     slug: "referral",
     eyebrow: "Player Systems — 09",
-    title: "Referral Booster",
-    description: "A capped mining-weight boost — not revenue sharing, not a payout.",
+    title: "Referral Program",
+    description: "Launch phase: invite friends and earn DOM — the mining-weight Referral Booster is planned for later.",
     blocks: [
       {
         type: "lede",
-        text: "Inviting active miners raises your own Effective Mining Weight. It is capped, tied to activity, and never framed as revenue sharing.",
+        text: `For now, referrals pay a flat DOM reward. When a friend joins the official Telegram channel and verifies, you earn ${referralProgram.rewardDom} DOM — for up to ${referralProgram.maxFriends} friends.`,
       },
       {
         type: "tiles",
         items: [
-          { label: "Per active referral", value: `+${referralBooster.weightPerActiveReferral}% Weight` },
-          { label: "Cap", value: `${referralBooster.maxQualifiedReferrals} referrals (+${referralBooster.maxBoostPercent}%)` },
-          { label: "Starter Boost", value: `+${referralBooster.starterBoost.percent}% for ${referralBooster.starterBoost.durationHours}h`, accent: "emerald" },
-          { label: "Qualification", value: "3 active days" },
+          { label: "Reward per friend", value: `${referralProgram.rewardDom} DOM`, accent: "emerald" },
+          { label: "Friend limit", value: `${referralProgram.maxFriends} friends` },
+          { label: "Maximum per inviter", value: `${formatNumber(referralProgram.maxTotalDom)} DOM` },
+          { label: "Only requirement", value: "Friend verifies the channel" },
         ],
       },
       {
         type: "note",
-        text: referralBooster.levels,
+        text: "This replaces the Referral Booster temporarily. Referral Booster is 0% during the launch phase — see the planned design at the bottom of this page.",
       },
-      { type: "heading", id: "dashboard", text: "Your referral stats" },
+      { type: "heading", id: "your-view", text: "What you see" },
+      { type: "list", items: referralProgram.yourView },
       {
         type: "tiles",
-        items: referralDashboardShape.map((s) => ({ label: s.label, value: s.value })),
+        items: referralProgramDashboardShape.map((s) => ({ label: s.label, value: s.value })),
       },
-      { type: "heading", id: "qualification", text: "How a referral qualifies" },
-      { type: "list", items: referralBooster.qualificationRules },
-      { type: "heading", id: "milestones", text: "Milestones" },
+      { type: "heading", id: "rules", text: "Rules" },
+      { type: "list", items: referralProgram.rules },
       {
         type: "badgeRow",
-        items: referralBooster.milestones.map((m) => ({ label: `${m} Qualified Miner${m > 1 ? "s" : ""}`, tone: "gold" as const })),
-      },
-      {
-        type: "note",
-        text: "Milestones unlock badges, cosmetics, and titles — never additional uncapped DOM rewards.",
-      },
-      { type: "heading", id: "statuses", text: "Referral status lifecycle" },
-      {
-        type: "badgeRow",
-        items: referralBooster.statuses.map((s) => ({
+        items: referralProgram.friendStatuses.map((s) => ({
           label: s,
-          tone: (s === "Active" || s === "Qualified" ? "live" : s === "Flagged" || s === "Invalidated" ? "warn" : "tba") as DocBadgeTone,
+          tone: (s === "Qualified" ? "live" : "tba") as DocBadgeTone,
         })),
       },
       {
         type: "callout",
         tone: "gold",
-        text: "Referral ownership is immutable after successful attribution — a referred account cannot switch referrers later. Every qualification event is idempotent: the same referral is never credited twice.",
+        text: referralProgram.communityMessage,
       },
+      { type: "heading", id: "reward-pool", text: "Where the DOM comes from" },
+      {
+        type: "table",
+        headers: ["Property", "Value"],
+        rows: [
+          ["Marketing reward pool size", { text: marketingRewardPool.size, badge: "tba" }],
+          ["Marketing reward pool source", { text: marketingRewardPool.source, badge: "tba" }],
+        ],
+      },
+      { type: "note", text: referralProgram.note },
       {
         type: "note",
         text: "Self-referrals, automated accounts, and multi-account farming are not allowed and can invalidate rewards — see the Fair Play Policy, whose exact detection logic is intentionally not published.",
+      },
+      { type: "heading", id: "booster-planned", text: "Referral Booster V2 — planned" },
+      {
+        type: "paragraph",
+        text: `A capped boost to your own mining weight: +${referralBooster.weightPerActiveReferral}% per active qualified referral, up to ${referralBooster.maxQualifiedReferrals} referrals (+${referralBooster.maxBoostPercent}%), plus a +${referralBooster.starterBoost.percent}% starter boost for ${referralBooster.starterBoost.durationHours}h for an invited friend. ${referralBooster.levels} It is not active in the launch phase.`,
+      },
+    ],
+  },
+
+  rewards: {
+    slug: "rewards",
+    eyebrow: "Player Systems — 10",
+    title: "Earn & Daily Check-In",
+    description: "Launch-phase DOM rewards: quests, daily check-in, ads, and bot reminders.",
+    blocks: [
+      {
+        type: "lede",
+        text: "Alongside idle mining, the Earn tab pays DOM for a few simple actions. All amounts are paid in DOM and can be adjusted through config.",
+      },
+      {
+        type: "table",
+        headers: ["Feature", "Reward", "Condition"],
+        rows: [
+          ["Referral", `${referralProgram.rewardDom} DOM per friend`, "Friend must join the Telegram channel and verify"],
+          ["Join Telegram channel", earnQuests[0].reward, "Real channel member, checked by the bot"],
+          ["Follow on X", earnQuests[1].reward, "Connected X account (honor-mode follow)"],
+          ["Daily Check-In", `${dailyCheckIn.streakTable[0].dom}–${dailyCheckIn.streakTable[6].dom} DOM (streak)`, "Once per UTC day"],
+          ["Watch an ad", "DOM equal to 2h of mining", "Up to 3 per day; final amount pending"],
+          ["Daily report", "—", "Posted automatically at 12:00 UTC"],
+        ],
+      },
+      { type: "heading", id: "channel-quest", text: earnQuests[0].title },
+      { type: "list", items: earnQuests[0].rules },
+      { type: "heading", id: "x-quest", text: earnQuests[1].title },
+      { type: "list", items: earnQuests[1].rules },
+      { type: "heading", id: "check-in", text: "Daily Check-In" },
+      { type: "paragraph", text: dailyCheckIn.summary },
+      {
+        type: "table",
+        headers: ["Streak day", "Reward"],
+        rows: dailyCheckIn.streakTable.map((r) => [r.day, { text: `${r.dom} DOM`, align: "right" as const }]),
+      },
+      { type: "list", items: dailyCheckIn.rules },
+      { type: "heading", id: "ads", text: "Watch an ad" },
+      { type: "paragraph", text: adRewards.summary },
+      { type: "heading", id: "daily-report", text: "Daily report in the channel" },
+      {
+        type: "paragraph",
+        text: `The bot posts automatically every day at ${botMessages.dailyReport.time}. It includes:`,
+      },
+      { type: "list", items: botMessages.dailyReport.contents },
+      { type: "note", text: botMessages.dailyReport.note },
+      { type: "heading", id: "storage-reminder", text: "Storage-full reminder" },
+      { type: "paragraph", text: botMessages.storageFull },
+      {
+        type: "callout",
+        tone: "gold",
+        title: "Honest expectations",
+        text: botMessages.honestyNote,
       },
     ],
   },
 
   activities: {
     slug: "activities",
-    eyebrow: "Player Systems — 10",
+    eyebrow: "Player Systems — 11",
     title: "Mining Activities",
     description: "Mining is live — here's how to build your position.",
     blocks: [
       {
         type: "lede",
-        text: "Beyond idle mining, these ongoing activities build a miner's profile, Mining XP, and boosters.",
+        text: "Beyond idle mining, these ongoing activities earn DOM and build a miner's profile, badges, and progression.",
       },
       {
         type: "list",
         items: [
           "Miner Profile — set up your profile and start tracking your mining progress.",
           "Delver Badges — earn permanent badges tied to milestones and Halving eras.",
-          "Daily Check-In — stay active every day to keep your streak and bonuses going.",
-          "Referrals — invite active miners to grow your Referral Booster.",
+          `Daily Check-In — ${dailyCheckIn.summary}`,
+          `Referrals — invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the Telegram channel and verifies.`,
+          `Join Telegram Channel — ${earnQuests[0].reward}, one-time.`,
+          `Follow on X — ${earnQuests[1].reward}, one-time.`,
+          `Watch an Ad — ${adRewards.summary}`,
           "Guild Registration — connect your Telegram community and coordinate daily expeditions.",
           "Daily Tasks — complete community missions and objectives.",
         ],
       },
       {
         type: "note",
-        text: "The Leaderboard ranks players by total DOM mined, current mining weight, Pickaxe Level, current Halving, and guild contribution — never by exposing private wallet balances, and never with placeholder or fake entries.",
+        text: "See Earn & Daily Check-In for the full rules. The Leaderboard ranks players by total DOM mined, current mining weight, Pickaxe Level, current Halving, and guild contribution — never by exposing private wallet balances, and never with placeholder or fake entries.",
       },
     ],
   },
 
   features: {
     slug: "features",
-    eyebrow: "Player Systems — 11",
+    eyebrow: "Player Systems — 12",
     title: "Full Feature List",
     description: "Only real, current, or confirmed-planned systems — organized by group.",
     blocks: featureGroups.flatMap((group): import("./docsBlocks").DocBlock[] => [
@@ -646,7 +713,7 @@ export const docsPages: Record<string, DocPage> = {
 
   transparency: {
     slug: "transparency",
-    eyebrow: "Trust & Policy — 12",
+    eyebrow: "Trust & Policy — 13",
     title: "Transparency Commitments",
     description: "We tell you exactly where DOM stands today.",
     blocks: [
@@ -698,7 +765,7 @@ export const docsPages: Record<string, DocPage> = {
 
   treasury: {
     slug: "treasury",
-    eyebrow: "Trust & Policy — 13",
+    eyebrow: "Trust & Policy — 14",
     title: "Treasury & Vesting",
     description: "Every non-mining DOM wallet, its purpose, and its unlock status.",
     blocks: [
@@ -723,7 +790,7 @@ export const docsPages: Record<string, DocPage> = {
 
   security: {
     slug: "security",
-    eyebrow: "Trust & Policy — 14",
+    eyebrow: "Trust & Policy — 15",
     title: "Security & Anti-Cheat",
     description: "What protects the economy, and what the backend owns.",
     blocks: [
@@ -755,7 +822,7 @@ export const docsPages: Record<string, DocPage> = {
 
   "fair-play": {
     slug: "fair-play",
-    eyebrow: "Trust & Policy — 15",
+    eyebrow: "Trust & Policy — 16",
     title: "Fair Play Policy",
     description: "Protecting a shared, finite supply.",
     blocks: [
@@ -786,21 +853,21 @@ export const docsPages: Record<string, DocPage> = {
 
   "risk-disclosure": {
     slug: "risk-disclosure",
-    eyebrow: "Trust & Policy — 16",
+    eyebrow: "Trust & Policy — 17",
     title: "Risk Disclosure",
     description: "Read this before you participate.",
     blocks: [
       { type: "callout", tone: "danger", text: riskDisclosure },
       {
         type: "note",
-        text: "Numerous parameters in this documentation — the DOM contract address, XP thresholds, claim limits, guild creation cost, minimum/maximum withdrawal, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
+        text: "Numerous parameters in this documentation — the DOM contract address, claim limits, guild creation cost, the future maximum withdrawal limit, the marketing reward pool, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
       },
     ],
   },
 
   roadmap: {
     slug: "roadmap",
-    eyebrow: "Reference — 17",
+    eyebrow: "Reference — 18",
     title: "Roadmap",
     description: "Qualitative phases, not marketing dates.",
     blocks: [
@@ -832,7 +899,7 @@ export const docsPages: Record<string, DocPage> = {
 
   changelog: {
     slug: "changelog",
-    eyebrow: "Reference — 18",
+    eyebrow: "Reference — 19",
     title: "Version History",
     description: "What changed, and why.",
     blocks: [
@@ -854,7 +921,7 @@ export const docsPages: Record<string, DocPage> = {
 
   "valuation-model": {
     slug: "valuation-model",
-    eyebrow: "Reference — 19",
+    eyebrow: `Reference — ${SHOW_PUBLIC_CHANGELOG ? 20 : 19}`,
     title: "Tokenomics & Valuation Model",
     description: "An independent, illustrative analysis — not an official specification, not investment advice, not a price prediction.",
     blocks: [
@@ -873,7 +940,7 @@ export const docsPages: Record<string, DocPage> = {
         type: "list",
         items: [
           "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v3.0: total supply, the six allocations, the six equal Halving allocations, Pickaxe base mining power, and booster caps.",
-          "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, minimum/maximum withdrawal, and listing venue/timing. No number is invented to fill these gaps.",
+          "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, the future maximum withdrawal limit, the marketing reward pool size and source, and listing venue/timing. No number is invented to fill these gaps.",
         ],
       },
       { type: "heading", id: "supply", text: "Fixed supply, not inflation" },
@@ -947,5 +1014,7 @@ export const docsPages: Record<string, DocPage> = {
     ],
   },
 };
+
+if (!SHOW_PUBLIC_CHANGELOG) delete docsPages.changelog;
 
 export const docsAllSlugs = Object.keys(docsPages);

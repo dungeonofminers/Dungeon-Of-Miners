@@ -16,7 +16,6 @@ const resourceLinks = [
   { label: "Transparency", href: "/transparency" },
   { label: "Treasury", href: "/treasury" },
   { label: "FAQ", href: "/faq" },
-  { label: "Changelog", href: "/changelog" },
 ];
 
 export function Footer() {
