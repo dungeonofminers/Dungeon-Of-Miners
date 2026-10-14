@@ -29,10 +29,10 @@ export type CoinDef = {
 };
 
 export const coinDefs: CoinDef[] = [
-  { id: "1", name: "Pickaxe", fullName: "your mining pickaxe", image: "/assets/coin-orbit-1.png", orbit: "orbit-01", duration: 18, offset: 0, spin: 6, size: 34 },
-  { id: "2", name: "BNB", fullName: "launch on BNB Smart Chain", image: "/assets/coin-orbit-2.png", orbit: "orbit-01", duration: 21, offset: 0.5, spin: 5, size: 32 },
-  { id: "3", name: "USDT", fullName: "paired with USDT", image: "/assets/coin-orbit-3.png", orbit: "orbit-02", duration: 23, offset: 0.25, spin: 6.5, size: 34 },
-  { id: "4", name: "DOM", fullName: "DOM Tokens Reward", image: "/assets/coin-orbit-4.png", orbit: "orbit-02", duration: 19, offset: 0.75, spin: 5.5, size: 33 },
+  { id: "1", name: "Pickaxe", fullName: "your mining pickaxe", image: "/assets/coin-orbit-1.png", orbit: "orbit-01", duration: 18, offset: 0, spin: 6, size: 44 },
+  { id: "2", name: "BNB", fullName: "launch on BNB Smart Chain", image: "/assets/coin-orbit-2.png", orbit: "orbit-01", duration: 21, offset: 0.5, spin: 5, size: 42 },
+  { id: "3", name: "USDT", fullName: "paired with USDT", image: "/assets/coin-orbit-3.png", orbit: "orbit-02", duration: 23, offset: 0.25, spin: 6.5, size: 44 },
+  { id: "4", name: "DOM", fullName: "DOM Tokens Reward", image: "/assets/coin-orbit-4.png", orbit: "orbit-02", duration: 19, offset: 0.75, spin: 5.5, size: 43 },
 ];
 
 /** Renders the orbiting object image, clipped to a circle. */

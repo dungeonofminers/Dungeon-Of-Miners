@@ -209,9 +209,9 @@ function CoinInstance({ def, orbit }: { def: CoinDef; orbit: OrbitConfig }) {
       <text
         className="coin-label-text"
         textAnchor="middle"
-        y={def.size + 20}
+        y={def.size + 22}
         fill="#FCD98A"
-        fontSize={10.5}
+        fontSize={14}
         fontWeight={600}
         letterSpacing="0.06em"
         style={{ pointerEvents: "none" }}
