@@ -67,6 +67,26 @@
   margin-top: 0.1rem;
 }
 
+.coin-label-text {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .coin-label-text {
+    animation: coin-label-run 6s ease-in-out infinite;
+  }
+}
+
+@keyframes coin-label-run {
+  0%,
+  100% {
+    transform: translateX(12px);
+  }
+  50% {
+    transform: translateX(-12px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dungeon-hero {
     aspect-ratio: 1920 / 760;

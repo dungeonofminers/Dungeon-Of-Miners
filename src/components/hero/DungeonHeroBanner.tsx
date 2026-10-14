@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { coinDefs, coinColors, CoinGraphic, type CoinDef } from "./coinDefs";
+import { coinDefs, CoinGraphic, type CoinDef } from "./coinDefs";
 import { orbits, ellipsePathD, pointOnOrbit, type OrbitConfig } from "./orbitPath";
 import { HeroParticles } from "./HeroParticles";
 import { useDungeonHeroAnimation } from "./useDungeonHeroAnimation";
@@ -92,22 +92,6 @@ export default function DungeonHeroBanner() {
             <stop offset="0%" stopColor="#454C64" />
             <stop offset="100%" stopColor="#23283A" />
           </linearGradient>
-
-          {(Object.entries(coinColors) as Array<[keyof typeof coinColors, (typeof coinColors)[keyof typeof coinColors]]>).map(
-            ([id, c]) => (
-              <g key={id}>
-                <radialGradient id={`coin-face-${id}`} cx="38%" cy="32%" r="75%">
-                  <stop offset="0%" stopColor={c.faceFrom} />
-                  <stop offset="100%" stopColor={c.faceTo} />
-                </radialGradient>
-                <linearGradient id={`coin-rim-${id}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FFF3D0" />
-                  <stop offset="45%" stopColor={c.faceTo} />
-                  <stop offset="100%" stopColor={c.rim} />
-                </linearGradient>
-              </g>
-            )
-          )}
 
           <filter id="soft-glow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="7" result="blur" />
@@ -218,10 +202,22 @@ function CoinInstance({ def, orbit }: { def: CoinDef; orbit: OrbitConfig }) {
             style={{ pointerEvents: "none" }}
           />
           <g style={{ pointerEvents: "none" }}>
-            <CoinGraphic id={def.id} size={def.size} />
+            <CoinGraphic def={def} />
           </g>
         </g>
       </g>
+      <text
+        className="coin-label-text"
+        textAnchor="middle"
+        y={def.size + 20}
+        fill="#FCD98A"
+        fontSize={10.5}
+        fontWeight={600}
+        letterSpacing="0.06em"
+        style={{ pointerEvents: "none" }}
+      >
+        {def.fullName.toUpperCase()}
+      </text>
     </g>
   );
 }
