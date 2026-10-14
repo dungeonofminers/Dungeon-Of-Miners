@@ -238,7 +238,7 @@ export const coreLoop = [
     step: "06",
     title: "Withdraw On-Chain",
     description:
-      "Connect a BEP-20 wallet and withdraw eligible Available Balance on BNB Smart Chain — zero withdrawal fee, network fee sponsored. Withdrawals are processed automatically in order, usually within minutes.",
+      "Paste your BEP-20 wallet address and withdraw eligible Available Balance on BNB Smart Chain — zero withdrawal fee, network fee sponsored. Withdrawals are processed automatically in order, usually within minutes.",
   },
 ];
 
@@ -307,7 +307,7 @@ export const economyConfig = {
   network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "any BEP-20 address (pasted)",
   mintingStatus: "Disabled — No Additional Minting",
-  economyVersion: "v4.2",
+  economyVersion: "v4",
   economyLastUpdated: "2026-10-12",
 };
 
@@ -337,7 +337,7 @@ export const tokenAllocation = [
     percent: Math.round((MINING_ALLOCATION / TOTAL_SUPPLY) * 100),
     amount: formatDOM(MINING_ALLOCATION),
     color: "#F4B544", // primary gold
-    description: "The largest allocation belongs to miners and community distribution.",
+    description: "The largest allocation belongs to miners.",
   },
   {
     id: "liquidity",
@@ -413,22 +413,24 @@ export const halvingFacts = [
 ];
 
 // ---------------------------------------------------------------------------
-// Mining activities — live mining is already on, so these are ongoing ways
-// to build progression, not pre-launch busywork. Rewards are DOM/boosters
-// first — DOM only where it comes from a defined, capped budget.
+// Mining activities — ways to build progression alongside idle mining.
+// Rewards are DOM/boosters first — DOM only where it comes from a defined,
+// capped budget.
 // ---------------------------------------------------------------------------
-export const miningActivities = [
+export const miningActivities: { icon: string; title: string; description: string; reward: string; comingSoon?: boolean }[] = [
   {
     icon: "user",
     title: "Miner Profile",
     description: "Set up your profile and start tracking your mining progress.",
     reward: "Profile Setup",
+    comingSoon: true,
   },
   {
     icon: "shield",
     title: "Delver Badges",
     description: "Earn permanent badges tied to milestones and Halving eras.",
     reward: "Badge",
+    comingSoon: true,
   },
   {
     icon: "calendar-check",
@@ -465,12 +467,14 @@ export const miningActivities = [
     title: "Guild Registration",
     description: "Connect your Telegram community and coordinate daily expeditions.",
     reward: "Guild XP",
+    comingSoon: true,
   },
   {
     icon: "list-checks",
     title: "Daily Tasks",
     description: "Complete community missions and objectives for steady progression.",
     reward: "Task rewards",
+    comingSoon: true,
   },
 ];
 
@@ -549,7 +553,7 @@ export const storageRules = {
 };
 
 export const claimRules = {
-  minimumClaim: "TBA",
+  minimumClaim: "1 DOM",
   claimCooldown: "TBA",
   maximumClaim: "TBA",
   note: "100% of every claimed amount becomes Available DOM Balance immediately — there is no wallet split.",
@@ -558,7 +562,7 @@ export const claimRules = {
 // ---------------------------------------------------------------------------
 // Balance & withdrawal flow — replaces the retired Holding Wallet / Pool
 // Wallet / 70:30 split entirely. Mining Storage is server-authoritative
-// mining state, not an external wallet; only the Connected Wallet step
+// mining state, not an external wallet; only the withdrawal-address step
 // touches the blockchain.
 // ---------------------------------------------------------------------------
 export const balanceModel = {
@@ -577,10 +581,10 @@ export const balanceModel = {
     },
     {
       label: "Withdraw",
-      description: "Request withdrawal of eligible Available Balance to your connected BEP-20 wallet.",
+      description: "Request withdrawal of eligible Available Balance to the BEP-20 address you enter.",
     },
     {
-      label: "Connected Wallet",
+      label: "Your Withdrawal Address",
       description: "Your external BEP-20 wallet on BNB Smart Chain — the BEP-20 address you enter when withdrawing.",
     },
   ],
@@ -588,20 +592,6 @@ export const balanceModel = {
   integrityNote:
     "Withdrawal validation always happens server-side with atomic database transactions and idempotency keys — the frontend only displays state, it never owns it. One reward can never be claimed or withdrawn twice.",
 };
-
-// ---------------------------------------------------------------------------
-// Wallet linking — signature-based ownership verification. Dungeon of
-// Miners never asks for a seed phrase, private key, or recovery phrase.
-// ---------------------------------------------------------------------------
-export const walletLinkingFlow = [
-  "Connect an EVM (BSC-compatible) wallet",
-  "Backend issues a single-use nonce",
-  "User signs an ownership message with their wallet — never a transaction, never a key",
-  "Backend verifies the signature against the nonce",
-  "Wallet is linked to the account",
-];
-
-export const walletLinkingRecord = ["wallet_address", "verified_at", "network", "signature_nonce_history"];
 
 // ---------------------------------------------------------------------------
 // Transaction / ledger types — every balance-affecting event is recorded,
@@ -766,12 +756,12 @@ export const withdrawalConfig = {
   network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "any BEP-20 address (pasted)",
   chainId: `${CHAIN_ID} (${NETWORK} Mainnet)`,
-  domContractAddress: "Coming Soon",
+  domContractAddress: "0xB33A511B88b6691bE265DdBCD0c8dbE6A4fCf515",
   blockExplorerUrl: `${BLOCK_EXPLORER_NAME} (${BLOCK_EXPLORER_URL.replace("https://", "")})`,
   statuses: ["Processing", "Broadcasted", "Confirming", "Confirmed", "Failed"] as const,
   minimumWithdrawal: typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA",
   minimumNote: "Counted against your combined balance — mined DOM plus every reward you have earned.",
-  maximumWithdrawal: "Daily limit grows with your Pickaxe Level. A new withdrawal address is limited to 500 DOM at first.",
+  maximumWithdrawal: "Daily limit grows with your Pickaxe Level — 1,000 / 2,000 / 3,000 / 5,000 / 8,000 / 12,000 DOM (Novice → Legend). A new withdrawal address is limited to 500 DOM in its first 24 hours.",
   withdrawalCooldown: typeof WITHDRAWAL_COOLDOWN_HOURS === "number" ? `${WITHDRAWAL_COOLDOWN_HOURS} hours` : "TBA",
   instantNote:
     "Withdrawals are processed automatically in order, usually within minutes — there is no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
@@ -956,7 +946,7 @@ export const referralProgram = {
     "How many friends you invited and how many are valid",
     "Your friend list with each status: Pending or Qualified",
   ],
-  note: "Referral rewards are paid in DOM from a dedicated marketing reward pool. The pool's size and source have not been finalized and are marked TBA.",
+  note: "Referral rewards are paid in DOM from the treasury.",
 };
 
 // What a miner sees on the Referral tab — real numbers are per-account and
@@ -967,8 +957,6 @@ export const referralProgramDashboardShape = [
   { label: "DOM Earned", value: "Awaiting Live Data" },
   { label: "Friend Limit", value: `${MAX_REWARDED_REFERRALS}` },
 ];
-
-export const marketingRewardPool = { size: "TBA", source: "TBA" };
 
 // ---------------------------------------------------------------------------
 // Launch-phase Earn quests, Daily Check-In, ads, and bot messages — source:
@@ -1157,7 +1145,7 @@ export const leaderboardConfig = {
 // ---------------------------------------------------------------------------
 // Features — organized by system group. Only real/current/planned systems.
 // ---------------------------------------------------------------------------
-export type FeatureItem = { title: string; description: string; icon: string };
+export type FeatureItem = { title: string; description: string; icon: string; comingSoon?: boolean };
 export type FeatureGroup = { group: string; items: FeatureItem[] };
 
 export const featureGroups: FeatureGroup[] = [
@@ -1187,12 +1175,12 @@ export const featureGroups: FeatureGroup[] = [
   {
     group: "Social",
     items: [
-      { title: "Guilds", description: "Bind your Telegram group or supergroup to its own Dungeon of Miners Guild.", icon: "users" },
-      { title: "Guild XP", description: "Earned from active members, expeditions, and mining contribution.", icon: "star" },
-      { title: "Guild Levels", description: "Guild XP unlocks cosmetic banners, badges, titles, and profile frames.", icon: "trophy" },
-      { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords" },
-      { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check" },
-      { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks" },
+      { title: "Guilds", description: "Bind your Telegram group or supergroup to its own Dungeon of Miners Guild.", icon: "users", comingSoon: true },
+      { title: "Guild XP", description: "Earned from active members, expeditions, and mining contribution.", icon: "star", comingSoon: true },
+      { title: "Guild Levels", description: "Guild XP unlocks cosmetic banners, badges, titles, and profile frames.", icon: "trophy", comingSoon: true },
+      { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords", comingSoon: true },
+      { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check", comingSoon: true },
+      { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks", comingSoon: true },
       { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend you invite who joins the official Telegram channel and claims their first mining session, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
       { title: "Referral Booster (Planned)", description: `A capped mining-weight boost, currently 0% and planned to replace DOM referral rewards later.`, icon: "shield" },
     ],
@@ -1201,11 +1189,11 @@ export const featureGroups: FeatureGroup[] = [
     group: "Engagement",
     items: [
       { title: "Daily Check-In", description: `${CHECKIN_MIN_DOM}–${CHECKIN_MAX_DOM} DOM per day, rising with your streak.`, icon: "calendar-check" },
-      { title: "Daily Tasks", description: "Community missions and objectives for steady progression.", icon: "check-circle" },
-      { title: "Stone Breaker", description: "A quick timing mini-game rewarding boosters and cosmetics.", icon: "gem" },
-      { title: "Achievements", description: "Permanent milestones tracked across your entire mining history.", icon: "shield" },
-      { title: "Miner Card", description: "Share your miner profile and progress with your community.", icon: "share-2" },
-      { title: "Temporary Boosters", description: "Short-duration, capped mining-weight boosts from events and activities.", icon: "zap" },
+      { title: "Daily Tasks", description: "Community missions and objectives for steady progression.", icon: "check-circle", comingSoon: true },
+      { title: "Stone Breaker", description: "A quick timing mini-game rewarding boosters and cosmetics.", icon: "gem", comingSoon: true },
+      { title: "Achievements", description: "Permanent milestones tracked across your entire mining history.", icon: "shield", comingSoon: true },
+      { title: "Miner Card", description: "Share your miner profile and progress with your community.", icon: "share-2", comingSoon: true },
+      { title: "Temporary Boosters", description: "Short-duration, capped mining-weight boosts from events and activities.", icon: "zap", comingSoon: true },
     ],
   },
   {
@@ -1280,7 +1268,7 @@ export const faqs = [
   },
   {
     question: "How much DOM do I need to hold to use a Pickaxe?",
-    answer: "Level 1 is free — no DOM needed. The requirement is measured against your Available DOM Balance in the game (DOM you've claimed — not unclaimed Mining Storage, and not a linked wallet). Level 2 requires 10,000 DOM, Level 3 requires 20,000, Level 4 requires 30,000, Level 5 requires 40,000, and Level 6 requires 50,000 DOM. If your Available DOM Balance drops below a level's minimum (for example after a withdrawal), that pickaxe is paused until you hold enough again.",
+    answer: "Level 1 is free — no DOM needed. The requirement is measured against your Available DOM Balance in the game (DOM you've claimed — not unclaimed Mining Storage, and not a wallet address you've entered). Level 2 requires 10,000 DOM, Level 3 requires 20,000, Level 4 requires 30,000, Level 5 requires 40,000, and Level 6 requires 50,000 DOM. If your Available DOM Balance drops below a level's minimum (for example after a withdrawal), that pickaxe is paused until you hold enough again.",
   },
   {
     question: "Does Pickaxe use an Equipment Multiplier?",
@@ -1302,7 +1290,7 @@ export const faqs = [
   {
     question: "How does withdrawal work?",
     answer:
-      "Connect your BEP-20 wallet, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction on BNB Smart Chain — no manual approval queue. You'll see a real transaction hash, a BscScan link, and a status of Processing, Broadcasted, Confirming, Confirmed, or Failed.",
+      "Paste your BEP-20 wallet address, enter an amount, and confirm. The backend validates your Available Balance server-side and automatically broadcasts the transaction on BNB Smart Chain — no manual approval queue. You'll see a real transaction hash, a BscScan link, and a status of Processing, Broadcasted, Confirming, Confirmed, or Failed.",
   },
   {
     question: "What wallet can I use?",
@@ -1319,7 +1307,7 @@ export const faqs = [
   },
   {
     question: "What is the minimum withdrawal?",
-    answer: `${withdrawalConfig.minimumWithdrawal}, counted against your combined balance (mined DOM plus all rewards). There is no maximum limit for now — one will be introduced later. The network fee is paid by the team, not by you.`,
+    answer: `${withdrawalConfig.minimumWithdrawal}, counted against your combined balance (mined DOM plus all rewards). Withdrawals have a daily limit that grows with your Pickaxe Level (from 1,000 DOM at Novice up to 12,000 DOM at Legend), and a new withdrawal address is limited to 500 DOM in its first 24 hours. The network fee is paid by the team, not by you.`,
   },
   {
     question: "What is a Guild?",
@@ -1436,18 +1424,18 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
 
 // ---------------------------------------------------------------------------
 // BSC Transparency page data — never fabricate a contract address. Show
-// "Coming Soon" until the contract is actually deployed and verified.
+// Contract is deployed and verified on BscScan.
 // ---------------------------------------------------------------------------
 export const transparencyConfig = {
   network: NETWORK,
   token: siteConfig.ticker,
   standard: TOKEN_STANDARD,
-  contractAddress: "Coming Soon",
+  contractAddress: "0xB33A511B88b6691bE265DdBCD0c8dbE6A4fCf515",
   totalSupply,
   additionalMinting: "None",
-  contractStatus: "Not Yet Deployed",
+  contractStatus: "Deployed & Verified",
   explorerName: BLOCK_EXPLORER_NAME,
-  explorerUrl: "Coming Soon",
+  explorerUrl: "https://bscscan.com/address/0xB33A511B88b6691bE265DdBCD0c8dbE6A4fCf515",
 };
 
 // ---------------------------------------------------------------------------

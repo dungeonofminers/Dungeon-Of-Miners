@@ -8,7 +8,7 @@ export function MiningFormula() {
     <section id="mining-formula" className="relative py-24 sm:py-32">
       <div className="section-shell">
         <SectionHeading
-          eyebrow="Economy Rules"
+          eyebrow="Economy"
           title="How Mining Rewards Work"
           description="Your Effective Mining Weight is never a mystery number — every booster you've earned is stacked in one formula, then shared out of a hard-capped global emission."
         />

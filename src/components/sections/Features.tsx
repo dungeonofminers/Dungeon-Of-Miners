@@ -87,7 +87,14 @@ export function Features() {
                         <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] transition-colors group-hover:border-gold/30 group-hover:bg-gold/10">
                           <Icon className="h-5 w-5 text-gold" />
                         </div>
-                        <h4 className="mt-4 text-base font-semibold text-ink">{feature.title}</h4>
+                        <h4 className="mt-4 flex items-center gap-2 text-base font-semibold text-ink">
+                          {feature.title}
+                          {feature.comingSoon && (
+                            <span className="rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-gold">
+                              Coming Soon
+                            </span>
+                          )}
+                        </h4>
                         <p className="body-lg mt-2 text-sm">{feature.description}</p>
                       </div>
                     </Reveal>

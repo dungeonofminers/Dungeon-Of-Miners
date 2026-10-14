@@ -67,11 +67,11 @@ export function PreTgeSection() {
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <dt className="text-ink-muted">DOM Contract</dt>
-                  <dd className="font-semibold text-ink-faint">{withdrawalConfig.domContractAddress}</dd>
+                  <dd className="break-all font-mono text-xs font-semibold text-ink">{withdrawalConfig.domContractAddress}</dd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <dt className="text-ink-muted">Block Explorer</dt>
-                  <dd className="font-semibold text-ink-faint">{withdrawalConfig.blockExplorerUrl}</dd>
+                  <dd className="font-semibold text-ink">{withdrawalConfig.blockExplorerUrl}</dd>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <dt className="text-ink-muted">Minimum Withdrawal</dt>

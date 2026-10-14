@@ -10,11 +10,11 @@ export const metadata: Metadata = {
   description: "DOM's network, token standard, contract status, and supply facts — never fabricated.",
 };
 
-const contractRows: { label: string; value: string; badge?: boolean }[] = [
+const contractRows: { label: string; value: string; badge?: boolean; mono?: boolean }[] = [
   { label: "Network", value: transparencyConfig.network },
   { label: "Token", value: transparencyConfig.token },
   { label: "Standard", value: transparencyConfig.standard },
-  { label: "Contract Address", value: transparencyConfig.contractAddress, badge: true },
+  { label: "Contract Address", value: transparencyConfig.contractAddress, mono: true },
   { label: "Total Supply", value: transparencyConfig.totalSupply },
   { label: "Additional Minting", value: transparencyConfig.additionalMinting },
   { label: "Contract Status", value: transparencyConfig.contractStatus, badge: true },
@@ -40,9 +40,11 @@ export default function TransparencyPage() {
                     <dt className="text-sm text-ink-muted">{row.label}</dt>
                     <dd
                       className={
-                        row.badge
-                          ? "rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-xs font-bold uppercase tracking-wider text-ink-faint"
-                          : "font-display text-base text-ink"
+                        row.mono
+                          ? "break-all font-mono text-sm text-ink"
+                          : row.badge
+                            ? "rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-xs font-bold uppercase tracking-wider text-ink-faint"
+                            : "font-display text-base text-ink"
                       }
                     >
                       {row.value}
@@ -51,15 +53,18 @@ export default function TransparencyPage() {
                 ))}
               </dl>
 
-              <div className="mt-6 flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
+              <a
+                href={transparencyConfig.explorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-colors hover:border-gold/30"
+              >
                 <div className="flex items-center gap-2 text-sm text-ink-muted">
                   <ExternalLink className="h-4 w-4 text-ink-faint" />
-                  {transparencyConfig.explorerName}
+                  View contract on {transparencyConfig.explorerName}
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-                  {transparencyConfig.explorerUrl}
-                </span>
-              </div>
+                <span className="text-xs font-semibold text-gold">Open ↗</span>
+              </a>
             </div>
           </Reveal>
 
@@ -67,10 +72,8 @@ export default function TransparencyPage() {
             <div className="mx-auto mt-6 flex max-w-2xl items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4">
               <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-glow" />
               <p className="text-xs leading-relaxed text-ink-faint">
-                Once the DOM contract is deployed and verified, this page will show the real
-                contract address, its BscScan link, and its verified status. Until then, every
-                field above stays exactly as shown — never a placeholder address dressed up as
-                real.
+                The DOM contract is deployed and verified on BscScan, with a Safe multisig as
+                its owner. The address above is the real, deployed contract — never a placeholder.
               </p>
             </div>
           </Reveal>

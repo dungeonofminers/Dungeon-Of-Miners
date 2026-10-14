@@ -20,7 +20,7 @@ export default function ChangelogPage() {
         <div className="section-shell">
           <SectionHeading
             eyebrow="Economy Changelog"
-            title={`Economy Rules — ${economyConfig.economyVersion}`}
+            title={`Economy ${economyConfig.economyVersion}`}
             description={`Status: Coming Soon · Last updated ${economyConfig.economyLastUpdated}`}
           />
 

@@ -104,7 +104,7 @@ export const PICKAXE_POWER: number[] = [100, 130, 165, 205, 250, 300]; // 3.0x L
 // Minimum Available DOM Balance a miner needs to USE each Pickaxe Level
 // (Level 1 is free). Steps of 10,000 DOM. This is the ONLY unlock rule —
 // there is no XP. Measured against the in-game Available DOM Balance, not a
-// linked wallet and not unclaimed Mining Storage.
+// withdrawal address and not unclaimed Mining Storage.
 export const PICKAXE_MIN_HOLD: number[] = [0, 10_000, 20_000, 30_000, 40_000, 50_000];
 
 // Mining Storage capacity (DOM) unlocked at each Pickaxe Level. Example config.

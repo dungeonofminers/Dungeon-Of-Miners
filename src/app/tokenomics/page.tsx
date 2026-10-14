@@ -88,7 +88,7 @@ export default function TokenomicsPage() {
           <SectionHeading
             eyebrow="Supply Breakdown"
             title="1,000,000,000 DOM across six allocations"
-            description="55% of DOM supply is allocated directly to mining and community rewards, while the remaining supply supports liquidity, development, ecosystem growth, reserves, and strategic expansion."
+            description="55% of DOM supply is allocated to mining rewards, while the remaining supply supports liquidity, development, ecosystem growth, reserves, and strategic expansion."
           />
 
           <div className="mt-14">

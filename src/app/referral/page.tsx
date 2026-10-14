@@ -5,7 +5,6 @@ import {
   referralProgram,
   referralProgramDashboardShape,
   referralBooster,
-  marketingRewardPool,
 } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -135,8 +134,7 @@ export default function ReferralPage() {
           <Reveal delay={0.18}>
             <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-5">
               <p className="text-sm text-ink-muted">
-                <span className="font-semibold text-ink">Reward pool:</span> {referralProgram.note}{" "}
-                (Pool size: {marketingRewardPool.size} · Source: {marketingRewardPool.source}.)
+                <span className="font-semibold text-ink">Reward pool:</span> {referralProgram.note}
               </p>
               <p className="mt-3 text-sm text-ink-muted">
                 <span className="font-semibold text-ink">Referral Booster — planned.</span> A capped

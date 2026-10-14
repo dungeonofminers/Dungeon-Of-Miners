@@ -42,7 +42,6 @@ import {
   referralBooster,
   referralProgram,
   referralProgramDashboardShape,
-  marketingRewardPool,
   earnQuests,
   dailyCheckIn,
   adRewards,
@@ -55,7 +54,6 @@ import {
   transparencyConfig,
   treasuryWallets,
   vestingConfig,
-  walletLinkingFlow,
   withdrawalSecurityMeasures,
   antiCheatMeasures,
   serverAuthoritativeState,
@@ -119,7 +117,7 @@ export const docsIntro: DocPage = {
     },
     {
       type: "paragraph",
-      text: "There is no Holding Wallet / Pool Wallet split. 100% of every claim becomes Available DOM Balance. Mining began at Halving 1 — the first of six equal 91,666,667 DOM eras — and will advance five more times, once each era's own allocation is fully mined out.",
+      text: "There is no Holding Wallet / Pool Wallet split. 100% of every claim becomes Available DOM Balance. Mining will begin at Halving 1 — the first of six equal 91,666,667 DOM eras — and will advance five more times, once each era's own allocation is fully mined out.",
     },
     { type: "heading", id: "why-different", text: "Why it's built differently" },
     {
@@ -143,7 +141,7 @@ export const docsIntro: DocPage = {
     },
     {
       type: "note",
-      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy Rules ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the retired Pre-TGE / Floor-system and Rank System models.`,
+      text: `This documentation describes the mechanics and economics of ${siteConfig.name} exactly as published on the live site, current as of Economy ${economyConfig.economyVersion} (${economyConfig.economyLastUpdated}), including the parameters the team has explicitly left undecided. It supersedes the retired Pre-TGE / Floor-system and Rank System models.`,
     },
   ],
 };
@@ -347,7 +345,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. There is no XP. A level is unlocked solely by keeping its minimum Available DOM Balance in the game — Level 1 is free (0 DOM), then +10,000 DOM per level up to 50,000 DOM for Level 6. Claim your Mining Storage to count it; a linked wallet's balance does not count. If your Available DOM Balance drops below a level's minimum, that pickaxe is paused until you hold enough again.",
+        text: "Pickaxe Level 1–6 replaces the retired Rank System as the primary progression system. There is no XP. A level is unlocked solely by keeping its minimum Available DOM Balance in the game — Level 1 is free (0 DOM), then +10,000 DOM per level up to 50,000 DOM for Level 6. Claim your Mining Storage to count it; a wallet address you've entered does not count. If your Available DOM Balance drops below a level's minimum, that pickaxe is paused until you hold enough again.",
       },
       { type: "heading", id: "level-table", text: "Level table" },
       {
@@ -476,8 +474,8 @@ export const docsPages: Record<string, DocPage> = {
         rows: [
           ["Network", withdrawalConfig.network],
           ["Wallet", withdrawalConfig.walletConnector],
-          ["DOM contract", { text: withdrawalConfig.domContractAddress, badge: "tba" }],
-          ["Block explorer", { text: withdrawalConfig.blockExplorerUrl, badge: "tba" }],
+          ["DOM contract", withdrawalConfig.domContractAddress],
+          ["Block explorer", withdrawalConfig.blockExplorerUrl],
           ["Minimum withdrawal", withdrawalConfig.minimumWithdrawal],
           ["Maximum withdrawal", withdrawalConfig.maximumWithdrawal],
           ["Withdrawal fee", `${withdrawalConfig.feeLabel} — network gas is paid by the team`],
@@ -603,14 +601,6 @@ export const docsPages: Record<string, DocPage> = {
         text: referralProgram.communityMessage,
       },
       { type: "heading", id: "reward-pool", text: "Where the DOM comes from" },
-      {
-        type: "table",
-        headers: ["Property", "Value"],
-        rows: [
-          ["Marketing reward pool size", { text: marketingRewardPool.size, badge: "tba" }],
-          ["Marketing reward pool source", { text: marketingRewardPool.source, badge: "tba" }],
-        ],
-      },
       { type: "note", text: referralProgram.note },
       {
         type: "note",
@@ -817,13 +807,16 @@ export const docsPages: Record<string, DocPage> = {
       { type: "list", items: withdrawalSecurityMeasures },
       { type: "heading", id: "anti-cheat", text: "Anti-cheat" },
       { type: "list", items: antiCheatMeasures },
-      { type: "heading", id: "wallet-linking", text: "Wallet linking (signature-based)" },
-      { type: "steps", items: walletLinkingFlow.map((step) => ({ title: step })) },
+      { type: "heading", id: "wallet-address", text: "Wallet address (paste, not connect)" },
+      {
+        type: "note",
+        text: "Dungeon of Miners does not connect wallets or use wallet signing. To withdraw, you paste a BEP-20 address — double-check it, because on-chain transfers can't be reversed.",
+      },
       {
         type: "callout",
         tone: "danger",
         title: "No seed phrases, ever",
-        text: "Dungeon of Miners never asks for a seed phrase, private key, or recovery phrase. Wallet ownership is verified with a signed message and a single-use nonce — never your keys.",
+        text: "Dungeon of Miners never asks for a seed phrase, private key, or recovery phrase.",
       },
       { type: "heading", id: "ledger", text: "Ledger & accounting" },
       {
@@ -952,7 +945,7 @@ export const docsPages: Record<string, DocPage> = {
       {
         type: "list",
         items: [
-          "Disclosed — taken directly from Dungeon of Miners' published Economy Rules v3.0: total supply, the six allocations, the six equal Halving allocations, Pickaxe base mining power, and booster caps.",
+          "Disclosed — taken directly from Dungeon of Miners' published Economy v4: total supply, the six allocations, the six equal Halving allocations, Pickaxe base mining power, and booster caps.",
           "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, the future maximum withdrawal limit, the marketing reward pool size and source, and listing venue/timing. No number is invented to fill these gaps.",
         ],
       },
@@ -1023,7 +1016,7 @@ export const docsPages: Record<string, DocPage> = {
       {
         type: "callout",
         tone: "danger",
-        text: "This page is an illustrative analytical model, not investment advice. Every figure is either taken directly from published Economy Rules v3.0 or explicitly marked TBA. Nothing here is a price prediction, a price target, or a guarantee of any kind. DOM has no live market, no guaranteed exchange listing, and mining or holding it does not guarantee financial value or profit.",
+        text: "This page is an illustrative analytical model, not investment advice. Every figure is either taken directly from published Economy v4 or explicitly marked TBA. Nothing here is a price prediction, a price target, or a guarantee of any kind. DOM has no live market, no guaranteed exchange listing, and mining or holding it does not guarantee financial value or profit.",
       },
     ],
   },

@@ -71,7 +71,7 @@ export function GenesisLedger() {
               <div className="flex items-center gap-2">
                 <ScrollText className="h-4 w-4 text-gold" />
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                  Economy Rules — {economyConfig.economyVersion}
+                  Economy {economyConfig.economyVersion}
                 </h3>
               </div>
               <p className="mt-1 text-xs text-ink-faint">
