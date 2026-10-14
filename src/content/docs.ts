@@ -261,11 +261,12 @@ export const docsPages: Record<string, DocPage> = {
       { type: "heading", id: "eras", text: "Six equal eras, mined out in sequence" },
       {
         type: "table",
-        headers: ["Era", "Allocation", "Share of Pool", "Status"],
+        headers: ["Era", "Allocation", "Share of Pool", "Nominal Duration", "Status"],
         rows: halvings.map((h) => [
           `H${h.number} · ${h.name}`,
           { text: h.allocation, align: "right" as const },
           { text: h.percentOfPool, align: "right" as const },
+          { text: h.nominalDuration, align: "right" as const },
           {
             text: h.status,
             badge: h.status === "CURRENT" ? "live" : h.status === "UPCOMING" ? "gold" : "tba",
@@ -314,9 +315,17 @@ export const docsPages: Record<string, DocPage> = {
         ],
       },
       { type: "note", text: miningFormula.example.note },
-      { type: "heading", id: "global-emission", text: "Global Emission Model" },
-      { type: "formula", text: emissionModel.shareFormula },
-      { type: "formula", text: emissionModel.rewardFormula },
+      { type: "heading", id: "global-emission", text: "Mining Reward Formula" },
+      ...emissionModel.formulas.map(
+        (f): import("./docsBlocks").DocBlock => ({ type: "formula", text: f })
+      ),
+      {
+        type: "table",
+        headers: ["Symbol", "Meaning"],
+        rows: emissionModel.symbols.map((s) => [s.symbol, s.meaning]),
+      },
+      { type: "note", text: emissionModel.floorNote },
+      { type: "note", text: emissionModel.precisionNote },
       {
         type: "note",
         text: emissionModel.note,
@@ -558,7 +567,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: `For now, referrals pay a flat DOM reward. When a friend you invite joins the official Telegram channel and makes their first mining claim, you earn ${referralProgram.rewardDom} DOM — for up to ${referralProgram.maxFriends} friends.`,
+        text: `For now, referrals pay a flat DOM reward. When a friend you invite joins the official Telegram channel and claims their first mining session, you earn ${referralProgram.rewardDom} DOM — for up to ${referralProgram.maxFriends} friends.`,
       },
       {
         type: "tiles",
@@ -566,7 +575,7 @@ export const docsPages: Record<string, DocPage> = {
           { label: "Reward per friend", value: `${referralProgram.rewardDom} DOM`, accent: "emerald" },
           { label: "Friend limit", value: `${referralProgram.maxFriends} friends` },
           { label: "Maximum per inviter", value: `${formatNumber(referralProgram.maxTotalDom)} DOM` },
-          { label: "Only requirement", value: "Friend joins the Telegram channel and makes their first mining claim" },
+          { label: "Only requirement", value: "Friend joins the Telegram channel and claims their first mining session" },
         ],
       },
       {
@@ -629,11 +638,11 @@ export const docsPages: Record<string, DocPage> = {
         type: "table",
         headers: ["Feature", "Reward", "Condition"],
         rows: [
-          ["Referral", `${referralProgram.rewardDom} DOM per friend`, "Friend must join the Telegram channel and make their first mining claim"],
+          ["Referral", `${referralProgram.rewardDom} DOM per friend`, "Friend must join the Telegram channel and claim their first mining session"],
           ["Join Telegram channel", earnQuests[0].reward, "Real channel member, checked by the bot"],
           ["Follow on X", earnQuests[1].reward, "Connected X account (honor-mode follow)"],
           ["Daily Check-In", `${dailyCheckIn.streakTable[0].dom}–${dailyCheckIn.streakTable[6].dom} DOM (streak)`, "Once per UTC day"],
-          ["Watch an ad", "DOM equal to 2h of mining", "Up to 3 per day; final amount pending"],
+          ["Watch an ad", "20 DOM", "Up to 3 per day"],
           ["Daily report", "—", "Posted automatically at 12:00 UTC"],
         ],
       },
@@ -685,7 +694,7 @@ export const docsPages: Record<string, DocPage> = {
           "Miner Profile — set up your profile and start tracking your mining progress.",
           "Delver Badges — earn permanent badges tied to milestones and Halving eras.",
           `Daily Check-In — ${dailyCheckIn.summary}`,
-          `Referrals — invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the Telegram channel and makes their first mining claim.`,
+          `Referrals — invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the Telegram channel and claims their first mining session.`,
           `Join Telegram Channel — ${earnQuests[0].reward}, one-time.`,
           `Follow on X — ${earnQuests[1].reward}, one-time.`,
           `Watch an Ad — ${adRewards.summary}`,
@@ -971,8 +980,9 @@ export const docsPages: Record<string, DocPage> = {
         text: "There is no daily or hourly emission ceiling. Each era simply mines out its own fixed 91,666,667 DOM allocation (91,666,665 DOM for Halving 6) before the network advances to the next — how long that takes depends entirely on real network mining activity, which this model does not forecast.",
       },
       { type: "heading", id: "emission-pool", text: "Why 1,000,000 users can't out-mine the pool" },
-      { type: "formula", text: emissionModel.shareFormula },
-      { type: "formula", text: emissionModel.rewardFormula },
+      ...emissionModel.formulas.map(
+        (f): import("./docsBlocks").DocBlock => ({ type: "formula", text: f })
+      ),
       {
         type: "note",
         text: "Referral, Guild, and event boosters change how each era's allocation is split between miners — they never change the size of that allocation. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool.",

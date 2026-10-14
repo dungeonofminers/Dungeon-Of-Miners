@@ -38,6 +38,7 @@ import {
   CURRENT_HALVING,
   HALVING_ALLOCATIONS,
   HALVING_EMISSION_RATES,
+  HALVING_NOMINAL_DURATION_DAYS,
   EPOCH_DURATION_MINUTES,
   PICKAXE_POWER,
   PICKAXE_MIN_HOLD,
@@ -46,7 +47,7 @@ import {
   MAX_REWARDED_REFERRALS,
   QUEST_JOIN_CHANNEL_DOM,
   QUEST_FOLLOW_X_DOM,
-  AD_WATCH_REWARD_HOURS,
+  AD_WATCH_REWARD_DOM,
   AD_WATCH_DAILY_LIMIT,
   CHECKIN_MIN_DOM,
   CHECKIN_MAX_DOM,
@@ -272,6 +273,7 @@ export const halvings = HALVING_ALLOCATIONS.map((allocation, i) => {
     allocation: formatDOM(allocation),
     percentOfPool: formatPercent(allocation / MINING_ALLOCATION),
     emissionRate: formatPercent(HALVING_EMISSION_RATES[i]),
+    nominalDuration: `${HALVING_NOMINAL_DURATION_DAYS[i]} days`,
     status: (number === CURRENT_HALVING ? "CURRENT" : number < CURRENT_HALVING ? "LOCKED" : number === CURRENT_HALVING + 1 ? "UPCOMING" : "LOCKED") as HalvingStatus,
     // Real-time figures — never fabricated. Populated once the backend
     // surfaces them; the UI shows "Awaiting Live Data" until then.
@@ -437,7 +439,7 @@ export const miningActivities = [
   {
     icon: "user-plus",
     title: "Referrals",
-    description: "Invite friends. Once they join the official Telegram channel and make their first mining claim, you earn DOM.",
+    description: "Invite friends. Once they join the official Telegram channel and claim their first mining session, you earn DOM.",
     reward: `${REFERRAL_REWARD_DOM} DOM per friend`,
   },
   {
@@ -455,8 +457,8 @@ export const miningActivities = [
   {
     icon: "play-circle",
     title: "Watch an Ad",
-    description: `Up to ${AD_WATCH_DAILY_LIMIT} ads per day, each paying DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining. Final amount to be confirmed.`,
-    reward: `${AD_WATCH_REWARD_HOURS}h of mining in DOM`,
+    description: `Up to ${AD_WATCH_DAILY_LIMIT} ads per day, each paying ${AD_WATCH_REWARD_DOM} DOM.`,
+    reward: `${AD_WATCH_REWARD_DOM} DOM per ad`,
   },
   {
     icon: "users",
@@ -506,19 +508,24 @@ export const miningFormula = {
 // every user on every tick).
 // ---------------------------------------------------------------------------
 export const emissionModel = {
-  architecture: [
-    "Halving Emission Rate",
-    "→ Epoch Budget",
-    "→ Total Mining Weight",
-    "→ User Mining Weight",
-    "→ User Reward",
+  epochDurationLabel: `${EPOCH_DURATION_MINUTES}-minute epochs (6 per hour)`,
+  formulas: [
+    "epoch_budget = era_allocation ÷ epochs_in_era",
+    "per_weight   = epoch_budget ÷ max(total_power, 200,000)",
+    "your_reward  = your_power × per_weight   (per epoch)",
+    "mining_rate  = your_power × per_weight × 6",
   ],
-  eraRateFormula: "EraEmissionRate = BaseEmissionRate × HalvingEmissionRate(currentHalving)",
-  epochBudgetFormula: "EpochBudget = min(EraEmissionRate × EpochDuration, RemainingHalvingAllocation)",
-  shareFormula: "userShare = userEffectiveMiningWeight ÷ totalNetworkMiningWeight",
-  rewardFormula: "userReward = epochBudget × userShare",
-  epochDurationLabel: `${EPOCH_DURATION_MINUTES}-minute epochs`,
-  note: "Every miner receives a proportional share of the current epoch's budget, itself capped by the current Halving's remaining allocation — never an unbounded per-user rate. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed era pool; they can never mine beyond it. All of this math runs server-side — the frontend only displays the result.",
+  symbols: [
+    { symbol: "era_allocation", meaning: "91,666,667 DOM for every era (91,666,665 for era 6)" },
+    { symbol: "epochs_in_era", meaning: "nominal era duration in days × 144 (a 10-minute epoch = 144 per day)" },
+    { symbol: "total_power", meaning: "sum of mining power of all active miners" },
+    { symbol: "your_power", meaning: "your pickaxe's mining power (100–300)" },
+  ],
+  floorNote:
+    "The 200,000 floor (equal to 2,000 Novice miners) prevents the very first miners from taking an entire epoch's budget alone.",
+  precisionNote:
+    "All amounts are computed as integer µDOM (1 DOM = 1,000,000 µDOM) and never rounded up — the game never shows more DOM than actually exists.",
+  note: "More miners lower the rate (per_weight is shared by everyone), and each new era halves it. What never changes: Legend (300) always mines exactly 3× Novice (100) at the same moment.",
 };
 
 export const boostRules = [
@@ -538,7 +545,7 @@ export const storageRules = {
   exampleCurrent: 2482,
   exampleMax: STORAGE_CAPACITY[0],
   fullStateTitle: "Mining Paused — Storage Full",
-  fullStateNote: "Claim DOM to resume mining. Earned DOM is never deleted while storage is full.",
+  fullStateNote: "Claim DOM to resume mining. Mining pauses when storage is full, or after 8 hours — whichever comes first. Earned DOM is never deleted.",
 };
 
 export const claimRules = {
@@ -694,7 +701,7 @@ export const economyChangelog = [
       `Referral Program (temporary): ${REFERRAL_REWARD_DOM} DOM per friend who joins the official Telegram channel and verifies, up to ${MAX_REWARDED_REFERRALS} friends. Referral Booster V2 is paused (0%) and kept as the planned replacement.`,
       `Earn quests: Join Telegram Channel = ${QUEST_JOIN_CHANNEL_DOM} DOM, Follow on X = ${QUEST_FOLLOW_X_DOM} DOM (both one-time).`,
       `Daily Check-In: streak rewards from ${CHECKIN_MIN_DOM} to ${CHECKIN_MAX_DOM} DOM per day; a missed day resets the streak.`,
-      `Watch an Ad: up to ${AD_WATCH_DAILY_LIMIT} per day, each paying DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining (final amount pending).`,
+      `Watch an Ad: up to ${AD_WATCH_DAILY_LIMIT} per day, each paying ${AD_WATCH_REWARD_DOM} DOM.`,
       `Minimum withdrawal set to ${typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA"} on the combined balance; no maximum for now; network fee paid by the team.`,
       "Guild Booster and Referral Booster are 0% during the launch phase.",
     ],
@@ -769,7 +776,7 @@ export const withdrawalConfig = {
   instantNote:
     "Withdrawals are processed automatically in order, usually within minutes — there is no manual approval queue. BNB Smart Chain itself still needs real confirmations: status only reaches Confirmed after the network confirms the transaction, never immediately after sending it.",
   unlockNote:
-    "Withdrawals unlock after you claim mined DOM on 3 different days. Requests are processed automatically in order, usually within minutes.",
+    "Withdrawals unlock after you claim mined DOM on 3 different UTC days. Requests are processed automatically in order, usually within minutes.",
 };
 
 export const withdrawalSecurityMeasures = [
@@ -935,11 +942,11 @@ export const referralProgram = {
   rewardDom: REFERRAL_REWARD_DOM,
   maxFriends: MAX_REWARDED_REFERRALS,
   maxTotalDom: REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS,
-  communityMessage: `Invite a friend — once they join our Telegram channel and make their first mining claim, you get ${REFERRAL_REWARD_DOM} DOM. Up to ${MAX_REWARDED_REFERRALS} friends.`,
+  communityMessage: `Invite a friend — once they join our Telegram channel and claim their first mining session, you get ${REFERRAL_REWARD_DOM} DOM. Up to ${MAX_REWARDED_REFERRALS} friends.`,
   friendStatuses: ["Pending", "Qualified"],
   rules: [
     "Your inviter is recorded once, when a friend's account is first created. An account that has already played cannot be invited later.",
-    "A referral becomes valid only after your friend joins the official Telegram channel and makes their first mining claim. This is the only requirement.",
+    "A referral becomes valid only after your friend joins the official Telegram channel and claims their first mining session. This is the only requirement.",
     `You earn ${REFERRAL_REWARD_DOM} DOM per valid friend, up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum).`,
     "If a friend leaves the channel after the referral is valid, the reward is not taken back.",
     "You cannot invite yourself. A banned inviter does not receive DOM.",
@@ -1015,7 +1022,7 @@ export const dailyCheckIn = {
 };
 
 export const adRewards = {
-  summary: `Watch an ad to earn DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining, up to ${AD_WATCH_DAILY_LIMIT} times per day. Ads no longer award XP. The final amount may be adjusted later.`,
+  summary: `Watch an ad to earn ${AD_WATCH_REWARD_DOM} DOM, up to ${AD_WATCH_DAILY_LIMIT} times per day.`,
 };
 
 export const botMessages = {
@@ -1092,6 +1099,8 @@ export type PickaxeLevel = {
   image: string;
   accent: string;
   unlocks: string[];
+  domPerHour: string;
+  domPerEpoch: string;
 };
 
 const PICKAXE_COSMETIC_NAMES = ["Novice", "Bronze", "Silver", "Gold", "Diamond", "Legend"];
@@ -1113,6 +1122,9 @@ const PICKAXE_UNLOCKS = [
   ["Delver Badge: Legend", "Maximum Storage Capacity", "Legend profile effects"],
 ];
 
+const PICKAXE_DOM_PER_HOUR = ["31.83", "41.38", "52.52", "65.25", "79.57", "95.48"];
+const PICKAXE_DOM_PER_EPOCH = ["5.30", "6.90", "8.75", "10.87", "13.26", "15.91"];
+
 export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
   level: i + 1,
   cosmeticName: PICKAXE_COSMETIC_NAMES[i],
@@ -1123,7 +1135,12 @@ export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
   image: PICKAXE_IMAGES[i],
   accent: PICKAXE_ACCENTS[i],
   unlocks: PICKAXE_UNLOCKS[i],
+  domPerHour: `±${PICKAXE_DOM_PER_HOUR[i]}`,
+  domPerEpoch: PICKAXE_DOM_PER_EPOCH[i],
 }));
+
+export const pickaxeMiningRateNote =
+  "Reference figures for Era 1 at minimum network weight (200,000): epoch budget ≈ 10,609.57 DOM, per weight ≈ 0.053 DOM. Rates are estimates and scale with live network mining weight.";
 
 // ---------------------------------------------------------------------------
 // Leaderboards — ranked by verified activity (DOM mined, active days,
@@ -1176,7 +1193,7 @@ export const featureGroups: FeatureGroup[] = [
       { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords" },
       { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check" },
       { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks" },
-      { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend you invite who joins the official Telegram channel and makes their first mining claim, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
+      { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend you invite who joins the official Telegram channel and claims their first mining session, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
       { title: "Referral Booster (Planned)", description: `A capped mining-weight boost, currently 0% and planned to replace DOM referral rewards later.`, icon: "shield" },
     ],
   },
@@ -1327,12 +1344,12 @@ export const faqs = [
   },
   {
     question: "How does the referral program work?",
-    answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and makes their first mining claim, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
+    answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and claims their first mining session, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
   },
   {
     question: "What is a valid referral?",
     answer:
-      "A friend with a brand-new account created through your invite link who joins the official Telegram channel and makes their first mining claim. Until then, the referral shows as \"Pending\". If they leave the channel later, your reward is not taken back. You cannot invite yourself.",
+      "A friend with a brand-new account created through your invite link who joins the official Telegram channel and claims their first mining session. Until then, the referral shows as \"Pending\". If they leave the channel later, your reward is not taken back. You cannot invite yourself.",
   },
   {
     question: "How does the Daily Check-In work?",
@@ -1340,7 +1357,7 @@ export const faqs = [
   },
   {
     question: "What Earn quests are there?",
-    answer: `Join the official Telegram channel (${QUEST_JOIN_CHANNEL_DOM} DOM, one-time), follow the project on X (${QUEST_FOLLOW_X_DOM} DOM, one-time), and watch up to ${AD_WATCH_DAILY_LIMIT} ads per day for DOM equal to ${AD_WATCH_REWARD_HOURS} hours of mining. Amounts can be adjusted through config.`,
+    answer: `Join the official Telegram channel (${QUEST_JOIN_CHANNEL_DOM} DOM, one-time), follow the project on X (${QUEST_FOLLOW_X_DOM} DOM, one-time), and watch up to ${AD_WATCH_DAILY_LIMIT} ads per day for ${AD_WATCH_REWARD_DOM} DOM each. Amounts can be adjusted through config.`,
   },
   {
     question: "How does anti-fraud work?",

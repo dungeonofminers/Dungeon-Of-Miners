@@ -74,16 +74,21 @@ if (HALVING_ALLOCATIONS_SUM !== MINING_ALLOCATION) {
 // Relative emission-rate multiplier per era: 100%, 50%, 25%, 12.5%, 6.25%, 3.125%.
 export const HALVING_EMISSION_RATES: number[] = HALVING_ALLOCATIONS.map((_, i) => 0.5 ** i);
 
-// ---- Epoch system (backend architecture reference — not yet deployed) -----
-// EraEmissionRate  = BaseEmissionRate × HALVING_EMISSION_RATES[haltingIndex]
-// EpochBudget      = min(EraEmissionRate × EPOCH_DURATION_MINUTES, RemainingHalvingAllocation)
-// UserShare        = UserEffectiveWeight / TotalNetworkWeight
-// UserReward       = EpochBudget × UserShare
+// Nominal (illustrative) era durations in days — used only to express the
+// halving pacing; the real trigger remains allocation-based (no fixed date).
+export const HALVING_NOMINAL_DURATION_DAYS: number[] = [60, 120, 240, 480, 960, 1920];
+
+// ---- Epoch system ---------------------------------------------------------
+// Mining runs in fixed 10-minute epochs (6 per hour). Each epoch, a fixed
+// budget is split among all active miners proportional to their power:
+//   epoch_budget = era_allocation ÷ epochs_in_era
+//   per_weight   = epoch_budget ÷ max(total_power, 200_000)
+//   your_reward  = your_power × per_weight
 // A short, fixed epoch (rather than per-second calculation) keeps reward
 // accounting cheap at scale: the backend accumulates a global "reward per
 // weight" index once per epoch, and each user's balance updates lazily from
 // that index instead of iterating every user on every tick.
-export const EPOCH_DURATION_MINUTES = 5;
+export const EPOCH_DURATION_MINUTES = 10;
 
 // ---- Pickaxe progression --------------------------------------------------
 // Base Mining Power replaces the retired "Rank" + "Equipment Multiplier"
@@ -111,11 +116,11 @@ export const STORAGE_CAPACITY: number[] = [5_000, 7_500, 11_000, 16_000, 23_000,
 // it. All of them are paid in DOM from a dedicated marketing reward pool —
 // the size and source of that pool is still undecided (TBA), and the numbers
 // below are config values that can be changed without a code change.
-export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must join the channel and make their first mining claim)
+export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must join the channel and claim their first mining session)
 export const MAX_REWARDED_REFERRALS = 50; // → max 1,000 DOM per inviter
 export const QUEST_JOIN_CHANNEL_DOM = 10; // one-time per account
 export const QUEST_FOLLOW_X_DOM = 10; // one-time per account (honor-mode follow)
-export const AD_WATCH_REWARD_HOURS = 2; // DOM equal to this many hours of mining, final number pending
+export const AD_WATCH_REWARD_DOM = 20; // DOM per ad
 export const AD_WATCH_DAILY_LIMIT = 3;
 
 // Daily Check-In — once per UTC day. Days 1–6 climb 5→25, every 7th day is

@@ -13,7 +13,7 @@ import { GlowOrb } from "@/components/ui/GlowOrb";
 
 export const metadata: Metadata = {
   title: `Referral Program — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: `Invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the official Telegram channel and makes their first mining claim.`,
+  description: `Invite friends and earn ${referralProgram.rewardDom} DOM for each one who joins the official Telegram channel and claims their first mining session.`,
 };
 
 export default function ReferralPage() {
@@ -39,7 +39,7 @@ export default function ReferralPage() {
               <div className="surface-panel h-full p-6 text-center">
                 <UserPlus className="mx-auto h-6 w-6 text-gold" />
                 <p className="mt-4 font-display text-2xl text-gold">{referralProgram.rewardDom} DOM</p>
-                <p className="mt-1 text-sm text-ink-muted">For every friend who joins the channel and makes their first mining claim</p>
+                <p className="mt-1 text-sm text-ink-muted">For every friend who joins the channel and claims their first mining session</p>
               </div>
             </Reveal>
             <Reveal delay={0.06}>
@@ -56,7 +56,7 @@ export default function ReferralPage() {
                 <Send className="mx-auto h-6 w-6 text-emerald-glow" />
                 <p className="mt-4 font-display text-2xl text-emerald-glow">1 step</p>
                 <p className="mt-1 text-sm text-ink-muted">
-                  Your friend joins the Telegram channel and makes their first mining claim
+                  Your friend joins the Telegram channel and claims their first mining session
                 </p>
               </div>
             </Reveal>

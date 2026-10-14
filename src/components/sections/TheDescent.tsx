@@ -146,7 +146,7 @@ export function TheDescent() {
                       {halving.allocation}
                     </span>
                     <span className="mt-1.5 text-[10px] text-ink-faint">
-                      {halving.percentOfPool} of pool · rate {halving.emissionRate}
+                      {halving.percentOfPool} of pool · rate {halving.emissionRate} · {halving.nominalDuration}
                     </span>
                   </div>
                 </Reveal>

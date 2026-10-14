@@ -57,15 +57,30 @@ export function MiningFormula() {
 
             <div className="mt-8 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
               <p className="text-xs font-semibold uppercase tracking-wider text-ink">
-                Global Emission Model
+                Mining Reward Formula
               </p>
               <div className="mt-3 flex flex-col gap-2 font-mono text-xs text-ink-muted sm:text-sm">
-                <p>{emissionModel.shareFormula}</p>
-                <p>{emissionModel.rewardFormula}</p>
+                {emissionModel.formulas.map((f) => (
+                  <p key={f}>{f}</p>
+                ))}
               </div>
-              <p className="mt-3 text-xs leading-relaxed text-ink-faint sm:text-sm">
-                {emissionModel.note}
-              </p>
+
+              <div className="mt-5 overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <tbody>
+                    {emissionModel.symbols.map((s) => (
+                      <tr key={s.symbol} className="border-t border-white/[0.06]">
+                        <td className="whitespace-nowrap py-2 pr-4 align-top font-mono text-gold">{s.symbol}</td>
+                        <td className="py-2 text-ink-muted">{s.meaning}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="mt-3 text-xs leading-relaxed text-ink-faint sm:text-sm">{emissionModel.floorNote}</p>
+              <p className="mt-2 text-xs leading-relaxed text-ink-faint sm:text-sm">{emissionModel.precisionNote}</p>
+              <p className="mt-3 text-xs leading-relaxed text-ink-faint sm:text-sm">{emissionModel.note}</p>
             </div>
           </div>
         </Reveal>

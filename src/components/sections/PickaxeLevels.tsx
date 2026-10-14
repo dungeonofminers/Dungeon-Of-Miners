@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { pickaxeLevels, type PickaxeLevel } from "@/content/site";
+import { pickaxeLevels, pickaxeMiningRateNote, type PickaxeLevel } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -77,6 +77,46 @@ export function PickaxeLevels() {
               </a>
               .
             </p>
+            <p className="mt-3 text-xs text-ink-faint">
+              Your level is locked when you start mining and re-checked at each claim — if your
+              balance drops, your level drops from the next claim. Mining pauses when your
+              warehouse is full or after 8 hours, whichever comes first.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.5}>
+          <div className="mx-auto mt-10 max-w-3xl">
+            <h3 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-gold">
+              Mining Rate — Era 1
+            </h3>
+            <div className="mt-5 overflow-x-auto rounded-xl border border-white/[0.08]">
+              <table className="w-full min-w-[560px] border-collapse text-sm">
+                <thead>
+                  <tr className="bg-white/[0.03]">
+                    <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Level</th>
+                    <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Name</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Power</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">× Level 1</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">DOM/hour</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">DOM per epoch</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pickaxeLevels.map((p) => (
+                    <tr key={p.level} className="border-t border-white/[0.06]">
+                      <td className="px-4 py-2.5 text-ink-muted">{p.level}</td>
+                      <td className="px-4 py-2.5 font-semibold text-ink">{p.cosmeticName}</td>
+                      <td className="px-4 py-2.5 text-right text-ink-muted">{p.basePower}</td>
+                      <td className="px-4 py-2.5 text-right text-ink-muted">{(p.basePower / pickaxeLevels[0].basePower).toFixed(2)}×</td>
+                      <td className="px-4 py-2.5 text-right font-semibold text-gold">{p.domPerHour}</td>
+                      <td className="px-4 py-2.5 text-right text-ink">{p.domPerEpoch}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3 text-center text-xs text-ink-faint">{pickaxeMiningRateNote}</p>
           </div>
         </Reveal>
       </div>
