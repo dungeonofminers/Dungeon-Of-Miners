@@ -925,8 +925,7 @@ export const guildProfileFields = [
 // ---------------------------------------------------------------------------
 // Launch-phase Referral Program (ACTIVE, temporary) — source: DOM-Marketing-v2.
 // For now referrals pay a flat DOM reward instead of a mining-weight booster.
-// One level only (no downline). The reward comes from a marketing reward pool
-// whose size/source is not yet decided, so it is shown as TBA — never guessed.
+// One level only (no downline). The reward is paid from the treasury.
 // Referral Booster V2 below is the planned replacement.
 // ---------------------------------------------------------------------------
 export const referralProgram = {
@@ -1427,8 +1426,7 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
 ];
 
 // ---------------------------------------------------------------------------
-// BSC Transparency page data — never fabricate a contract address. Show
-// Contract is deployed and verified on BscScan.
+// BSC Transparency page data — the contract is deployed and verified on BscScan.
 // ---------------------------------------------------------------------------
 export const transparencyConfig = {
   network: NETWORK,

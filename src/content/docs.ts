@@ -866,7 +866,7 @@ export const docsPages: Record<string, DocPage> = {
       { type: "callout", tone: "danger", text: riskDisclosure },
       {
         type: "note",
-        text: "Numerous parameters in this documentation — the DOM contract address, claim limits, guild creation cost, the future maximum withdrawal limit, the marketing reward pool, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
+        text: "Numerous parameters in this documentation — claim limits, guild creation cost, the marketing reward pool, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
       },
     ],
   },
@@ -946,7 +946,7 @@ export const docsPages: Record<string, DocPage> = {
         type: "list",
         items: [
           "Disclosed — taken directly from Dungeon of Miners' published Economy v4: total supply, the six allocations, the six equal Halving allocations, Pickaxe base mining power, and booster caps.",
-          "TBA — officially undisclosed by the project itself: exact Halving trigger timing, DOM contract address, the future maximum withdrawal limit, the marketing reward pool size and source, and listing venue/timing. No number is invented to fill these gaps.",
+          "TBA — officially undisclosed by the project itself: exact Halving trigger timing, the marketing reward pool size, and listing venue/timing. No number is invented to fill these gaps.",
         ],
       },
       { type: "heading", id: "supply", text: "Fixed supply, not inflation" },
@@ -1009,7 +1009,6 @@ export const docsPages: Record<string, DocPage> = {
           "Vesting schedule for the 450M non-mining allocation.",
           "TGE date and exchange listing venue/timing.",
           "Active miner count — sets the realistic per-miner emission share; currently unbounded from public data.",
-          "DOM contract address and block explorer — published only once deployed.",
         ],
       },
       { type: "heading", id: "disclaimer", text: "Disclaimer" },

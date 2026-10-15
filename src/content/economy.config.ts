@@ -12,8 +12,8 @@
 // once the actual mining engine is built — they are not a price, date, or
 // legal claim, so they are safe to ship as sensible starting numbers rather
 // than "TBA". Anything that WOULD be a factual/legal claim if invented
-// (contract address, exact withdrawal limits, launch dates) is left as TBA
-// in site.ts instead of guessed here.
+// (treasury wallet addresses, launch dates) is left as TBA in site.ts
+// instead of guessed here.
 // ---------------------------------------------------------------------------
 
 // ---- Network -----------------------------------------------------------
@@ -113,9 +113,8 @@ export const STORAGE_CAPACITY: number[] = [5_000, 7_500, 11_000, 16_000, 23_000,
 // ---- Launch-phase marketing rewards (DOM) -----------------------------------
 // Source: DOM-Marketing-v2. These are the rewards ACTIVE during the launch
 // phase and they replace the Referral Booster below until the team re-enables
-// it. All of them are paid in DOM from a dedicated marketing reward pool —
-// the size and source of that pool is still undecided (TBA), and the numbers
-// below are config values that can be changed without a code change.
+// it. All of them are paid in DOM from the treasury. The numbers below are
+// config values that can be changed without a code change.
 export const REFERRAL_REWARD_DOM = 20; // per qualified friend (friend must join the channel and claim their first mining session)
 export const MAX_REWARDED_REFERRALS = 50; // → max 1,000 DOM per inviter
 export const QUEST_JOIN_CHANNEL_DOM = 10; // one-time per account
