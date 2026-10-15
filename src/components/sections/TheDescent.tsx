@@ -109,7 +109,13 @@ export function TheDescent() {
             >
               <div className="relative">
                 <div className="absolute inset-0 -z-10 rounded-full bg-gold/25 blur-2xl" />
-                <NetworkBadge className="h-24 w-24" />
+                <PlaceholderImage
+                  src={assets.bnbLogo}
+                  alt="BNB Smart Chain"
+                  label="BNB"
+                  className="h-24 w-24"
+                  imgClassName="object-contain"
+                />
               </div>
               <span className="max-w-[150px] text-center text-[11px] text-ink-faint">
                 Network: {withdrawalConfig.network}
@@ -184,36 +190,5 @@ function Stat({ label, value, accent, muted }: { label: string; value: string; a
       <p className="text-xs uppercase tracking-wider text-ink-faint">{label}</p>
       <p className={`mt-1 font-display text-lg ${accent ? "text-torch" : muted ? "text-ink-faint" : "text-ink"}`}>{value}</p>
     </div>
-  );
-}
-
-function diamondPoints(cx: number, cy: number, r: number) {
-  return `${cx},${cy - r} ${cx + r},${cy} ${cx},${cy + r} ${cx - r},${cy}`;
-}
-
-/** Self-contained network coin mark — no shared <defs>, safe to render alongside other SVGs on the page. */
-function NetworkBadge({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 100 100" className={className} role="img" aria-label="Network">
-      <defs>
-        <linearGradient id="descentBnbRim" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FFE9A8" />
-          <stop offset="100%" stopColor="#D9A614" />
-        </linearGradient>
-        <radialGradient id="descentBnbFace" cx="35%" cy="30%" r="75%">
-          <stop offset="0%" stopColor="#FFE070" />
-          <stop offset="100%" stopColor="#F0B90B" />
-        </radialGradient>
-      </defs>
-      <circle cx="50" cy="50" r="48" fill="url(#descentBnbRim)" />
-      <circle cx="50" cy="50" r="42" fill="url(#descentBnbFace)" stroke="rgba(255,255,255,0.35)" strokeWidth={0.75} />
-      <g fill="#161D31">
-        <polygon points={diamondPoints(50, 30, 8)} />
-        <polygon points={diamondPoints(50, 70, 8)} />
-        <polygon points={diamondPoints(30, 50, 8)} />
-        <polygon points={diamondPoints(70, 50, 8)} />
-        <polygon points={diamondPoints(50, 50, 10)} />
-      </g>
-    </svg>
   );
 }

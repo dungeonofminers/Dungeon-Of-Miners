@@ -173,6 +173,7 @@ export const footerLegalLinks: NavItem[] = [
 export const assets = {
   logoDom: "/assets/logo-dom.png",
   logoDragonCoin: "/assets/logo-dragon-coin.png",
+  bnbLogo: "/assets/bnb-logo.png",
   logoMinerHat: "/assets/logo-miner-hat.png",
   iconLivingEconomy: "/assets/icon-living-economy.png",
   iconScarcityWatch: "/assets/icon-scarcity-watch.png",
