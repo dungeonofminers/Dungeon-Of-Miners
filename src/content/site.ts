@@ -1090,6 +1090,7 @@ export type PickaxeLevel = {
   unlocks: string[];
   domPerHour: string;
   domPerEpoch: string;
+  domPerEpochMicro: string;
 };
 
 const PICKAXE_COSMETIC_NAMES = ["Novice", "Bronze", "Silver", "Gold", "Diamond", "Legend"];
@@ -1113,6 +1114,7 @@ const PICKAXE_UNLOCKS = [
 
 const PICKAXE_DOM_PER_HOUR = ["31.83", "41.38", "52.52", "65.25", "79.57", "95.48"];
 const PICKAXE_DOM_PER_EPOCH = ["5.30", "6.90", "8.75", "10.87", "13.26", "15.91"];
+const PICKAXE_DOM_PER_EPOCH_MICRO = ["5,304,700", "6,896,110", "8,752,755", "10,874,635", "13,261,750", "15,914,100"];
 
 export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
   level: i + 1,
@@ -1126,10 +1128,11 @@ export const pickaxeLevels: PickaxeLevel[] = PICKAXE_POWER.map((power, i) => ({
   unlocks: PICKAXE_UNLOCKS[i],
   domPerHour: `±${PICKAXE_DOM_PER_HOUR[i]}`,
   domPerEpoch: PICKAXE_DOM_PER_EPOCH[i],
+  domPerEpochMicro: PICKAXE_DOM_PER_EPOCH_MICRO[i],
 }));
 
 export const pickaxeMiningRateNote =
-  "Reference figures for Era 1 at minimum network weight (200,000): epoch budget ≈ 10,609.57 DOM, per weight ≈ 0.053 DOM. Rates are estimates and scale with live network mining weight.";
+  "Reference figures for Era 1 at minimum network weight (200,000): epoch budget ≈ 10,609.57 DOM, per weight ≈ 53.047 µDOM. Per epoch: power × 53.047 µDOM; per hour: × 6 (6 epochs/hour). Rates are estimates and scale with live network mining weight.";
 
 // ---------------------------------------------------------------------------
 // Leaderboards — ranked by verified activity (DOM mined, active days,

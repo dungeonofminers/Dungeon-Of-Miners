@@ -91,15 +91,16 @@ export function PickaxeLevels() {
               Mining Rate — Era 1
             </h3>
             <div className="mt-5 overflow-x-auto rounded-xl border border-white/[0.08]">
-              <table className="w-full min-w-[560px] border-collapse text-sm">
+              <table className="w-full min-w-[680px] border-collapse text-sm">
                 <thead>
                   <tr className="bg-white/[0.03]">
                     <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Level</th>
                     <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Name</th>
                     <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">Power</th>
                     <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">× Level 1</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">µDOM/epoch</th>
+                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">DOM/epoch</th>
                     <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">DOM/hour</th>
-                    <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider text-ink-faint">DOM per epoch</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -109,8 +110,9 @@ export function PickaxeLevels() {
                       <td className="px-4 py-2.5 font-semibold text-ink">{p.cosmeticName}</td>
                       <td className="px-4 py-2.5 text-right text-ink-muted">{p.basePower}</td>
                       <td className="px-4 py-2.5 text-right text-ink-muted">{(p.basePower / pickaxeLevels[0].basePower).toFixed(2)}×</td>
-                      <td className="px-4 py-2.5 text-right font-semibold text-gold">{p.domPerHour}</td>
+                      <td className="px-4 py-2.5 text-right font-mono text-xs text-ink-faint">{p.domPerEpochMicro}</td>
                       <td className="px-4 py-2.5 text-right text-ink">{p.domPerEpoch}</td>
+                      <td className="px-4 py-2.5 text-right font-semibold text-gold">{p.domPerHour}</td>
                     </tr>
                   ))}
                 </tbody>
