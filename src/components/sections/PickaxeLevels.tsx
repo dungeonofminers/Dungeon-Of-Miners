@@ -163,6 +163,15 @@ export function PickaxeLevels() {
             </dl>
 
             <div className="mt-5 border-t border-white/[0.06] pt-5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">Mining Rate — Era 1</p>
+              <dl className="mt-3 flex flex-col gap-3">
+                <Row label="µDOM per epoch" value={active.domPerEpochMicro} />
+                <Row label="DOM per epoch" value={active.domPerEpoch} />
+                <Row label="DOM per hour" value={active.domPerHour} />
+              </dl>
+            </div>
+
+            <div className="mt-5 border-t border-white/[0.06] pt-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">Features Unlocked</p>
               <ul className="mt-3 flex flex-col gap-2">
                 {active.unlocks.map((unlock) => (
