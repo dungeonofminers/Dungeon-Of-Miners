@@ -19,7 +19,7 @@ export function TheGenesis() {
       <div className="section-shell relative">
         <SectionHeading
           eyebrow="The Halving Status"
-          title="Mining Is Coming Soon — Halving 1 Is First"
+          title="Mining Is Live — Halving 1 Is Underway"
           description="Halving 1 is the first of six equal eras carved from the mining pool. Each Halving must be fully mined out before the network advances to the next."
         />
 

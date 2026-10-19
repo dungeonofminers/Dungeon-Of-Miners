@@ -86,6 +86,7 @@ export const siteConfig = {
 export const contactEmail = "official@dungeonofminers.xyz";
 
 export const links = {
+  miniApp: "https://t.me/DungeonOfMinersBot?startapp=r692260767",
   telegramCommunity: "https://t.me/DungeonOfMiners",
   telegramChannel: "https://t.me/DungeonOfMinersAnnouncements",
   twitter: "https://x.com/DungeonOfMiners",
@@ -96,7 +97,7 @@ export const links = {
 // Set `visible` to false to hide it site-wide.
 // ---------------------------------------------------------------------------
 export const announcementBar = {
-  text: "DOM Mining Coming Soon",
+  text: "DOM Mining Is Live",
   visible: true,
 };
 
@@ -214,7 +215,7 @@ export const coreLoop = [
   },
   {
     step: "02",
-    title: "Start Mining — Coming Soon",
+    title: "Start Mining — It's Live",
     description:
       "Your rig runs idle, mining DOM around the clock at a rate set by your Pickaxe Level and the current Halving era.",
   },
@@ -301,7 +302,7 @@ export type MiningStatus = "LIVE" | "MAINTENANCE" | "COMING SOON";
 export type LaunchStatus = "LIVE" | "COMING SOON";
 
 export const economyConfig = {
-  miningStatus: "COMING SOON" as MiningStatus,
+  miningStatus: "LIVE" as MiningStatus,
   withdrawalStatus: "COMING SOON" as LaunchStatus,
   tgeStatus: "COMING SOON" as LaunchStatus,
   exchangeListingStatus: "COMING SOON" as LaunchStatus,

@@ -153,7 +153,7 @@ export function Navbar() {
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
               <span className="text-[10px] font-bold uppercase tracking-widest text-gold">
-                Mining Coming Soon
+                Mining Live
               </span>
               <span className="text-[10px] text-ink-faint">· Halving 1 · Starting Era</span>
             </div>

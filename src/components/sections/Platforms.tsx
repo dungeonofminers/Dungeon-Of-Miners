@@ -13,7 +13,7 @@ export function Platforms() {
         <SectionHeading
           eyebrow="Where to Play"
           title="Available on Telegram. Android is on the way."
-          description="No download, no setup — mining is coming soon to the Dungeon of Miners Mini App. A dedicated Android app is next for players who want it on their home screen."
+          description="No download, no setup — mining is live now inside the Dungeon of Miners Mini App. A dedicated Android app is next for players who want it on their home screen."
         />
 
         <div className="mt-16 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -26,8 +26,8 @@ export function Platforms() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-semibold text-ink">Telegram Mini App</h3>
-                    <span className="rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
-                      Coming Soon
+                    <span className="rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-glow">
+                      Mining Live
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-ink-muted">

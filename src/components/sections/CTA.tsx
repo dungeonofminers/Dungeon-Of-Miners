@@ -22,18 +22,17 @@ export function CTA() {
               Ready to <span className="text-gradient-gold">Start Mining?</span>
             </h2>
             <p className="body-lg mx-auto mt-5 max-w-xl">
-              Mining is coming soon. Join the community, and be ready to start your miner the moment it
-              goes live.
+              Mining is live. Start your miner now and earn DOM.
             </p>
             <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row">
               <a
-                href={links.telegramCommunity}
+                href={links.miniApp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
+                className="btn-primary"
               >
                 <Send className="h-4 w-4" />
-                Join Community
+                Start Mining
               </a>
             </div>
           </div>

@@ -672,7 +672,7 @@ export const docsPages: Record<string, DocPage> = {
     slug: "activities",
     eyebrow: "Player Systems — 11",
     title: "Mining Activities",
-    description: "Mining is coming soon — here's how to build your position.",
+    description: "Mining is live — here's how to build your position.",
     blocks: [
       {
         type: "lede",

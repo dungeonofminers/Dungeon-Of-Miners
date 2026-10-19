@@ -11,7 +11,7 @@ export function LiveEconomyDashboard() {
       <div className="section-shell">
         <SectionHeading
           eyebrow="Economy Dashboard"
-          title="Mining Is Coming Soon"
+          title="The Dungeon Is Mining"
           description="Every value below is either a known configuration fact or an honest placeholder — never a fabricated statistic. Live figures appear the moment the backend can supply them."
         />
 

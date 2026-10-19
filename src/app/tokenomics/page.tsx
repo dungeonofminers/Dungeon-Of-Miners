@@ -19,7 +19,7 @@ const keyFacts = [
   { label: "Ticker", value: siteConfig.ticker },
   { label: "Network", value: withdrawalConfig.network },
   { label: "Max Supply", value: totalSupply },
-  { label: "Mining Status", value: "Coming Soon" },
+  { label: "Mining Status", value: "Live" },
   { label: "Withdrawal Fee", value: `${withdrawalConfig.feeDom} DOM` },
 ];
 
@@ -60,10 +60,10 @@ export default function TokenomicsPage() {
                     eligible for on-chain withdrawal.
                   </p>
                   <div className="mt-4 flex justify-center sm:justify-start">
-                    <span className="inline-flex items-center gap-2 rounded-lg border border-gold/25 bg-gold/10 px-3.5 py-2 text-xs">
-                      <Zap className="h-3.5 w-3.5 text-gold" />
+                    <span className="inline-flex items-center gap-2 rounded-lg border border-emerald-glow/25 bg-emerald-glow/10 px-3.5 py-2 text-xs">
+                      <Zap className="h-3.5 w-3.5 text-emerald-glow" />
                       <span className="text-ink-faint">Mining</span>
-                      <span className="font-semibold text-gold">Coming Soon</span>
+                      <span className="font-semibold text-emerald-glow">Live</span>
                     </span>
                   </div>
                 </div>

@@ -21,7 +21,7 @@ export function PrepareForGenesis() {
       <div className="section-shell">
         <SectionHeading
           eyebrow="Mining Activities"
-          title="Mining is coming soon — here's how to build your position"
+          title="Mining is live — here's how to build your position"
           description="Beyond idle mining, these activities earn DOM rewards and build your profile, badges, and progression."
         />
 
