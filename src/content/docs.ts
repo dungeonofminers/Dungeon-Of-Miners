@@ -188,7 +188,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: `DOM has a fixed maximum supply of ${totalSupply}. The entire supply is created once; minting is permanently disabled after deployment. 55% is allocated directly to mining; the remainder supports liquidity, the team, ecosystem reserves, ecosystem growth, and strategic/public opportunities.`,
+        text: `DOM has a fixed maximum supply of ${totalSupply}. The entire supply is created once; minting is permanently disabled after deployment. 55% is allocated directly to mining; the remainder supports liquidity, the team, ecosystem reserves, staking rewards, and strategic/public opportunities.`,
       },
       {
         type: "tiles",
@@ -997,7 +997,7 @@ export const docsPages: Record<string, DocPage> = {
       {
         type: "list",
         items: [
-          "450,000,000 DOM (Liquidity, Team, Treasure & Reserve, Ecosystem, Public/Strategic — 45% of total supply) has no published vesting schedule at the time of writing.",
+          "450,000,000 DOM (Liquidity, Team, Treasure & Reserve, Staking Reward, Public/Strategic — 45% of total supply) has no published vesting schedule at the time of writing.",
           "The Mining Allocation (55%) is the only allocation with a disclosed release mechanism: the six-Halving emission schedule above.",
         ],
       },

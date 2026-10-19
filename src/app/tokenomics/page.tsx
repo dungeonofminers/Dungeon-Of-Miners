@@ -12,7 +12,7 @@ import { AllocationCard } from "@/components/tokenomics/AllocationCard";
 export const metadata: Metadata = {
   title: `Tokenomics — ${siteConfig.name} (${siteConfig.ticker})`,
   description:
-    "DOM has a fixed maximum supply of 1,000,000,000 tokens, created once with minting permanently disabled, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion.",
+    "DOM has a fixed maximum supply of 1,000,000,000 tokens, created once with minting permanently disabled, distributed across mining rewards, liquidity, staking rewards, reserves, the team, and strategic expansion.",
 };
 
 const keyFacts = [
@@ -37,7 +37,7 @@ export default function TokenomicsPage() {
           <SectionHeading
             eyebrow="Tokenomics"
             title="1 Billion DOM. Built for the Dungeon."
-            description="DOM has a fixed maximum supply of 1,000,000,000 tokens, distributed across mining rewards, liquidity, ecosystem growth, reserves, the team, and strategic expansion."
+            description="DOM has a fixed maximum supply of 1,000,000,000 tokens, distributed across mining rewards, liquidity, staking rewards, reserves, the team, and strategic expansion."
           />
 
           {/* Token identity card */}
@@ -88,7 +88,7 @@ export default function TokenomicsPage() {
           <SectionHeading
             eyebrow="Supply Breakdown"
             title="1,000,000,000 DOM across six allocations"
-            description="55% of DOM supply is allocated to mining rewards, while the remaining supply supports liquidity, development, ecosystem growth, reserves, and strategic expansion."
+            description="55% of DOM supply is allocated to mining rewards, while the remaining supply supports liquidity, development, staking rewards, reserves, and strategic expansion."
           />
 
           <div className="mt-14">

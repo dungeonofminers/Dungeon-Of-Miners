@@ -366,11 +366,11 @@ export const tokenAllocation = [
   },
   {
     id: "ecosystem",
-    label: "Ecosystem",
+    label: "Staking Reward",
     percent: Math.round((ECOSYSTEM_ALLOCATION / TOTAL_SUPPLY) * 100),
     amount: formatDOM(ECOSYSTEM_ALLOCATION),
     color: "#FF8A2A", // warm orange
-    description: "Allocated for product growth, guilds, partnerships, integrations, and ecosystem expansion.",
+    description: "Reserved for staking rewards to incentivize holding DOM.",
   },
   {
     id: "public",
@@ -1499,8 +1499,8 @@ export const treasuryWallets: TreasuryWallet[] = [
   },
   {
     id: "ecosystem",
-    label: "Ecosystem Wallet",
-    purpose: "Product growth, guilds, partnerships, integrations, and ecosystem expansion.",
+    label: "Staking Reward Wallet",
+    purpose: "Reserved for staking rewards to incentivize holding DOM.",
     allocation: formatDOM(ECOSYSTEM_ALLOCATION),
     address: "Coming Soon",
     balance: "Awaiting Live Data",
@@ -1521,8 +1521,8 @@ export const treasuryWallets: TreasuryWallet[] = [
 
 export const vestingConfig = {
   status: "Pending Final Approval",
-  note: "The 45% non-mining supply (Liquidity, Team, Treasure & Reserve, Ecosystem, Public/Strategic) needs a published unlock schedule. No cliff, vesting curve, or release date has been approved yet — this page will be updated the moment one is finalized, and will never show an invented number before then.",
-  covers: ["Team", "Ecosystem", "Public / Strategic", "Treasure & Reserve", "Liquidity (where relevant)"],
+  note: "The 45% non-mining supply (Liquidity, Team, Treasure & Reserve, Staking Reward, Public/Strategic) needs a published unlock schedule. No cliff, vesting curve, or release date has been approved yet — this page will be updated the moment one is finalized, and will never show an invented number before then.",
+  covers: ["Team", "Staking Reward", "Public / Strategic", "Treasure & Reserve", "Liquidity (where relevant)"],
 };
 
 // ---------------------------------------------------------------------------
