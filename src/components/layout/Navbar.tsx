@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { navGroups, navTopLevel, assets, economyConfig } from "@/content/site";
+import { navGroups, navTopLevel, navTopRight, assets, economyConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
@@ -72,6 +72,12 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:block">
+          <span className="inline-flex items-center gap-2 rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-2 text-sm font-semibold text-gold">
+            {navTopRight.label}
+            <span className="rounded-full border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-faint">
+              Soon
+            </span>
+          </span>
         </div>
 
         <button
@@ -141,6 +147,9 @@ export function Navbar() {
               {navTopLevel.label}
             </a>
 
+            <span className="flex min-h-[44px] items-center py-3 text-sm text-ink-faint">
+              {navTopRight.label} · Coming Soon
+            </span>
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
               <span className="text-[10px] font-bold uppercase tracking-widest text-gold">

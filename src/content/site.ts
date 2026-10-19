@@ -124,7 +124,6 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Mining Economy", href: "/economy" },
       { label: "Tokenomics", href: "/tokenomics" },
-      { label: "Staking", href: "/staking", comingSoon: true },
       { label: "Halvings", href: "/halving" },
       { label: "Live Dashboard", href: "/#dashboard" },
       { label: "On-Chain Withdrawal", href: "/economy#withdrawal" },
@@ -152,6 +151,7 @@ export const navGroups: NavGroup[] = [
 ];
 
 export const navTopLevel: NavItem = { label: "Roadmap", href: "/roadmap" };
+export const navTopRight: NavItem = { label: "Staking", href: "/staking", comingSoon: true };
 
 export const footerLegalLinks: NavItem[] = [
   { label: "Terms of Service", href: "/terms" },
