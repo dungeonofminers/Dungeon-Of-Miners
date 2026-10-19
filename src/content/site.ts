@@ -124,6 +124,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Mining Economy", href: "/economy" },
       { label: "Tokenomics", href: "/tokenomics" },
+      { label: "Staking", href: "/staking", comingSoon: true },
       { label: "Halvings", href: "/halving" },
       { label: "Live Dashboard", href: "/#dashboard" },
       { label: "On-Chain Withdrawal", href: "/economy#withdrawal" },
