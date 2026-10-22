@@ -328,6 +328,27 @@ export const supplyFacts = [
 ];
 
 // ---------------------------------------------------------------------------
+// Multi-sig (Safe) treasury wallets — real, published BNB Smart Chain
+// addresses. Every allocation below is held in a multi-signature Safe wallet.
+// ---------------------------------------------------------------------------
+export const SAFE_WALLETS = {
+  mining: "0xC1F93ADc7e00a8117943fAFdACdD520d6e6434D9",
+  liquidity: "0x2036c4Dd6Be3e713c282AEe3538e2f01d53decF3",
+  ecosystem: "0x10ADfD32f15778a9F2CA09662e34074D79F3C62B",
+  public: "0xf95aB72E4a1EEDcF6d23Df1EF75402D3e71A9192",
+  treasury: "0x5ad3D39d9875E329595b3432ab3e723426E1b68A",
+  team: "0xdB275039d182e5F715F369ED1Ae7211193aD02D9",
+} as const;
+
+export function safeWalletUrl(address: string): string {
+  return `https://app.safe.global/home?safe=bnb:${address}`;
+}
+
+export function safeWalletExplorerUrl(address: string): string {
+  return `${BLOCK_EXPLORER_URL}/address/${address}`;
+}
+
+// ---------------------------------------------------------------------------
 // Token allocation — exact 1,000,000,000 DOM split, derived from
 // economy.config (which enforces the sum at import time). Percentages and
 // amounts must never be changed without an explicit, approved economic
@@ -341,6 +362,7 @@ export const tokenAllocation = [
     amount: formatDOM(MINING_ALLOCATION),
     color: "#F4B544", // primary gold
     description: "The largest allocation belongs to miners.",
+    safeAddress: SAFE_WALLETS.mining,
   },
   {
     id: "liquidity",
@@ -349,6 +371,7 @@ export const tokenAllocation = [
     amount: formatDOM(LIQUIDITY_ALLOCATION),
     color: "#D98A1E", // amber
     description: "Reserved to support healthy DOM market liquidity.",
+    safeAddress: SAFE_WALLETS.liquidity,
   },
   {
     id: "team",
@@ -357,6 +380,7 @@ export const tokenAllocation = [
     amount: formatDOM(TEAM_ALLOCATION),
     color: "#8a5a3c", // bronze
     description: "Long-term allocation for the core team.",
+    safeAddress: SAFE_WALLETS.team,
   },
   {
     id: "treasury",
@@ -365,6 +389,7 @@ export const tokenAllocation = [
     amount: formatDOM(TREASURE_ALLOCATION),
     color: "#B8860B", // deep gold
     description: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
+    safeAddress: SAFE_WALLETS.treasury,
   },
   {
     id: "ecosystem",
@@ -373,6 +398,7 @@ export const tokenAllocation = [
     amount: formatDOM(ECOSYSTEM_ALLOCATION),
     color: "#FF8A2A", // warm orange
     description: "Reserved for staking rewards to incentivize holding DOM.",
+    safeAddress: SAFE_WALLETS.ecosystem,
   },
   {
     id: "public",
@@ -381,6 +407,7 @@ export const tokenAllocation = [
     amount: formatDOM(PUBLIC_STRATEGIC_ALLOCATION),
     color: "#a9825a", // muted copper
     description: "Reserved for public and strategic ecosystem opportunities.",
+    safeAddress: SAFE_WALLETS.public,
   },
 ];
 
@@ -1455,69 +1482,62 @@ export type TreasuryWallet = {
   address: string;
   balance: string;
   vesting: string;
-  explorer: string;
 };
 
 export const treasuryWallets: TreasuryWallet[] = [
   {
     id: "mining",
-    label: "Mining Distribution Wallet",
+    label: "Mining Reward Wallet",
     purpose: "Source of all mining rewards released to players through the Global Emission System.",
     allocation: formatDOM(MINING_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.mining,
     balance: "Awaiting Live Data",
     vesting: "Released via mining, paced by the Halving schedule",
-    explorer: "Coming Soon",
   },
   {
     id: "liquidity",
     label: "Liquidity Wallet",
     purpose: "Reserved to support healthy DOM market liquidity at and after TGE.",
     allocation: formatDOM(LIQUIDITY_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.liquidity,
     balance: "Awaiting Live Data",
     vesting: "Pending Final Approval",
-    explorer: "Coming Soon",
   },
   {
     id: "team",
-    label: "Team Wallet / Vesting Contract",
+    label: "Team Wallet",
     purpose: "Long-term allocation for the core team.",
     allocation: formatDOM(TEAM_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.team,
     balance: "Awaiting Live Data",
     vesting: "Pending Final Approval",
-    explorer: "Coming Soon",
   },
   {
-    id: "treasure",
+    id: "treasury",
     label: "Treasure & Ecosystem Reserve",
     purpose: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
     allocation: formatDOM(TREASURE_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.treasury,
     balance: "Awaiting Live Data",
     vesting: "Pending Final Approval",
-    explorer: "Coming Soon",
   },
   {
     id: "ecosystem",
     label: "Staking Reward Wallet",
     purpose: "Reserved for staking rewards to incentivize holding DOM.",
     allocation: formatDOM(ECOSYSTEM_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.ecosystem,
     balance: "Awaiting Live Data",
     vesting: "Pending Final Approval",
-    explorer: "Coming Soon",
   },
   {
     id: "public",
     label: "Public / Strategic Wallet",
     purpose: "Reserved for public and strategic ecosystem opportunities.",
     allocation: formatDOM(PUBLIC_STRATEGIC_ALLOCATION),
-    address: "Coming Soon",
+    address: SAFE_WALLETS.public,
     balance: "Awaiting Live Data",
     vesting: "Pending Final Approval",
-    explorer: "Coming Soon",
   },
 ];
 

@@ -770,11 +770,11 @@ export const docsPages: Record<string, DocPage> = {
     slug: "treasury",
     eyebrow: "Trust & Policy — 14",
     title: "Treasury & Vesting",
-    description: "Every non-mining DOM wallet, its purpose, and its unlock status.",
+    description: "Every DOM allocation, its multi-signature (Safe) wallet, and its unlock status.",
     blocks: [
       {
         type: "lede",
-        text: "Each wallet below will carry a real, verifiable BNB Smart Chain address once published. Address, Balance, and Vesting stay honest placeholders until then — never invented.",
+        text: "Every DOM allocation is held in a real, verifiable multi-signature (Safe) wallet on BNB Smart Chain. Balances and the unlock schedule stay honest placeholders until live data is published — never invented.",
       },
       {
         type: "table",
@@ -786,7 +786,7 @@ export const docsPages: Record<string, DocPage> = {
       { type: "paragraph", text: vestingConfig.note },
       {
         type: "linkGrid",
-        items: [{ title: "See the full Treasury page", description: "Purpose, allocation, balance, and explorer link per wallet.", href: "/treasury" }],
+        items: [{ title: "See the full Treasury page", description: "Purpose, allocation, multi-sig address, and Safe/explorer links per wallet.", href: "/treasury" }],
       },
     ],
   },

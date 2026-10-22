@@ -3,10 +3,11 @@ import { AlertTriangle } from "lucide-react";
 import { siteConfig, treasuryWallets, vestingConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { SafeWalletAddress } from "@/components/tokenomics/SafeWalletAddress";
 
 export const metadata: Metadata = {
   title: `Treasury & Vesting — ${siteConfig.name} (${siteConfig.ticker})`,
-  description: "Every non-mining DOM wallet, its purpose, and its unlock status — no fabricated addresses or balances.",
+  description: "Every DOM allocation lives in a real multi-signature (Safe) wallet on BNB Smart Chain — verifiable on-chain, with honest balance and vesting placeholders.",
 };
 
 export default function TreasuryPage() {
@@ -17,7 +18,7 @@ export default function TreasuryPage() {
           <SectionHeading
             eyebrow="Treasury & Allocation"
             title="Where every allocation actually lives"
-            description="Each wallet below will carry a real, verifiable BNB Smart Chain address once published. Until then, Address, Balance, and Vesting stay honest placeholders — never invented."
+            description="Every DOM allocation is held in a real, verifiable multi-signature (Safe) wallet on BNB Smart Chain. Balances and the unlock schedule stay honest placeholders until live data is published."
           />
 
           <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-5 lg:grid-cols-2">
@@ -30,11 +31,11 @@ export default function TreasuryPage() {
                   </div>
                   <p className="mt-2 text-sm text-ink-muted">{wallet.purpose}</p>
 
-                  <dl className="mt-5 flex flex-col gap-2.5 border-t border-white/[0.06] pt-4">
-                    <div className="flex items-center justify-between text-xs">
-                      <dt className="text-ink-faint">Address</dt>
-                      <dd className="font-semibold text-ink-faint">{wallet.address}</dd>
-                    </div>
+                  <div className="mt-5">
+                    <SafeWalletAddress address={wallet.address} />
+                  </div>
+
+                  <dl className="mt-4 flex flex-col gap-2.5 border-t border-white/[0.06] pt-4">
                     <div className="flex items-center justify-between text-xs">
                       <dt className="text-ink-faint">Balance</dt>
                       <dd className="font-semibold text-ink-faint">{wallet.balance}</dd>
@@ -42,10 +43,6 @@ export default function TreasuryPage() {
                     <div className="flex items-center justify-between text-xs">
                       <dt className="text-ink-faint">Vesting / Lock</dt>
                       <dd className="font-semibold text-ink-faint">{wallet.vesting}</dd>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <dt className="text-ink-faint">Explorer</dt>
-                      <dd className="font-semibold text-ink-faint">{wallet.explorer}</dd>
                     </div>
                   </dl>
                 </div>

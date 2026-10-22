@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { X, ArrowUpRight } from "lucide-react";
 import { halvings, MINING_ALLOCATION_DOM } from "@/content/site";
+import { SafeWalletAddress } from "@/components/tokenomics/SafeWalletAddress";
 
 type AllocationEntry = {
   id: string;
@@ -11,6 +12,7 @@ type AllocationEntry = {
   amount: string;
   color: string;
   description: string;
+  safeAddress: string;
 };
 
 const STATUS_CLASS: Record<string, string> = {
@@ -57,6 +59,10 @@ export function AllocationCard({ entry }: { entry: AllocationEntry }) {
             <ArrowUpRight className="h-3.5 w-3.5" />
           </button>
         )}
+
+        <div className="mt-auto pt-5">
+          <SafeWalletAddress address={entry.safeAddress} />
+        </div>
       </div>
 
       {isMining && open && (
