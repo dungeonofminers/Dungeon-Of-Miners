@@ -75,7 +75,7 @@ export function LeaderboardBoard() {
             <Trophy className="h-6 w-6 text-gold" />
           </div>
           <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-bold uppercase tracking-widest text-ink-faint">
-            Awaiting Live Data
+            —
           </span>
           <p className="body-lg max-w-sm text-sm">
             The {tabs[tab]} {board === "player" ? "Player" : "Guild"} board renders here once

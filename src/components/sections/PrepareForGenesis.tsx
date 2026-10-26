@@ -38,7 +38,7 @@ export function PrepareForGenesis() {
                     {card.title}
                     {card.comingSoon && (
                       <span className="rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-gold">
-                        Coming Soon
+                        In Development
                       </span>
                     )}
                   </h3>

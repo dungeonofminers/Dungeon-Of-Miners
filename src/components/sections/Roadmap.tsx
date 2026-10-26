@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const STATUS_META = {
   done: { label: "Live", icon: CheckCircle2, className: "border-emerald-glow/30 bg-emerald-glow/10 text-emerald-glow" },
   active: { label: "In Progress", icon: Loader2, className: "border-gold/30 bg-gold/10 text-gold" },
-  comingSoon: { label: "Coming Soon", icon: Rocket, className: "border-torch/30 bg-torch/10 text-torch" },
+  comingSoon: { label: "Upcoming", icon: Rocket, className: "border-torch/30 bg-torch/10 text-torch" },
   planned: { label: "Planned", icon: CircleDashed, className: "border-white/15 bg-white/[0.04] text-ink-faint" },
   future: { label: "Future", icon: Hourglass, className: "border-white/10 bg-white/[0.03] text-ink-faint" },
 } as const;

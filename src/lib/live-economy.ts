@@ -31,13 +31,28 @@ export type LiveEpoch = {
   effectiveWeight: string;
 };
 
+export type LiveStats = {
+  totalClaimed: string;
+  totalWithdrawn: string;
+  qualifiedReferrals: number;
+};
+
+export type LiveWithdrawal = {
+  address: string;
+  amount: string;
+  txHash: string;
+  confirmedAt: string;
+};
+
 export type LiveEconomy = {
   floor: LiveFloor | null;
   economy: { era: LiveEra | null; epoch: LiveEpoch | null } | null;
+  stats: LiveStats | null;
+  withdrawals: { items: LiveWithdrawal[] } | null;
   fetchedAt: string;
 };
 
-export const AWAITING = "Awaiting Live Data";
+export const AWAITING = "—";
 export const REFRESH_MS = 15_000;
 
 // DOM amounts arrive as plain decimal strings ("22693.5066") — group the
@@ -52,6 +67,11 @@ export function formatDom(value: string | null | undefined): string | null {
 export function formatInt(value: number | string | null | undefined): string | null {
   if (value == null) return null;
   return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export function shortAddress(address: string): string {
+  if (address.length <= 12) return address;
+  return `${address.slice(0, 6)}…${address.slice(-4)}`;
 }
 
 // µDOM-safe arithmetic so "remaining" never drifts from floating point.

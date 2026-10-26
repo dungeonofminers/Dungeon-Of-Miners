@@ -70,7 +70,7 @@ export function TheDescent() {
             <div className="mt-6 border-t border-white/[0.06] pt-6">
               <div className="flex items-center justify-between text-xs">
                 <span className="uppercase tracking-wider text-ink-faint">Progress</span>
-                <span className="font-semibold text-ink-faint">Awaiting Live Data</span>
+                <span className="font-semibold text-ink-faint">—</span>
               </div>
               <div className="relative mt-2 h-2.5 w-full overflow-hidden rounded-full bg-white/5">
                 <div className="absolute inset-y-0 left-0 w-0 rounded-full bg-gradient-to-r from-torch-ember to-torch" />

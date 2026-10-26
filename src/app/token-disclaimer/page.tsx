@@ -39,7 +39,7 @@ export default function TokenDisclaimerPage() {
         {
           heading: "TGE & Exchange Listing",
           body: [
-            "The public market launch (TGE) and any exchange listing are both status: Coming Soon. No date, venue, opening price, market cap, or liquidity amount has been set. Any of these details will be announced only through official Dungeon of Miners channels — never assume one is confirmed until it is.",
+            "The public market launch (TGE) and any exchange listing are both status: TBA. No date, venue, opening price, market cap, or liquidity amount has been set. Any of these details will be announced only through official Dungeon of Miners channels — never assume one is confirmed until it is.",
           ],
         },
         {

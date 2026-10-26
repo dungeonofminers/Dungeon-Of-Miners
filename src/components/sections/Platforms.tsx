@@ -1,4 +1,4 @@
-import { Send, Smartphone, Bell } from "lucide-react";
+import { Send, Smartphone } from "lucide-react";
 import { assets } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -46,17 +46,13 @@ export function Platforms() {
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-semibold text-ink">Android App</h3>
                     <span className="rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold">
-                      Coming Soon
+                      In Development
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-ink-muted">
                     A standalone app is in development for a home-screen experience.
                   </p>
                 </div>
-                <span className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-ink-faint">
-                  <Bell className="h-3.5 w-3.5" />
-                  Soon
-                </span>
               </div>
             </Reveal>
           </div>

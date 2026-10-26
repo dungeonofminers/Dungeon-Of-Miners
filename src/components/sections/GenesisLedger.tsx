@@ -69,7 +69,7 @@ export function GenesisLedger() {
                 </h3>
               </div>
               <p className="mt-1 text-xs text-ink-faint">
-                Status: Coming Soon · Last Updated: {economyConfig.economyLastUpdated}
+                Status: Live · Last Updated: {economyConfig.economyLastUpdated}
               </p>
               {SHOW_PUBLIC_CHANGELOG && (
               <ul className="mt-4 flex flex-col gap-3">

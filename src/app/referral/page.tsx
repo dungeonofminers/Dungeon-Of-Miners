@@ -69,7 +69,7 @@ export default function ReferralPage() {
                   <div key={stat.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-3 text-center">
                     <p
                       className={`font-display text-sm sm:text-base ${
-                        stat.value === "Awaiting Live Data" ? "text-ink-faint" : "text-gold"
+                        stat.value === "—" ? "text-ink-faint" : "text-gold"
                       }`}
                     >
                       {stat.value}

@@ -18,6 +18,7 @@ export function LiveEconomyDashboard() {
 
   const floor = data?.floor ?? null;
   const epoch = data?.economy?.epoch ?? null;
+  const stats = data?.stats ?? null;
 
   const halvingNumber = floor?.floor ?? economyConfig.currentHalving;
   const halvingEntry = halvings[halvingNumber - 1];
@@ -28,6 +29,9 @@ export function LiveEconomyDashboard() {
   const activeMiners = formatInt(epoch?.activeMiners);
   const networkWeight = formatInt(epoch?.effectiveWeight);
   const miningRemaining = miningRemainingDom(floor?.totalMinted, MINING_ALLOCATION);
+  const totalClaimed = formatDom(stats?.totalClaimed);
+  const totalWithdrawn = formatDom(stats?.totalWithdrawn);
+  const qualifiedReferrals = formatInt(stats?.qualifiedReferrals);
   const progressPct = floor?.progress?.pct ?? null;
 
   const metrics: { label: string; value: string }[] = [
@@ -39,10 +43,9 @@ export function LiveEconomyDashboard() {
     { label: "Current Emission Rate", value: emissionRate },
     { label: "Current Network Mining Weight", value: networkWeight ?? AWAITING },
     { label: "Active Miners", value: activeMiners ?? AWAITING },
-    { label: "Total Claimed", value: AWAITING },
-    { label: "Total Withdrawn", value: AWAITING },
-    { label: "Number of Guilds", value: AWAITING },
-    { label: "Qualified Referrals", value: AWAITING },
+    { label: "Total Claimed", value: totalClaimed ?? AWAITING },
+    { label: "Total Withdrawn", value: totalWithdrawn ?? AWAITING },
+    { label: "Qualified Referrals", value: qualifiedReferrals ?? AWAITING },
   ];
 
   return (
@@ -74,7 +77,7 @@ export function LiveEconomyDashboard() {
             <p className="mt-2 text-xs text-ink-faint">
               {progressPct != null
                 ? `Halving progress: ${progressPct}% of the current era allocation mined`
-                : "Halving progress: Awaiting Live Data — shown honestly rather than an invented percentage."}
+                : "Halving progress updates live from the network."}
             </p>
           </div>
         </Reveal>

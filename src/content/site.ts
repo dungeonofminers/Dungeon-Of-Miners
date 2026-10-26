@@ -18,7 +18,7 @@
 // Progression is Pickaxe Level 1–6, unlocked by holding a minimum Available
 // DOM Balance (Level 1 is free). There is no XP and no Equipment
 // Multiplier. TGE (public market
-// launch) and Exchange Listing are both status: Coming Soon.
+// launch) and Exchange Listing are both status: TBA.
 // ---------------------------------------------------------------------------
 
 import {
@@ -280,8 +280,8 @@ export const halvings = HALVING_ALLOCATIONS.map((allocation, i) => {
     status: (number === CURRENT_HALVING ? "CURRENT" : number < CURRENT_HALVING ? "LOCKED" : number === CURRENT_HALVING + 1 ? "UPCOMING" : "LOCKED") as HalvingStatus,
     // Real-time figures — never fabricated. Populated once the backend
     // surfaces them; the UI shows "Awaiting Live Data" until then.
-    distributed: "Awaiting Live Data",
-    remaining: "Awaiting Live Data",
+    distributed: "—",
+    remaining: "—",
     progressPercent: null as number | null,
     vibe: HALVING_META[i].vibe,
   };
@@ -299,13 +299,13 @@ export const totalSupply = formatDOM(TOTAL_SUPPLY);
 // corresponding backend functionality is actually deployed.
 // ---------------------------------------------------------------------------
 export type MiningStatus = "LIVE" | "MAINTENANCE" | "COMING SOON";
-export type LaunchStatus = "LIVE" | "COMING SOON";
+export type LaunchStatus = "LIVE" | "TBA";
 
 export const economyConfig = {
   miningStatus: "LIVE" as MiningStatus,
-  withdrawalStatus: "COMING SOON" as LaunchStatus,
-  tgeStatus: "COMING SOON" as LaunchStatus,
-  exchangeListingStatus: "COMING SOON" as LaunchStatus,
+  withdrawalStatus: "LIVE" as LaunchStatus,
+  tgeStatus: "TBA" as LaunchStatus,
+  exchangeListingStatus: "TBA" as LaunchStatus,
   currentHalving: CURRENT_HALVING,
   network: `${NETWORK} (${TOKEN_STANDARD})`,
   walletConnector: "any BEP-20 address (pasted)",
@@ -678,10 +678,8 @@ export const liveApiBaseUrl = "https://app.dungeonofminers.xyz";
 // /api/live; no longer hand-edited here. Never fabricate a statistic.
 // ---------------------------------------------------------------------------
 
-// Real withdrawals only — this stays empty until the backend can supply
-// genuine on-chain data. Never seed it with example rows.
-export type RecentWithdrawal = { address: string; amount: string; status: string; txUrl: string };
-export const recentWithdrawals: RecentWithdrawal[] = [];
+// Recent on-chain withdrawals are now read live from the backend via /api/live
+// (see RecentWithdrawals.tsx) — no longer a hand-edited list here.
 
 // Public changelog visibility. While false, the /changelog route, its nav and
 // footer link, the docs "Version History" page, and the version-history list
@@ -823,7 +821,7 @@ export const serverAuthoritativeState = [
 ];
 
 export const riskDisclosure =
-  "Dungeon of Miners is a mining ecosystem on BNB Smart Chain. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: Coming Soon — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
+  "Dungeon of Miners is a mining ecosystem on BNB Smart Chain. Mining or holding DOM does not guarantee financial value, profit, or return. Digital assets can be volatile, and participation carries smart contract risk, wallet risk, blockchain and network risk, technical failure, network congestion, market volatility, liquidity risk, and the possibility of ecosystem changes. DOM's TGE (public market launch) and Exchange Listing are both status: TBA — no date, exchange venue, opening price, market cap, or liquidity amount has been announced, and none should be assumed until officially confirmed through Dungeon of Miners' own channels. Dungeon of Miners does not promise financial return, profit, price appreciation, exchange listing, or guaranteed liquidity. Users should independently evaluate the risks of holding or using blockchain assets.";
 
 // ---------------------------------------------------------------------------
 // Fair Play policy
@@ -960,9 +958,9 @@ export const referralProgram = {
 // What a miner sees on the Referral tab — real numbers are per-account and
 // need a live backend, so they are "Awaiting Live Data" until then.
 export const referralProgramDashboardShape = [
-  { label: "Friends Invited", value: "Awaiting Live Data" },
-  { label: "Qualified Friends", value: "Awaiting Live Data" },
-  { label: "DOM Earned", value: "Awaiting Live Data" },
+  { label: "Friends Invited", value: "—" },
+  { label: "Qualified Friends", value: "—" },
+  { label: "DOM Earned", value: "—" },
   { label: "Friend Limit", value: `${MAX_REWARDED_REFERRALS}` },
 ];
 
@@ -1068,10 +1066,10 @@ export const referralBooster = {
 // Example/empty dashboard shape — real numbers are per-account and require
 // a live backend. Shown as "Awaiting Live Data" until then, never guessed.
 export const referralDashboardShape = [
-  { label: "Invited", value: "Awaiting Live Data" },
-  { label: "Qualified", value: "Awaiting Live Data" },
-  { label: "Active", value: "Awaiting Live Data" },
-  { label: "Current Booster", value: "Awaiting Live Data" },
+  { label: "Invited", value: "—" },
+  { label: "Qualified", value: "—" },
+  { label: "Active", value: "—" },
+  { label: "Current Booster", value: "—" },
   { label: "Maximum Booster", value: `+${referralBooster.maxBoostPercent}%` },
 ];
 
@@ -1222,8 +1220,8 @@ export const featureGroups: FeatureGroup[] = [
   {
     group: "Upcoming",
     items: [
-      { title: "TGE / Public Market Launch", description: "Status: Coming Soon.", icon: "rocket" },
-      { title: "Exchange Listing", description: "Announced only through official Dungeon of Miners channels — status: Coming Soon.", icon: "trending-up" },
+      { title: "TGE / Public Market Launch", description: "Status: TBA.", icon: "rocket" },
+      { title: "Exchange Listing", description: "Announced only through official Dungeon of Miners channels — status: TBA.", icon: "trending-up" },
     ],
   },
 ];
@@ -1365,11 +1363,11 @@ export const faqs = [
   },
   {
     question: "When is the TGE?",
-    answer: "Status: Coming Soon. Mining and on-chain withdrawal already operate before the public market launch. No TGE date has been set — one will be announced only through official Dungeon of Miners channels.",
+    answer: "Status: TBA. Mining and on-chain withdrawal already operate before the public market launch. No TGE date has been set — one will be announced only through official Dungeon of Miners channels.",
   },
   {
     question: "When will DOM be listed?",
-    answer: "Status: Coming Soon. No exchange, venue, or listing date has been confirmed — announcements will come only through official Dungeon of Miners channels.",
+    answer: "Status: TBA. No exchange, venue, or listing date has been confirmed — announcements will come only through official Dungeon of Miners channels.",
   },
   {
     question: "Is DOM guaranteed to have a particular value?",
@@ -1470,7 +1468,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Source of all mining rewards released to players through the Global Emission System.",
     allocation: formatDOM(MINING_ALLOCATION),
     address: SAFE_WALLETS.mining,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Released via mining, paced by the Halving schedule",
   },
   {
@@ -1479,7 +1477,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Reserved to support healthy DOM market liquidity at and after TGE.",
     allocation: formatDOM(LIQUIDITY_ALLOCATION),
     address: SAFE_WALLETS.liquidity,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Pending Final Approval",
   },
   {
@@ -1488,7 +1486,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Long-term allocation for the core team.",
     allocation: formatDOM(TEAM_ALLOCATION),
     address: SAFE_WALLETS.team,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Pending Final Approval",
   },
   {
@@ -1497,7 +1495,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Strategic reserve supporting rewards, campaigns, and long-term ecosystem requirements.",
     allocation: formatDOM(TREASURE_ALLOCATION),
     address: SAFE_WALLETS.treasury,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Pending Final Approval",
   },
   {
@@ -1506,7 +1504,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Reserved for staking rewards to incentivize holding DOM.",
     allocation: formatDOM(ECOSYSTEM_ALLOCATION),
     address: SAFE_WALLETS.ecosystem,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Pending Final Approval",
   },
   {
@@ -1515,7 +1513,7 @@ export const treasuryWallets: TreasuryWallet[] = [
     purpose: "Reserved for public and strategic ecosystem opportunities.",
     allocation: formatDOM(PUBLIC_STRATEGIC_ALLOCATION),
     address: SAFE_WALLETS.public,
-    balance: "Awaiting Live Data",
+    balance: "—",
     vesting: "Pending Final Approval",
   },
 ];

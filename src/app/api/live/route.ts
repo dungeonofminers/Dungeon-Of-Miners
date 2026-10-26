@@ -47,6 +47,23 @@ type EconomyResponse = {
   params: { epochMinutes: number; minNetworkWeight: string; activeWindowHours: number };
 };
 
+type StatsResponse = {
+  totalClaimed: string;
+  totalWithdrawn: string;
+  qualifiedReferrals: number;
+};
+
+type WithdrawalItem = {
+  address: string;
+  amount: string;
+  txHash: string;
+  confirmedAt: string;
+};
+
+type WithdrawalsResponse = {
+  items: WithdrawalItem[];
+};
+
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
     const res = await fetch(`${liveApiBaseUrl}${path}`, {
@@ -61,13 +78,15 @@ async function fetchJson<T>(path: string): Promise<T | null> {
 }
 
 export async function GET() {
-  const [floor, economy] = await Promise.all([
+  const [floor, economy, stats, withdrawals] = await Promise.all([
     fetchJson<FloorResponse>("/v1/floor"),
     fetchJson<EconomyResponse>("/v1/economy"),
+    fetchJson<StatsResponse>("/v1/stats"),
+    fetchJson<WithdrawalsResponse>("/v1/stats/withdrawals"),
   ]);
 
   return NextResponse.json(
-    { floor, economy, fetchedAt: new Date().toISOString() },
+    { floor, economy, stats, withdrawals, fetchedAt: new Date().toISOString() },
     { headers: { "Cache-Control": "public, s-maxage=5, stale-while-revalidate=10" } },
   );
 }

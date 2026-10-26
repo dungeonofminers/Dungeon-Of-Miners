@@ -21,7 +21,7 @@ export default function ChangelogPage() {
           <SectionHeading
             eyebrow="Economy Changelog"
             title={`Economy ${economyConfig.economyVersion}`}
-            description={`Status: Coming Soon · Last updated ${economyConfig.economyLastUpdated}`}
+            description={`Status: Live · Last updated ${economyConfig.economyLastUpdated}`}
           />
 
           <div className="mx-auto mt-14 max-w-2xl">

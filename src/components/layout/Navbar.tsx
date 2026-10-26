@@ -117,7 +117,7 @@ export function Navbar() {
                             key={item.label}
                             className="flex min-h-[44px] items-center px-3 text-sm text-ink-faint"
                           >
-                            {item.label} · Coming Soon
+                            {item.label} · Planned
                           </span>
                         ) : (
                           <a
@@ -148,7 +148,7 @@ export function Navbar() {
             </a>
 
             <span className="flex min-h-[44px] items-center py-3 text-sm text-ink-faint">
-              {navTopRight.label} · Coming Soon
+              {navTopRight.label} · Soon
             </span>
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">

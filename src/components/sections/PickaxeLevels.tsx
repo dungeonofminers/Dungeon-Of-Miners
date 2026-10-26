@@ -159,7 +159,7 @@ export function PickaxeLevels() {
               <Row label="Min. Available DOM Balance" value={active.minHoldLabel} />
               <Row label="Base Mining Power" value={String(active.basePower)} />
               <Row label="Storage Capacity" value={active.storageCapacity} />
-              <Row label="Current Progress" value="Awaiting Live Data" muted />
+              <Row label="Current Progress" value="—" muted />
             </dl>
 
             <div className="mt-5 border-t border-white/[0.06] pt-5">

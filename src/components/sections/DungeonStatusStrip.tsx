@@ -1,6 +1,7 @@
-import { Link2, Zap, Coins, ArrowDownCircle, Rocket, TrendingUp } from "lucide-react";
-import { economyConfig, halvings, miningStatusStrip, totalSupply } from "@/content/site";
+import { Link2, Zap, Coins, ArrowDownCircle, ShieldCheck, ExternalLink } from "lucide-react";
+import { economyConfig, halvings, miningStatusStrip, totalSupply, transparencyConfig } from "@/content/site";
 import { GenesisStatusBadge } from "@/components/ui/GenesisStatusBadge";
+import { shortAddress } from "@/lib/live-economy";
 
 export function DungeonStatusStrip() {
   const currentHalving = halvings.find((h) => h.number === economyConfig.currentHalving);
@@ -27,16 +28,6 @@ export function DungeonStatusStrip() {
       label: "Withdrawal",
       value: miningStatusStrip.withdrawalLabel,
     },
-    {
-      icon: Rocket,
-      label: "TGE",
-      value: miningStatusStrip.tgeLabel,
-    },
-    {
-      icon: TrendingUp,
-      label: "Listing",
-      value: miningStatusStrip.listingLabel,
-    },
   ];
 
   return (
@@ -54,6 +45,20 @@ export function DungeonStatusStrip() {
               <span className="text-sm font-semibold text-ink">{item.value}</span>
             </div>
           ))}
+
+          <a
+            href={transparencyConfig.explorerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex shrink-0 items-center gap-2 whitespace-nowrap transition-opacity hover:opacity-80"
+          >
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-glow" />
+            <span className="text-[11px] uppercase tracking-wider text-ink-faint">Contract</span>
+            <span className="font-mono text-sm font-semibold text-ink">
+              {shortAddress(transparencyConfig.contractAddress)}
+            </span>
+            <ExternalLink className="h-3 w-3 text-ink-faint" />
+          </a>
         </div>
       </div>
     </div>

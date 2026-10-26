@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Send, Zap } from "lucide-react";
-import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation, supplyFacts, balanceModel } from "@/content/site";
+import { ShieldCheck, Send, Zap, ExternalLink } from "lucide-react";
+import { siteConfig, links, assets, totalSupply, withdrawalConfig, tokenAllocation, supplyFacts, balanceModel, transparencyConfig } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -76,6 +76,24 @@ export default function TokenomicsPage() {
                     <p className="mt-1 font-display text-lg text-gold">{fact.value}</p>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 sm:flex-row">
+                <div className="flex flex-col items-center gap-1 text-center sm:items-start sm:text-left">
+                  <span className="text-xs uppercase tracking-wider text-ink-faint">Contract Address</span>
+                  <span className="break-all font-mono text-sm text-ink">
+                    {transparencyConfig.contractAddress}
+                  </span>
+                </div>
+                <a
+                  href={transparencyConfig.explorerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-gold/25 bg-gold/10 px-3 py-2 text-xs font-semibold text-gold transition-colors hover:bg-gold/20"
+                >
+                  View on {transparencyConfig.explorerName}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               </div>
             </div>
           </Reveal>

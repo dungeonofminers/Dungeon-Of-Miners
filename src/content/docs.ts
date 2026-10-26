@@ -888,7 +888,7 @@ export const docsPages: Record<string, DocPage> = {
             : p.status === "active"
               ? "In Progress"
               : p.status === "comingSoon"
-                ? "Coming Soon"
+                ? "Upcoming"
                 : p.status === "future"
                   ? "Future"
                   : "Planned";
@@ -939,7 +939,7 @@ export const docsPages: Record<string, DocPage> = {
         type: "callout",
         tone: "danger",
         title: "Can DOM be given a fair value today?",
-        text: "No — not with any real precision, and any document claiming otherwise should be treated with suspicion. DOM has no live market: the exact Halving trigger timing and several network parameters remain TBA, no exchange listing exists, and TGE status is Coming Soon. What follows is a scenario model built on the fixed, disclosed supply mechanics — not a price prediction.",
+        text: "No — not with any real precision, and any document claiming otherwise should be treated with suspicion. DOM has no live market: the exact Halving trigger timing and several network parameters remain TBA, no exchange listing exists, and TGE status is TBA. What follows is a scenario model built on the fixed, disclosed supply mechanics — not a price prediction.",
       },
       { type: "heading", id: "methodology", text: "Methodology — disclosed vs. TBA" },
       {
@@ -989,8 +989,8 @@ export const docsPages: Record<string, DocPage> = {
           ["Utility sink (in-game spend)", { text: "Yes", badge: "good" }, "Available Balance DOM is spent on upgrades, guild costs, and Stone Breaker."],
           ["Staking", { text: "Planned", badge: "planned" }, "Roadmap Phase 5/6 lists ecosystem utilities — no rate or lockup published yet."],
           ["Liquidity provisioning", { text: "Allocated", badge: "good" }, "10% of supply (100,000,000 DOM) earmarked — deployment timing and venue are TBA."],
-          ["TGE / Market launch", { text: "Coming Soon", badge: "tba" }, "No date has been set. Announced only through official Dungeon of Miners channels."],
-          ["Exchange listing", { text: "Coming Soon", badge: "tba" }, "No venue or date confirmed. No promise of guaranteed liquidity."],
+          ["TGE / Market launch", { text: "TBA", badge: "tba" }, "No date has been set. Announced only through official Dungeon of Miners channels."],
+          ["Exchange listing", { text: "TBA", badge: "tba" }, "No venue or date confirmed. No promise of guaranteed liquidity."],
         ],
       },
       { type: "heading", id: "dilution-risk", text: "Dilution & vesting" },
