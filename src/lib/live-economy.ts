@@ -55,13 +55,14 @@ export type LiveEconomy = {
 export const AWAITING = "—";
 export const REFRESH_MS = 15_000;
 
-// DOM amounts arrive as plain decimal strings ("22693.5066") — group the
-// integer part for display and append the unit.
+// DOM amounts arrive as plain decimal strings ("22693.5066"). For display we
+// drop the fractional µDOM part (truncate, never round up) and group the
+// integer part with commas — so "3326.1312" renders as "3,326 DOM".
 export function formatDom(value: string | null | undefined): string | null {
   if (value == null) return null;
-  const [whole, frac] = value.split(".");
+  const whole = value.split(".")[0];
   const grouped = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return `${grouped}${frac ? "." + frac : ""} DOM`;
+  return `${grouped} DOM`;
 }
 
 export function formatInt(value: number | string | null | undefined): string | null {
