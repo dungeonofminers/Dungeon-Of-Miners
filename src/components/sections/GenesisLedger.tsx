@@ -1,7 +1,8 @@
 import { Archive, ScrollText } from "lucide-react";
-import { halvingLedger, halvingRecord, halvingArchive, economyChangelog, economyConfig, SHOW_PUBLIC_CHANGELOG } from "@/content/site";
+import { halvingRecord, halvingArchive, economyChangelog, economyConfig, SHOW_PUBLIC_CHANGELOG } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { LiveHalvingLedger } from "@/components/sections/LiveHalvingLedger";
 
 export function GenesisLedger() {
   return (
@@ -19,14 +20,7 @@ export function GenesisLedger() {
               <h3 className="text-sm font-semibold uppercase tracking-wider text-ink">
                 Global Halving Ledger
               </h3>
-              <dl className="mt-5 flex flex-col gap-3">
-                {halvingLedger.map((row) => (
-                  <div key={row.label} className="flex items-start justify-between gap-4 text-sm">
-                    <dt className="text-ink-muted">{row.label}</dt>
-                    <dd className="text-right font-semibold text-ink">{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
+              <LiveHalvingLedger />
             </div>
           </Reveal>
 

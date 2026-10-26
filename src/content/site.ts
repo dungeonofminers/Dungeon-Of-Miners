@@ -640,22 +640,8 @@ export const transactionTypes = [
 
 export const transactionHistoryFilters = ["Mining", "Claim", "Withdrawal", "Rewards", "Adjustment"];
 
-// ---------------------------------------------------------------------------
-// Public Halving Ledger — transparency data. Structural shape only; once the
-// real backend is wired up these should be live reads, not edited by hand.
-// No live numbers are fabricated here.
-// ---------------------------------------------------------------------------
-export const halvingLedger = [
-  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
-  { label: "Total Mined", value: "Awaiting Live Data" },
-  { label: "Remaining Mining Allocation", value: "Awaiting Live Data" },
-  { label: "Current Halving", value: `Halving ${currentHalvingEntry.number} · ${currentHalvingEntry.name}` },
-  { label: "Current Era Allocation", value: currentHalvingEntry.allocation },
-  { label: "Remaining Era Allocation", value: "Awaiting Live Data" },
-  { label: "Current Network Mining Weight", value: "Awaiting Live Data" },
-  { label: "Number of Active Miners", value: "Awaiting Live Data" },
-];
-
+// Global Halving Ledger is now a live read (see LiveHalvingLedger.tsx), not a
+// hand-edited list here. Static economy facts remain in halvingRecord below.
 export const halvingRecord = [
   { label: "Economy Version", value: economyConfig.economyVersion },
   { label: "Last Updated", value: economyConfig.economyLastUpdated },
@@ -680,24 +666,17 @@ export type HalvingArchiveEntry = {
 export const halvingArchive: HalvingArchiveEntry[] = [];
 
 // ---------------------------------------------------------------------------
-// Live Economy Dashboard — one of the most important sections on the site.
-// Every value is either a known configuration fact or an honest
-// "Awaiting Live Data" placeholder. Never a fabricated statistic.
+// Live backend — the Telegram Mini App's public, read-only API. `/v1/floor`
+// and `/v1/economy` are public (no auth) and expose the real network totals
+// (totalMinted, activeMiners, halving progress). The site reads them through
+// its own `/api/live` route so the browser never talks cross-origin.
 // ---------------------------------------------------------------------------
-export const liveDashboardMetrics = [
-  { label: "Total Supply", value: totalSupply },
-  { label: "Mining Allocation", value: MINING_ALLOCATION_DOM },
-  { label: "Total Mined", value: "Awaiting Live Data" },
-  { label: "Mining Allocation Remaining", value: "Awaiting Live Data" },
-  { label: "Current Halving", value: `${economyConfig.currentHalving} / ${HALVING_COUNT}` },
-  { label: "Current Emission Rate", value: currentHalvingEntry.emissionRate },
-  { label: "Current Network Mining Weight", value: "Awaiting Live Data" },
-  { label: "Active Miners", value: "Awaiting Live Data" },
-  { label: "Total Claimed", value: "Awaiting Live Data" },
-  { label: "Total Withdrawn", value: "Awaiting Live Data" },
-  { label: "Number of Guilds", value: "Awaiting Live Data" },
-  { label: "Qualified Referrals", value: "Awaiting Live Data" },
-];
+export const liveApiBaseUrl = "https://app.dungeonofminers.xyz";
+
+// ---------------------------------------------------------------------------
+// Live Economy Dashboard — now a live read (see LiveEconomyDashboard.tsx) via
+// /api/live; no longer hand-edited here. Never fabricate a statistic.
+// ---------------------------------------------------------------------------
 
 // Real withdrawals only — this stays empty until the backend can supply
 // genuine on-chain data. Never seed it with example rows.

@@ -4,6 +4,7 @@ import { siteConfig, transparencyConfig, supplyFacts } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { GlowOrb } from "@/components/ui/GlowOrb";
+import { LiveTransparencyFacts } from "@/components/sections/LiveTransparencyFacts";
 
 export const metadata: Metadata = {
   title: `Transparency — ${siteConfig.name} (${siteConfig.ticker})`,
@@ -87,6 +88,16 @@ export default function TransparencyPage() {
                   <p className="mt-1 font-display text-sm text-gold sm:text-base">{fact.value}</p>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="mx-auto mt-10 max-w-2xl">
+            <h3 className="heading-md text-lg">Live network</h3>
+            <p className="body-lg mt-1 text-sm">
+              Read straight from the Dungeon of Miners backend and refreshed automatically.
+            </p>
+            <div className="mt-5">
+              <LiveTransparencyFacts />
             </div>
           </div>
 
