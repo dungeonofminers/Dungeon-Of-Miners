@@ -57,8 +57,6 @@ export function Hero() {
               <br />
               Upgrade Your Pickaxe.
               <br />
-              Build Your Guild.
-              <br />
               <span className="text-gradient-gold">Survive the Halving.</span>
             </motion.h1>
 
@@ -70,7 +68,7 @@ export function Hero() {
             >
               Mine DOM through the Dungeon of Miners ecosystem. Fixed{" "}
               <span className="font-semibold text-ink">1B supply</span>, six Halving eras,
-              community Guilds, and on-chain BSC withdrawals.
+              and on-chain BSC withdrawals.
             </motion.p>
 
             <motion.div

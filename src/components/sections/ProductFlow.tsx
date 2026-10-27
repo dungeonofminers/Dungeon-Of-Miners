@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 const flow = [
   { icon: Gauge, label: "Global Halving Pool" },
   { icon: Pickaxe, label: "Mine" },
-  { icon: Users, label: "Pickaxe + Referral + Guild" },
+  { icon: Users, label: "Pickaxe + Referral" },
   { icon: Gauge, label: "Mining Weight" },
   { icon: Box, label: "Mining Storage" },
   { icon: CheckCircle2, label: "Claim" },

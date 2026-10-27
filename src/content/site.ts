@@ -61,10 +61,6 @@ import {
   REFERRAL_ACTIVE_WINDOW_DAYS,
   REFERRAL_STARTER_BOOST_PERCENT,
   REFERRAL_STARTER_BOOST_HOURS,
-  MAX_GUILD_MEMBERS,
-  GUILD_COOLDOWN_HOURS,
-  MAX_GUILD_BOOST,
-  GUILD_BOOSTER_TIERS,
   BOOST_CAP,
   MIN_WITHDRAWAL,
   WITHDRAWAL_COOLDOWN_HOURS,
@@ -75,18 +71,54 @@ import {
 export const siteConfig = {
   name: "Dungeon of Miners",
   ticker: "DOM",
-  tagline: "Mine DOM. Upgrade Your Pickaxe. Build Your Guild. Survive the Halving.",
+  tagline: "Mine DOM. Upgrade Your Pickaxe. Survive the Halving.",
   taglineShort: "Mine DOM. Withdraw On-Chain. Survive the Halving.",
   description:
-    "Dungeon of Miners is a mining ecosystem powered by a fixed supply of 1 billion DOM, six Halving eras, Pickaxe progression, community Guilds and on-chain BSC withdrawals.",
+    "Dungeon of Miners is a mining ecosystem powered by a fixed supply of 1 billion DOM, six Halving eras, Pickaxe progression, and on-chain BSC withdrawals.",
   url: "https://dungeonofminers.com",
 };
 
 // Replace these with your real links.
 export const contactEmail = "official@dungeonofminers.xyz";
 
+// Team — real people behind the game. Each entry: name, role, a short Web3
+// background, a profile photo (in /public/assets/team/), and an optional
+// LinkedIn or X link.
+export const teamMembers: {
+  name: string;
+  role: string;
+  image: string;
+  bio: string;
+  link?: string;
+}[] = [
+  {
+    name: "Georgie Zec",
+    role: "Founder",
+    image: "/assets/team/georgie-zec.png",
+    bio: "Product founder of Dungeon of Miners. Background in token economies, Web3 product strategy, and community-driven growth.",
+  },
+  {
+    name: "Jeff",
+    role: "CTO",
+    image: "/assets/team/jeff.png",
+    bio: "Technical lead behind the mining engine and on-chain infrastructure. Experienced in smart contracts, backend systems, and secure on-chain payout architecture.",
+  },
+  {
+    name: "Aliana Angel",
+    role: "Marketing",
+    image: "/assets/team/aliana-angel.png",
+    bio: "Leads marketing and community. Skilled in Web3 growth, community building, and campaign strategy across crypto-native audiences.",
+  },
+  {
+    name: "Nichi",
+    role: "Finance",
+    image: "/assets/team/nichi.png",
+    bio: "Heads finance and treasury. Background in DeFi, tokenomics modeling, and sustainable treasury management.",
+  },
+];
+
 export const links = {
-  miniApp: "https://t.me/DungeonOfMinersBot?startapp=r692260767",
+  miniApp: "https://t.me/DungeonOfMinersBot",
   telegramCommunity: "https://t.me/DungeonOfMiners",
   telegramChannel: "https://t.me/DungeonOfMinersAnnouncements",
   twitter: "https://x.com/DungeonOfMiners",
@@ -133,7 +165,6 @@ export const navGroups: NavGroup[] = [
   {
     label: "Community",
     items: [
-      { label: "Guilds", href: "/community/guilds" },
       { label: "Leaderboard", href: "/leaderboard" },
       { label: "Referral Program", href: "/referral" },
       { label: "Announcements", href: links.telegramChannel, external: true },
@@ -143,6 +174,7 @@ export const navGroups: NavGroup[] = [
     label: "Docs",
     items: [
       { label: "Documentation", href: "/docs" },
+      { label: "About", href: "/about" },
       { label: "Transparency", href: "/transparency" },
       { label: "FAQ", href: "/faq" },
       { label: "Fair Play", href: "/fair-play" },
@@ -235,7 +267,7 @@ export const coreLoop = [
     step: "05",
     title: "Boost Your Mining Weight",
     description:
-      "Planned Referral and Guild Boosters will stack on top of your Base Mining Power — both capped, so no one multiplier explodes. Both are 0% during the launch phase.",
+      "Planned Referral Boosters will stack on top of your Base Mining Power — capped, so no one multiplier explodes. 0% during the launch phase.",
   },
   {
     step: "06",
@@ -493,13 +525,6 @@ export const miningActivities: { icon: string; title: string; description: strin
     reward: `${AD_WATCH_REWARD_DOM} DOM per ad`,
   },
   {
-    icon: "users",
-    title: "Guild Registration",
-    description: "Connect your Telegram community and coordinate daily expeditions.",
-    reward: "Guild XP",
-    comingSoon: true,
-  },
-  {
     icon: "list-checks",
     title: "Daily Tasks",
     description: "Complete community missions and objectives for steady progression.",
@@ -519,17 +544,16 @@ export const miningActivities: { icon: string; title: string; description: strin
 export const miningFormula = {
   weightChain: [
     "Pickaxe Base Mining Power",
-    "× (1 + Referral Booster + Guild Booster + Temporary Booster)",
+    "× (1 + Referral Booster + Temporary Booster)",
   ],
   example: {
     label: "Effective Mining Weight Example",
     rows: [
       { label: "Pickaxe Base Mining Power (Level 3)", value: String(PICKAXE_POWER[2]) },
       { label: "Referral Booster (launch phase)", value: "0%" },
-      { label: "Guild Booster (launch phase)", value: "0%" },
     ],
     final: { label: "Effective Mining Weight", value: String(PICKAXE_POWER[2]) },
-    note: "Referral and Guild boosters are 0% during the launch phase, so Effective Mining Weight equals Base Mining Power. The chain above shows how they will stack once enabled.",
+    note: "The Referral Booster is 0% during the launch phase, so Effective Mining Weight equals Base Mining Power. The chain above shows how it will stack once enabled.",
   },
 };
 
@@ -564,7 +588,6 @@ export const emissionModel = {
 
 export const boostRules = [
   { label: "Referral Booster", value: `0% during the launch phase (referrals pay DOM instead). Planned: +${REFERRAL_BOOST_PER_ACTIVE_USER}% per active qualified referral, up to +${MAX_REFERRAL_BOOST}%` },
-  { label: "Guild Booster", value: `0% during the launch phase. Planned: tiered by guild activity, up to +${MAX_GUILD_BOOST}% Mining Weight` },
   { label: "Temporary / Event Booster", value: "TBA — configurable, always capped" },
   { label: "Combined Booster Ceiling", value: `+${BOOST_CAP}% before any event booster — the Halving's allocation always wins` },
 ];
@@ -660,7 +683,6 @@ export type HalvingArchiveEntry = {
   domMined: string;
   participatingMiners: string;
   totalClaims: string;
-  topGuild: string;
   trigger: string;
 };
 export const halvingArchive: HalvingArchiveEntry[] = [];
@@ -700,7 +722,7 @@ export const economyChangelog = [
       `Daily Check-In: streak rewards from ${CHECKIN_MIN_DOM} to ${CHECKIN_MAX_DOM} DOM per day; a missed day resets the streak.`,
       `Watch an Ad: up to ${AD_WATCH_DAILY_LIMIT} per day, each paying ${AD_WATCH_REWARD_DOM} DOM.`,
       `Minimum withdrawal set to ${typeof MIN_WITHDRAWAL === "number" ? formatDOM(MIN_WITHDRAWAL) : "TBA"} on the combined balance; no maximum for now; network fee paid by the team.`,
-      "Guild Booster and Referral Booster are 0% during the launch phase.",
+      "Referral Booster is 0% during the launch phase.",
     ],
   },
   {
@@ -797,7 +819,6 @@ export const antiCheatMeasures = [
   "Referral farm detection",
   "Duplicate claim prevention",
   "Duplicate withdrawal prevention",
-  "Guild abuse detection",
   "Fake activity detection",
   "API replay protection",
   "Client-side balance manipulation rejection",
@@ -812,8 +833,6 @@ export const serverAuthoritativeState = [
   "Pickaxe Level",
   "Referral status",
   "Referral Booster",
-  "Guild membership",
-  "Guild Booster",
   "Global emission accounting",
   "Halving progression",
   "Claim",
@@ -834,7 +853,6 @@ export const fairPlay = {
     "Request manipulation",
     "Multiple-account farming",
     "Referral farming / referral abuse",
-    "Guild manipulation",
     "Sybil attacks",
     "API abuse",
     "Exploit abuse",
@@ -846,7 +864,7 @@ export const fairPlay = {
   ],
   possibleActions: [
     "Reward rollback",
-    "Referral/Guild booster reversal",
+    "Referral booster reversal",
     "Leaderboard removal",
     "Mining suspension",
     "Withdrawal security review",
@@ -855,78 +873,9 @@ export const fairPlay = {
   ],
 };
 
-// ---------------------------------------------------------------------------
-// Guild V2 — Telegram-community-based guilds. One Telegram group binds to
-// exactly one Guild via its permanent telegram_chat_id, not a mutable
-// @username. Guild Booster is tiered and capped; it modifies mining WEIGHT
-// only and never creates additional DOM beyond the global emission ceiling.
-// ---------------------------------------------------------------------------
-export const guildConfig = {
-  maxMembers: MAX_GUILD_MEMBERS,
-  joinCooldownHours: GUILD_COOLDOWN_HOURS,
-  maxBoostPercent: MAX_GUILD_BOOST,
-  roles: ["Owner", "Officer", "Member"],
-};
-
-export const guildRolePermissions = [
-  { role: "Owner", actions: ["Edit Guild", "Manage Officers", "Remove members", "Transfer ownership", "Manage invitations", "Dissolve Guild"] },
-  { role: "Officer", actions: ["Moderate members", "Manage community activities", "Handle invitations"] },
-  { role: "Member", actions: ["Mine", "Contribute", "Participate in Expeditions", "Leave Guild"] },
-];
-
-export const guildBoosterTiers = GUILD_BOOSTER_TIERS.map((t) => ({
-  activeThreshold: t.activeThreshold,
-  weightBonus: t.bonusPercent,
-}));
-
-export const guildCreationFlow = [
-  "Open the Guild section in the Mini App",
-  'Press "Create Guild"',
-  'Press "Connect Telegram Group"',
-  "Choose an eligible Telegram Group or Supergroup",
-  "Backend verifies the connected group and your creator/admin role",
-  "Your Telegram group's chat ID is permanently bound to your Guild",
-];
-
-export const guildRuleDetails = [
-  { label: "Max Members", value: String(guildConfig.maxMembers) },
-  { label: "Join Cooldown (after leaving)", value: `${guildConfig.joinCooldownHours} hours` },
-  { label: "Maximum Guild Booster", value: `+${guildConfig.maxBoostPercent}% Mining Weight` },
-  { label: "Guild Creation Cost", value: "TBA" },
-];
-
-// Guild XP — a guild-wide stat (there is no personal XP). Earned by the
-// guild as a whole; unlocks cosmetics and access, never uncapped DOM.
-export const guildXP = {
-  sources: ["Active members", "Expedition completion", "Mining contribution", "Guild achievements", "Weekly participation"],
-  unlocks: ["Guild Levels", "Cosmetic banners", "Badges", "Titles", "Profile frames", "Special expedition access"],
-};
-
-export const guildExpeditions = {
-  cadences: ["Daily Guild Expedition", "Weekly Guild Expedition"],
-  examples: [
-    "20 members mine today",
-    "15 members claim today",
-    "Complete 100 Daily Tasks (guild-wide)",
-    "Break X Stones in Stone Breaker (guild-wide)",
-    "Reach a cumulative Guild XP target",
-    "Reach a guild activity percentage target",
-  ],
-  rewards: ["Guild XP", "Season Points", "Cosmetic reward", "Temporary capped mining boost", "Achievement"],
-};
-
-export const guildSeasons = {
-  current: "Season 1",
-  tiedTo: "Halving 1",
-  durationNote: "Season duration is configurable — tied to Halving progression rather than a fixed calendar date.",
-  onSeasonEnd: "The season leaderboard resets. The All-Time Hall of Fame is permanent, so new guilds can always compete for it later.",
-};
-
-export const guildProfileFields = [
-  "Guild ID", "Guild Name", "Guild Logo", "Description", "Community link", "Owner", "Officers", "Members",
-  "Member capacity", "Guild Level", "Guild XP", "Activity %", "Current Booster", "Season Points",
-  "Mining Contribution", "Expedition Progress", "Leaderboard Rank", "Invite Link",
-];
+// Guilds are planned but not yet shipped — they live only in the Roadmap, not
+// as an active feature or in the docs. Kept out of the feature list and menu
+// per the BscScan review.
 
 // ---------------------------------------------------------------------------
 // Launch-phase Referral Program (ACTIVE, temporary) — source: DOM-Marketing-v2.
@@ -1111,7 +1060,7 @@ const PICKAXE_ACCENTS = [
 const PICKAXE_UNLOCKS = [
   ["Miner Profile", "Base Storage Capacity"],
   ["Delver Badge: Bronze", "Expanded Storage"],
-  ["Delver Badge: Silver", "Guild Officer eligibility"],
+  ["Delver Badge: Silver", "Profile badge"],
   ["Delver Badge: Gold", "Profile prestige frame"],
   ["Delver Badge: Diamond", "Priority Stone Breaker rewards"],
   ["Delver Badge: Legend", "Maximum Storage Capacity", "Legend profile effects"],
@@ -1140,14 +1089,12 @@ export const pickaxeMiningRateNote =
   "Reference figures for Era 1 at minimum network weight (200,000): epoch budget ≈ 10,609.57 DOM, per weight ≈ 53.047 µDOM. Per epoch: power × 53.047 µDOM; per hour: × 6 (6 epochs/hour). Rates are estimates and scale with live network mining weight.";
 
 // ---------------------------------------------------------------------------
-// Leaderboards — ranked by verified activity (DOM mined, active days,
-// guild contribution). Player and Guild boards each span multiple timeframes.
+// Leaderboards — ranked by verified activity (DOM mined, active days, and
+// season points). A single Player board spans multiple timeframes.
 // ---------------------------------------------------------------------------
 export const leaderboardConfig = {
   playerTabs: ["Daily", "Weekly", "Halving", "All-Time"],
-  guildTabs: ["Weekly", "Season", "Halving", "All-Time"],
-  playerMetrics: ["DOM Mined", "Pickaxe Level", "Active Days", "Guild Contribution", "Season Points"],
-  guildMetrics: ["Guild XP", "Verified Activity", "Mining Contribution", "Expedition Completion", "Season Points"],
+  playerMetrics: ["DOM Mined", "Pickaxe Level", "Active Days", "Season Points"],
   rewardPhilosophy: "Leaderboard rewards favor badges, cosmetics, and titles over large direct DOM payouts, so ranking well never distorts the capped emission model.",
 };
 
@@ -1182,14 +1129,8 @@ export const featureGroups: FeatureGroup[] = [
     ],
   },
   {
-    group: "Social",
+    group: "Referrals",
     items: [
-      { title: "Guilds", description: "Bind your Telegram group or supergroup to its own Dungeon of Miners Guild.", icon: "users", comingSoon: true },
-      { title: "Guild XP", description: "Earned from active members, expeditions, and mining contribution.", icon: "star", comingSoon: true },
-      { title: "Guild Levels", description: "Guild XP unlocks cosmetic banners, badges, titles, and profile frames.", icon: "trophy", comingSoon: true },
-      { title: "Guild Expeditions", description: "Daily and weekly community targets that reward Guild XP and cosmetics.", icon: "swords", comingSoon: true },
-      { title: "Guild Seasons", description: "Season leaderboards reset periodically; the All-Time Hall of Fame never does.", icon: "calendar-check", comingSoon: true },
-      { title: "Guild Leaderboard", description: "Guilds ranked by verified activity and contribution, never raw member count.", icon: "list-checks", comingSoon: true },
       { title: "Referral Rewards", description: `${REFERRAL_REWARD_DOM} DOM for every friend you invite who joins the official Telegram channel and claims their first mining session, up to ${MAX_REWARDED_REFERRALS} friends.`, icon: "user-plus" },
       { title: "Referral Booster (Planned)", description: `A capped mining-weight boost, currently 0% and planned to replace DOM referral rewards later.`, icon: "shield" },
     ],
@@ -1233,7 +1174,7 @@ export const faqs = [
   {
     question: "What is Dungeon of Miners?",
     answer:
-      "Dungeon of Miners is a mining ecosystem. You mine DOM passively, unlock higher Pickaxe levels by holding DOM, and progress through six Halving eras alongside a global community of miners and Telegram-based Guilds.",
+      "Dungeon of Miners is a mining ecosystem. You mine DOM passively, unlock higher Pickaxe levels by holding DOM, and progress through six Halving eras alongside a global community of miners.",
   },
   {
     question: "What blockchain does DOM use?",
@@ -1255,7 +1196,7 @@ export const faqs = [
   {
     question: "How does mining work?",
     answer:
-      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, optionally boosted by capped Referral and Guild Boosters (0% during the launch phase) into an Effective Mining Weight. Each mining epoch, you receive a share of that epoch's budget proportional to your weight — never an unlimited per-user rate.",
+      "Mining is idle and server-authoritative. Your Pickaxe Level sets your Base Mining Power, optionally boosted by a capped Referral Booster (0% during the launch phase) into an Effective Mining Weight. Each mining epoch, you receive a share of that epoch's budget proportional to your weight — never an unlimited per-user rate.",
   },
   {
     question: "What is Global Emission?",
@@ -1319,27 +1260,6 @@ export const faqs = [
     answer: `${withdrawalConfig.minimumWithdrawal}, counted against your combined balance (mined DOM plus all rewards). Withdrawals have a daily limit that grows with your Pickaxe Level (from 1,000 DOM at Novice up to 12,000 DOM at Legend), and a new withdrawal address is limited to 500 DOM in its first 24 hours. The network fee is paid by the team, not by you.`,
   },
   {
-    question: "What is a Guild?",
-    answer: "A Guild is a Telegram-community-based team of up to 30 miners who coordinate expeditions and earn a shared Guild Booster.",
-  },
-  {
-    question: "How does Guild Booster work?",
-    answer:
-      "The Guild Booster is currently 0% during the launch phase. When enabled, it scales with how active your guild really is: 30% of members active grants +2% Mining Weight, 50% grants +5%, 70% grants +8%, and 90%+ grants the maximum +10%. It's recalculated on a regular basis and never rewards empty or inactive guilds.",
-  },
-  {
-    question: "What is Guild XP?",
-    answer: "Guild XP is earned by the whole guild from active members, expedition completion, mining contribution, and achievements. It unlocks Guild Levels, cosmetic banners, badges, and titles — never uncapped DOM.",
-  },
-  {
-    question: "What is a Guild Expedition?",
-    answer: "A daily or weekly guild-wide target (e.g. a claim quota or a cumulative Stone Breaker goal) that rewards Guild XP, Season Points, and cosmetics when completed together.",
-  },
-  {
-    question: "What is a Guild Season?",
-    answer: "A recurring competitive period (Season 1 runs alongside Halving 1). Season leaderboards reset at the end of each season, while the All-Time Hall of Fame stays permanent.",
-  },
-  {
     question: "How does the referral program work?",
     answer: `For now, referrals pay DOM: you earn ${REFERRAL_REWARD_DOM} DOM for every friend who joins the official Telegram channel and claims their first mining session, for up to ${MAX_REWARDED_REFERRALS} friends (${formatDOM(REFERRAL_REWARD_DOM * MAX_REWARDED_REFERRALS)} maximum). It's one level only — there is no downline or multi-level reward tree. The mining-weight Referral Booster is paused (0%) and planned for later.`,
   },
@@ -1376,16 +1296,6 @@ export const faqs = [
 ];
 
 // ---------------------------------------------------------------------------
-// Guild section stats
-// ---------------------------------------------------------------------------
-export const guildStats = [
-  { label: "Max Members", value: String(guildConfig.maxMembers) },
-  { label: "Booster Tiers", value: String(guildBoosterTiers.length) },
-  { label: "Max Guild Booster", value: `+${guildConfig.maxBoostPercent}%` },
-  { label: "Current Season", value: guildSeasons.current },
-];
-
-// ---------------------------------------------------------------------------
 // Roadmap — qualitative phases, not fixed dates. Update `status` as each
 // phase actually ships. No governance/staking/DAO/swap/NFT/launchpad items
 // — none of those are approved features.
@@ -1408,7 +1318,7 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
   {
     phase: "Phase 3",
     title: "Social Mining",
-    status: "active",
+    status: "planned",
     items: ["Guild system", "Guild XP", "Guild Levels", "Guild Expeditions", "Guild Seasons", "Leaderboards"],
   },
   {
@@ -1548,7 +1458,7 @@ export const domEcosystem = {
   headline: ["One Token.", "One Living Economy."],
   headlineHighlight: 1, // index into headline[] to render in the gold accent
   paragraph:
-    "DOM powers the entire Dungeon of Miners ecosystem. Every miner, upgrade, guild action, reward, and on-chain withdrawal connects back to one shared economy.",
+    "DOM powers the entire Dungeon of Miners ecosystem. Every miner, upgrade, reward, and on-chain withdrawal connects back to one shared economy.",
   tagline: "Mine. Progress. Connect. Withdraw.",
   intro: {
     lineOne: "The dungeon is more than a mine.",
@@ -1618,9 +1528,9 @@ export const domEcosystem = {
       status: "IN PROGRESS",
       narrative: {
         primary: "No one mines alone.",
-        secondary: "Telegram communities form Guilds, complete expeditions, and progress together.",
+        secondary: "The Telegram community mines together and advances through each Halving era.",
       },
-      tooltip: { title: "Guilds", text: "Coordinate miners and strengthen your expedition." },
+      tooltip: { title: "Community", text: "Mine alongside the Dungeon of Miners community." },
     },
     {
       id: "expansion",

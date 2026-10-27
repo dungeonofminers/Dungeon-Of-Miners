@@ -38,7 +38,7 @@ export default function DataDeletionPage() {
         {
           heading: "What happens to your mining progress",
           body: [
-            "Deleting your account removes your ability to access your Pickaxe Level, guild membership, and any unclaimed Mining Storage balance. Claim any eligible DOM and complete any pending withdrawal before requesting deletion — a deleted account cannot be recovered.",
+            "Deleting your account removes your ability to access your Pickaxe Level and any unclaimed Mining Storage balance. Claim any eligible DOM and complete any pending withdrawal before requesting deletion — a deleted account cannot be recovered.",
           ],
         },
       ]}

@@ -56,7 +56,7 @@ export function PrepareForGenesis() {
           <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-4 text-center">
             <p className="text-sm text-ink-muted">
               <span className="font-semibold text-ink">Leaderboard</span> ranks players by total
-              mined, Pickaxe Level, referrals, and guild contribution. See the full{" "}
+              mined, Pickaxe Level, and referrals. See the full{" "}
               <a href="/leaderboard" className="text-gold underline-offset-4 hover:underline">
                 Leaderboard
               </a>

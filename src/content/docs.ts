@@ -31,14 +31,6 @@ import {
   pickaxeLevels,
   withdrawalConfig,
   fairPlay,
-  guildConfig,
-  guildBoosterTiers,
-  guildCreationFlow,
-  guildRuleDetails,
-  guildStats,
-  guildXP,
-  guildExpeditions,
-  guildSeasons,
   referralBooster,
   referralProgram,
   referralProgramDashboardShape,
@@ -76,7 +68,6 @@ export const docsNav: DocsNavCategory[] = [
       { slug: "pickaxe-levels", title: "Pickaxe Levels" },
       { slug: "balances", title: "Mining Storage & Balance" },
       { slug: "withdrawal", title: "On-Chain Withdrawal" },
-      { slug: "guilds", title: "Guilds" },
       { slug: "referral", title: "Referral Program" },
       { slug: "rewards", title: "Earn & Daily Check-In" },
       { slug: "activities", title: "Mining Activities" },
@@ -113,7 +104,7 @@ export const docsIntro: DocPage = {
   blocks: [
     {
       type: "lede",
-      text: "Players mine idly, unlock higher Pickaxe levels by holding DOM, join Telegram-community Guilds, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain.",
+      text: "Players mine idly, unlock higher Pickaxe levels by holding DOM, and advance through six Halving eras that each mine out their own fixed slice of the mining pool — and eligible DOM can be withdrawn on-chain.",
     },
     {
       type: "paragraph",
@@ -491,71 +482,8 @@ export const docsPages: Record<string, DocPage> = {
     ],
   },
 
-  guilds: {
-    slug: "guilds",
-    eyebrow: "Player Systems — 08",
-    title: "Guilds",
-    description: "Telegram-community-based guilds, with a tiered activity booster.",
-    blocks: [
-      {
-        type: "lede",
-        text: "A Guild binds one Telegram Group or Supergroup to a shared mining team of up to 30 miners. The connection is anchored to the group's permanent telegram_chat_id, not a mutable @username.",
-      },
-      {
-        type: "tiles",
-        items: guildStats.map((s) => ({ label: s.label, value: s.value })),
-      },
-      { type: "heading", id: "creation", text: "Guild creation flow" },
-      {
-        type: "steps",
-        items: guildCreationFlow.map((step) => ({ title: step })),
-      },
-      { type: "heading", id: "roles", text: "Roles & rules" },
-      {
-        type: "table",
-        headers: ["Property", "Value"],
-        rows: [
-          ["Roles", guildConfig.roles.join(", ")],
-          ["Actions", "Join, leave, transfer ownership, kick member"],
-          ...guildRuleDetails.map((r) => [r.label, r.value === "TBA" ? { text: r.value, badge: "tba" as const } : r.value]),
-        ],
-      },
-      { type: "heading", id: "booster", text: "Guild Booster — tiered, never unlimited" },
-      {
-        type: "table",
-        headers: ["Active Members", "Mining Weight Bonus"],
-        rows: guildBoosterTiers.map((t) => [
-          `${t.activeThreshold}%+ active`,
-          { text: `+${t.weightBonus}%`, align: "right" as const },
-        ]),
-      },
-      {
-        type: "note",
-        text: "The Guild Booster is 0% during the launch phase; the tiers above apply once it is enabled. Recalculated daily. Empty or inactive guilds earn no booster. The Guild Booster modifies mining weight only — it never creates additional DOM beyond the global emission ceiling.",
-      },
-      { type: "heading", id: "guild-xp", text: "Guild XP & Levels" },
-      {
-        type: "paragraph",
-        text: "Guild XP is earned by the whole guild, not any one member. It unlocks Guild Levels, cosmetic banners, badges, titles, and profile frames — never uncapped DOM.",
-      },
-      { type: "list", items: guildXP.sources },
-      { type: "heading", id: "expeditions", text: "Guild Expeditions" },
-      {
-        type: "paragraph",
-        text: `${guildExpeditions.cadences.join(" and ")} targets the whole guild completes together.`,
-      },
-      { type: "list", items: guildExpeditions.examples },
-      {
-        type: "note",
-        text: `Rewards: ${guildExpeditions.rewards.join(", ")} — expeditions never pay out from an unlimited DOM faucet.`,
-      },
-      { type: "heading", id: "seasons", text: "Guild Seasons" },
-      {
-        type: "paragraph",
-        text: `${guildSeasons.current} runs alongside ${guildSeasons.tiedTo}. ${guildSeasons.durationNote} ${guildSeasons.onSeasonEnd}`,
-      },
-    ],
-  },
+  // Guilds are not shipped — the feature lives only in the Roadmap, so there
+  // is intentionally no Guilds doc page. Kept out per the BscScan review.
 
   referral: {
     slug: "referral",
@@ -688,13 +616,12 @@ export const docsPages: Record<string, DocPage> = {
           `Join Telegram Channel — ${earnQuests[0].reward}, one-time.`,
           `Follow on X — ${earnQuests[1].reward}, one-time.`,
           `Watch an Ad — ${adRewards.summary}`,
-          "Guild Registration — connect your Telegram community and coordinate daily expeditions.",
           "Daily Tasks — complete community missions and objectives.",
         ],
       },
       {
         type: "note",
-        text: "See Earn & Daily Check-In for the full rules. The Leaderboard ranks players by total DOM mined, current mining weight, Pickaxe Level, current Halving, and guild contribution — never by exposing private wallet balances, and never with placeholder or fake entries.",
+        text: "See Earn & Daily Check-In for the full rules. The Leaderboard ranks players by total DOM mined, current mining weight, Pickaxe Level, and current Halving — never by exposing private wallet balances, and never with placeholder or fake entries.",
       },
     ],
   },
@@ -754,7 +681,7 @@ export const docsPages: Record<string, DocPage> = {
       },
       {
         type: "note",
-        text: "A permanent Halving Archive will preserve every completed era's history — duration, DOM mined, participating miners, top guild — once the first Halving closes.",
+        text: "A permanent Halving Archive will preserve every completed era's history — duration, DOM mined, participating miners, and total claims — once the first Halving closes.",
       },
       {
         type: "linkGrid",
@@ -799,7 +726,7 @@ export const docsPages: Record<string, DocPage> = {
     blocks: [
       {
         type: "lede",
-        text: "The frontend only displays state — it never decides a balance. Every mining, claim, referral, guild, and withdrawal calculation happens server-side.",
+        text: "The frontend only displays state — it never decides a balance. Every mining, claim, referral, and withdrawal calculation happens server-side.",
       },
       { type: "heading", id: "server-authoritative", text: "Server-authoritative state" },
       { type: "list", items: serverAuthoritativeState },
@@ -866,7 +793,7 @@ export const docsPages: Record<string, DocPage> = {
       { type: "callout", tone: "danger", text: riskDisclosure },
       {
         type: "note",
-        text: "Numerous parameters in this documentation — claim limits, guild creation cost, the marketing reward pool, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
+        text: "Numerous parameters in this documentation — claim limits, the marketing reward pool, and the exact Halving trigger timing — are marked TBA because they are genuinely undecided at the time of writing, not omitted. Treat any figure not marked TBA as the current published rule, and any TBA field as subject to change before it is finalized and announced.",
       },
     ],
   },
@@ -978,7 +905,7 @@ export const docsPages: Record<string, DocPage> = {
       ),
       {
         type: "note",
-        text: "Referral, Guild, and event boosters change how each era's allocation is split between miners — they never change the size of that allocation. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool.",
+        text: "Referral and event boosters change how each era's allocation is split between miners — they never change the size of that allocation. 10 miners, 10,000 miners, or 1,000,000 miners all draw from the same fixed 91,666,667 DOM era pool.",
       },
       { type: "heading", id: "value-drivers", text: "Value driver assessment" },
       {
@@ -986,7 +913,7 @@ export const docsPages: Record<string, DocPage> = {
         headers: ["Driver", "Status", "Note"],
         rows: [
           ["Buyback / burn mechanism", { text: "TBA", badge: "tba" }, "Not mentioned in published Economy Rules or Roadmap."],
-          ["Utility sink (in-game spend)", { text: "Yes", badge: "good" }, "Available Balance DOM is spent on upgrades, guild costs, and Stone Breaker."],
+          ["Utility sink (in-game spend)", { text: "Yes", badge: "good" }, "Available Balance DOM is spent on upgrades and Stone Breaker."],
           ["Staking", { text: "Planned", badge: "planned" }, "Roadmap Phase 5/6 lists ecosystem utilities — no rate or lockup published yet."],
           ["Liquidity provisioning", { text: "Allocated", badge: "good" }, "10% of supply (100,000,000 DOM) earmarked — deployment timing and venue are TBA."],
           ["TGE / Market launch", { text: "TBA", badge: "tba" }, "No date has been set. Announced only through official Dungeon of Miners channels."],

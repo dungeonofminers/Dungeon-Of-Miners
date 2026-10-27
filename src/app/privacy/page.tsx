@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           heading: "1. Information We Collect",
           body: [
             "Telegram account identifiers (such as your Telegram user ID) needed to operate your mining account, verified server-side via Telegram's own authentication data — never trusted from the frontend alone.",
-            "Gameplay data: mining activity, Pickaxe Level, claims, guild membership, and referral relationships.",
+            "Gameplay data: mining activity, Pickaxe Level, claims, and referral relationships.",
             "Quest data: whether your Telegram account is a member of the official channel, and the identifier of an X account you choose to connect. Your X token is not stored and the app only requests read permission.",
             "If you connect a wallet: the public wallet address and a signed ownership message. We never receive or store your seed phrase or private key.",
             "Standard technical data (such as device/browser type) automatically collected by hosting and analytics infrastructure.",
@@ -28,14 +28,14 @@ export default function PrivacyPage() {
         {
           heading: "2. How We Use Information",
           body: [
-            "To operate mining, claim, withdrawal, referral, and guild features; to protect the economy against fraud and abuse; and to communicate important updates through official channels.",
+            "To operate mining, claim, withdrawal, and referral features; to protect the economy against fraud and abuse; and to communicate important updates through official channels.",
             "We do not sell personal information to third parties.",
           ],
         },
         {
           heading: "3. Public vs. Private Data",
           body: [
-            "Leaderboards and guild pages may show your chosen display name, Pickaxe Level, and activity-based stats. We do not display your Telegram username or wallet address publicly unless you explicitly opt in. Recent on-chain withdrawals are shown with a shortened wallet address only.",
+            "Leaderboards may show your chosen display name, Pickaxe Level, and activity-based stats. We do not display your Telegram username or wallet address publicly unless you explicitly opt in. Recent on-chain withdrawals are shown with a shortened wallet address only.",
           ],
         },
         {

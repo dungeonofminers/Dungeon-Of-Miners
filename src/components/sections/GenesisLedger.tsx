@@ -51,7 +51,7 @@ export function GenesisLedger() {
               {halvingArchive.length === 0 ? (
                 <p className="max-w-sm text-sm text-ink-muted">
                   No Halving eras have completed yet. Once a Halving ends, its full history —
-                  duration, DOM mined, participating miners, top guild — will appear here
+                  duration, DOM mined, participating miners, and total claims — will appear here
                   permanently.
                 </p>
               ) : (

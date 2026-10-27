@@ -24,7 +24,7 @@ export default function TermsPage() {
         {
           heading: "2. The Service",
           body: [
-            "Dungeon of Miners is a mining ecosystem: you accrue DOM through gameplay, unlock higher Pickaxe levels by holding DOM, participate in Guilds, and may request on-chain withdrawal of eligible DOM to a BEP-20 wallet on BNB Smart Chain.",
+            "Dungeon of Miners is a mining ecosystem: you accrue DOM through gameplay, unlock higher Pickaxe levels by holding DOM, and may request on-chain withdrawal of eligible DOM to a BEP-20 wallet on BNB Smart Chain.",
             "The Service, including specific mechanics, rates, and features, may change over time. Material economy changes are announced through official Dungeon of Miners channels.",
           ],
         },
@@ -43,7 +43,7 @@ export default function TermsPage() {
         {
           heading: "5. Fair Play",
           body: [
-            "Automation, multi-accounting, referral or guild abuse, and any attempt to manipulate mining, claim, or withdrawal accounting are prohibited. Violations may result in reward rollback, account restriction, or a ban — see the Fair Play Policy for the full list.",
+            "Automation, multi-accounting, referral abuse, and any attempt to manipulate mining, claim, or withdrawal accounting are prohibited. Violations may result in reward rollback, account restriction, or a ban — see the Fair Play Policy for the full list.",
           ],
         },
         {

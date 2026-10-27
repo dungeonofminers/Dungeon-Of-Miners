@@ -72,7 +72,7 @@ export default function SupportPage() {
           <Reveal delay={0.2}>
             <div className="surface-panel mx-auto mt-6 max-w-3xl p-6 text-center">
               <p className="text-sm text-ink-muted">
-                Common questions about mining, withdrawal, Guilds, and referrals are already answered
+                Common questions about mining, withdrawal, and referrals are already answered
                 in the{" "}
                 <a href="/faq" className="text-gold underline-offset-4 hover:underline">
                   FAQ

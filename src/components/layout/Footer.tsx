@@ -7,7 +7,7 @@ const exploreLinks = [
   { label: "Economy", href: "/economy" },
   { label: "Halving", href: "/halving" },
   { label: "Tokenomics", href: "/tokenomics" },
-  { label: "Guilds", href: "/community/guilds" },
+  { label: "About", href: "/about" },
   { label: navTopLevel.label, href: navTopLevel.href },
 ];
 
