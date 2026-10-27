@@ -59,7 +59,7 @@ export default function AboutPage() {
               </div>
             </Reveal>
 
-            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-5 sm:grid-cols-2">
               {teamMembers.map((member, i) => (
                 <Reveal key={member.name} delay={0.08 + i * 0.08}>
                   <div className="group relative flex h-full flex-col items-center rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:bg-white/[0.04]">
