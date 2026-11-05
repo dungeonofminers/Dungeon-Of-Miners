@@ -6,14 +6,17 @@ import { liveApiBaseUrl } from "@/content/site";
 //
 // The Mini App API (app.dungeonofminers.xyz) has no CORS headers, so the
 // browser can't call it directly from a different origin. This route fetches
-// server-side and re-exposes the two public endpoints the site needs:
+// server-side and re-exposes the public endpoints the site needs:
 //   /v1/floor   → totalMinted + halving progress
 //   /v1/economy → activeMiners + network weight
+//   /v1/stats   → totalClaimed / totalWithdrawn / qualifiedReferrals
+//   /v1/stats/withdrawals → recent confirmed withdrawals
 //
-// Both upstream responses are cached (max-age 5s / 10s). This route mirrors
-// that with a short s-maxage so the CDN absorbs repeat traffic and the API
-// is hit at most once per few seconds no matter how many visitors load the
-// dashboard.
+// These fetches are intentionally NOT put in Next.js's Data Cache. The
+// upstream responses already carry short `max-age` (5–60s) values of their
+// own, and caching them here once led to the Data Cache serving days-old
+// figures (e.g. "Active Miners = 10" instead of the live count). We fetch
+// fresh every time and rely on the upstream's own cache instead.
 // ---------------------------------------------------------------------------
 
 type FloorResponse = {
@@ -67,7 +70,7 @@ type WithdrawalsResponse = {
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
     const res = await fetch(`${liveApiBaseUrl}${path}`, {
-      next: { revalidate: 5 },
+      cache: "no-store",
       headers: { accept: "application/json" },
     });
     if (!res.ok) return null;
