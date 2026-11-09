@@ -4,6 +4,17 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  webpack: (config) => {
+    // wagmi / WalletConnect / MetaMask SDK pull in optional Node-only modules
+    // that aren't available in the browser. Mark them as false so bundling
+    // doesn't emit "Can't resolve" errors.
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      encoding: false,
+      "pino-pretty": false,
+    };
+    return config;
+  },
   async redirects() {
     return [
       // Retired Pre-TGE/Genesis routes — the concept no longer exists, the

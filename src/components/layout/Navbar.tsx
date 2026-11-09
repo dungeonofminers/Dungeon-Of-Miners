@@ -72,12 +72,21 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:block">
-          <span className="inline-flex items-center gap-2 rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-2 text-sm font-semibold text-gold">
-            {navTopRight.label}
-            <span className="rounded-full border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-faint">
-              Soon
+          {navTopRight.comingSoon ? (
+            <span className="inline-flex items-center gap-2 rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-2 text-sm font-semibold text-gold">
+              {navTopRight.label}
+              <span className="rounded-full border border-white/15 bg-white/[0.06] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-ink-faint">
+                Soon
+              </span>
             </span>
-          </span>
+          ) : (
+            <a
+              href={navTopRight.href}
+              className="inline-flex items-center gap-2 rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-2 text-sm font-semibold text-gold transition-colors hover:bg-gold/20"
+            >
+              {navTopRight.label}
+            </a>
+          )}
         </div>
 
         <button
@@ -147,9 +156,19 @@ export function Navbar() {
               {navTopLevel.label}
             </a>
 
-            <span className="flex min-h-[44px] items-center py-3 text-sm text-ink-faint">
-              {navTopRight.label} · Soon
-            </span>
+            {navTopRight.comingSoon ? (
+              <span className="flex min-h-[44px] items-center py-3 text-sm text-ink-faint">
+                {navTopRight.label} · Soon
+              </span>
+            ) : (
+              <a
+                href={navTopRight.href}
+                onClick={() => setOpen(false)}
+                className="flex min-h-[44px] items-center py-3 text-sm font-semibold text-ink"
+              >
+                {navTopRight.label}
+              </a>
+            )}
 
             <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center">
               <span className="text-[10px] font-bold uppercase tracking-widest text-gold">

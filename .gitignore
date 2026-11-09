@@ -20,6 +20,8 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+.env.deploy
+contracts/.env.deploy
 
 # vercel
 .vercel

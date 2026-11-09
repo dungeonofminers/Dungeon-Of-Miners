@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-import { AlertTriangle } from "lucide-react";
-import { siteConfig, treasuryWallets, vestingConfig } from "@/content/site";
+import { AlertTriangle, ExternalLink, ArrowUpRight } from "lucide-react";
+import { siteConfig, treasuryWallets, vestingConfig, navTopRight } from "@/content/site";
+import {
+  EXPLORER_URL,
+  STAKING_CONTRACT_ADDRESS,
+  isStakingLive,
+} from "@/content/staking.config";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
 import { SafeWalletAddress } from "@/components/tokenomics/SafeWalletAddress";
@@ -44,6 +49,32 @@ export default function TreasuryPage() {
                       <dt className="text-ink-faint">Vesting / Lock</dt>
                       <dd className="font-semibold text-ink-faint">{wallet.vesting}</dd>
                     </div>
+                    {wallet.id === "ecosystem" && !navTopRight.comingSoon && (
+                      <div className="flex items-center justify-between text-xs">
+                        <dt className="text-ink-faint">Staking Contract</dt>
+                        <dd className="flex items-center gap-2">
+                          {isStakingLive ? (
+                            <a
+                              href={`${EXPLORER_URL}/address/${STAKING_CONTRACT_ADDRESS}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 font-mono font-semibold text-gold underline-offset-4 hover:underline"
+                            >
+                              {STAKING_CONTRACT_ADDRESS.slice(0, 6)}…{STAKING_CONTRACT_ADDRESS.slice(-4)}
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                          ) : (
+                            <a
+                              href="/staking"
+                              className="inline-flex items-center gap-1 font-semibold text-gold underline-offset-4 hover:underline"
+                            >
+                              Deploying Soon · Preview Tiers
+                              <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                          )}
+                        </dd>
+                      </div>
+                    )}
                   </dl>
                 </div>
               </Reveal>
