@@ -1,4 +1,4 @@
-import { http, createConfig } from "wagmi";
+import { http, fallback, createConfig } from "wagmi";
 import { bsc, bscTestnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 import { STAKING_CHAIN_ID } from "@/content/staking.config";
@@ -13,12 +13,29 @@ export const stakingChain = STAKING_CHAIN_ID === 97 ? bscTestnet : bsc;
 const projectId =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "a7e06d6a615d64e635d03b92f04a9241";
 
-// RPC URLs read from env first (e.g. private Ankr RPC endpoint) with public fallback.
-const bscMainnetRpc =
-  process.env.NEXT_PUBLIC_BSC_RPC_URL || "https://bsc-dataseed.bnbchain.org";
-const bscTestnetRpc =
-  process.env.NEXT_PUBLIC_BSC_TESTNET_RPC_URL ||
-  "https://data-seed-prebsc-1-s1.bnbchain.org:8545";
+// Primary: private Ankr RPC from env (if set).
+// Fallback: official BNB Chain public RPC endpoints (automatic runtime failover).
+const bscMainnetPrivateRpc = process.env.NEXT_PUBLIC_BSC_RPC_URL?.trim();
+const bscTestnetPrivateRpc = process.env.NEXT_PUBLIC_BSC_TESTNET_RPC_URL?.trim();
+
+const bscMainnetTransport = fallback(
+  [
+    ...(bscMainnetPrivateRpc ? [http(bscMainnetPrivateRpc)] : []),
+    http("https://bsc-dataseed.bnbchain.org"),
+    http("https://bsc-dataseed1.defibit.io"),
+    http("https://bsc-dataseed1.ninicoin.io"),
+  ],
+  { rank: false }
+);
+
+const bscTestnetTransport = fallback(
+  [
+    ...(bscTestnetPrivateRpc ? [http(bscTestnetPrivateRpc)] : []),
+    http("https://data-seed-prebsc-1-s1.bnbchain.org:8545"),
+    http("https://data-seed-prebsc-2-s1.bnbchain.org:8545"),
+  ],
+  { rank: false }
+);
 
 export const wagmiConfig = createConfig({
   chains: [stakingChain],
@@ -39,7 +56,7 @@ export const wagmiConfig = createConfig({
     }),
   ],
   transports: {
-    [bsc.id]: http(bscMainnetRpc),
-    [bscTestnet.id]: http(bscTestnetRpc),
+    [bsc.id]: bscMainnetTransport,
+    [bscTestnet.id]: bscTestnetTransport,
   },
 });
