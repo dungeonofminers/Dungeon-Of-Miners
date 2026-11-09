@@ -5,13 +5,27 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: (config) => {
-    // wagmi / WalletConnect / MetaMask SDK pull in optional Node-only modules
-    // that aren't available in the browser. Mark them as false so bundling
-    // doesn't emit "Can't resolve" errors.
+    // wagmi / WalletConnect / MetaMask / Coinbase SDKs pull in optional
+    // peer dependencies & Node-only modules that aren't used by our
+    // injected + WalletConnect setup. Alias them to false so Webpack
+    // never fails with "Module not found".
     config.resolve.fallback = {
       ...config.resolve.fallback,
       encoding: false,
       "pino-pretty": false,
+      "@react-native-async-storage/async-storage": false,
+    };
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@x402/evm": false,
+      "@base-org/account": false,
+      "@coinbase/wallet-sdk": false,
+      "@gemini-wallet/core": false,
+      "@metamask/sdk": false,
+      "@safe-global/safe-apps-sdk": false,
+      "@safe-global/safe-apps-provider": false,
+      porto: false,
+      "porto/internal": false,
     };
     return config;
   },
