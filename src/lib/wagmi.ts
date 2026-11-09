@@ -13,6 +13,13 @@ export const stakingChain = STAKING_CHAIN_ID === 97 ? bscTestnet : bsc;
 const projectId =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "a7e06d6a615d64e635d03b92f04a9241";
 
+// RPC URLs read from env first (e.g. private Ankr RPC endpoint) with public fallback.
+const bscMainnetRpc =
+  process.env.NEXT_PUBLIC_BSC_RPC_URL || "https://bsc-dataseed.bnbchain.org";
+const bscTestnetRpc =
+  process.env.NEXT_PUBLIC_BSC_TESTNET_RPC_URL ||
+  "https://data-seed-prebsc-1-s1.bnbchain.org:8545";
+
 export const wagmiConfig = createConfig({
   chains: [stakingChain],
   connectors: [
@@ -32,7 +39,7 @@ export const wagmiConfig = createConfig({
     }),
   ],
   transports: {
-    [bsc.id]: http("https://bsc-dataseed.bnbchain.org"),
-    [bscTestnet.id]: http("https://data-seed-prebsc-1-s1.bnbchain.org:8545"),
+    [bsc.id]: http(bscMainnetRpc),
+    [bscTestnet.id]: http(bscTestnetRpc),
   },
 });
