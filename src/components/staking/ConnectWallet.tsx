@@ -192,20 +192,36 @@ export function ConnectWallet({ className }: { className?: string }) {
   const [copied, setCopied] = useState(false);
   const [tokenAdded, setTokenAdded] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null);
+
+  const updateMenuPosition = () => {
+    if (!btnRef.current) return;
+    const r = btnRef.current.getBoundingClientRect();
+    const menuWidth = 256; // w-64 = 16rem = 256px
+    const left = Math.min(Math.max(12, r.left), window.innerWidth - menuWidth - 12);
+    setMenuPos({ top: r.bottom + 8, left });
+  };
 
   useEffect(() => {
     if (!menuOpen) return;
+    updateMenuPosition();
     const onClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
+    const onReposition = () => updateMenuPosition();
     document.addEventListener("mousedown", onClick);
     document.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", onReposition, true);
+    window.addEventListener("resize", onReposition);
     return () => {
       document.removeEventListener("mousedown", onClick);
       document.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", onReposition, true);
+      window.removeEventListener("resize", onReposition);
     };
   }, [menuOpen]);
 
@@ -377,8 +393,12 @@ export function ConnectWallet({ className }: { className?: string }) {
     return (
       <div ref={menuRef} className={cn("relative", className)}>
         <button
+          ref={btnRef}
           type="button"
-          onClick={() => setMenuOpen((prev) => !prev)}
+          onClick={() => {
+            if (!menuOpen) updateMenuPosition();
+            setMenuOpen((prev) => !prev);
+          }}
           className={cn(
             "inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-glow/30 bg-emerald-glow/10 px-4 py-3 text-sm font-semibold text-emerald-glow transition-colors hover:bg-emerald-glow/20",
             className?.includes("w-full") && "w-full"
@@ -390,8 +410,11 @@ export function ConnectWallet({ className }: { className?: string }) {
           <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", menuOpen && "rotate-180")} />
         </button>
 
-        {menuOpen && (
-          <div className="absolute right-0 top-full z-[110] mt-2 w-64 overflow-hidden rounded-xl border border-white/10 bg-void-100 p-1.5 shadow-2xl shadow-black/60">
+        {menuOpen && menuPos && (
+          <div
+            className="fixed z-[110] w-64 overflow-hidden rounded-xl border border-white/10 bg-void-100 p-1.5 shadow-2xl shadow-black/60"
+            style={{ top: menuPos.top, left: menuPos.left }}
+          >
             <div className="flex items-center justify-between gap-2 px-3 py-2">
               <span className="truncate font-mono text-xs text-ink-muted">{address}</span>
               <button
