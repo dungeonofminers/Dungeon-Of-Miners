@@ -82,14 +82,19 @@ export default function AboutPage() {
                         href={member.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold text-ink-muted transition-colors hover:border-gold/40 hover:text-gold"
+                        className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-semibold text-ink-muted transition-colors hover:border-gold/40 hover:bg-gold/10 hover:text-gold"
                       >
                         {isLinkedIn(member.link) ? (
-                          <Linkedin className="h-3.5 w-3.5" />
+                          <>
+                            <Linkedin className="h-3.5 w-3.5 text-gold" />
+                            LinkedIn
+                          </>
                         ) : (
-                          <Twitter className="h-3.5 w-3.5" />
+                          <>
+                            <Twitter className="h-3.5 w-3.5 text-gold" />
+                            Profile
+                          </>
                         )}
-                        Profile
                       </a>
                     )}
                   </div>

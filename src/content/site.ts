@@ -92,28 +92,18 @@ export const teamMembers: {
   link?: string;
 }[] = [
   {
-    name: "Georgie Zec",
+    name: "Bagas Ady",
     role: "Founder",
-    image: "/assets/team/georgie-zec.png",
-    bio: "Product founder of Dungeon of Miners. Background in token economies, Web3 product strategy, and community-driven growth.",
+    image: "/assets/team/Bagas Ady.jpg",
+    bio: "Founder of Dungeon of Miners. Drives the product vision, token economy design, and long-term ecosystem growth on BNB Smart Chain.",
+    link: "https://www.linkedin.com/in/bagas-ady-santoso-b32a69182/",
   },
   {
-    name: "Jeff",
-    role: "CTO",
-    image: "/assets/team/jeff.png",
-    bio: "Technical lead behind the mining engine and on-chain infrastructure. Experienced in smart contracts, backend systems, and secure on-chain payout architecture.",
-  },
-  {
-    name: "Aliana Angel",
-    role: "Marketing",
-    image: "/assets/team/aliana-angel.png",
-    bio: "Leads marketing and community. Skilled in Web3 growth, community building, and campaign strategy across crypto-native audiences.",
-  },
-  {
-    name: "Nichi",
-    role: "Finance",
-    image: "/assets/team/nichi.png",
-    bio: "Heads finance and treasury. Background in DeFi, tokenomics modeling, and sustainable treasury management.",
+    name: "Septiyan Arif",
+    role: "Co-Founder",
+    image: "/assets/team/Septiyan Arif.jpg",
+    bio: "Leads technical architecture, smart contract infrastructure, and core platform operations behind Dungeon of Miners.",
+    link: "https://www.linkedin.com/in/septiyanarif/",
   },
 ];
 
