@@ -44,14 +44,16 @@ export default function TokenomicsPage() {
           <Reveal delay={0.1}>
             <div className="surface-panel mx-auto mt-14 max-w-3xl p-8 sm:p-10">
               <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left">
-                <div className="relative shrink-0">
+                <div className="relative flex shrink-0 flex-col items-center">
                   <div className="absolute inset-0 -z-10 rounded-full bg-gold/30 blur-2xl" />
-                  <PlaceholderImage
-                    src={assets.logoDragonCoin}
-                    alt="Dungeon of Miners DOM token"
-                    label="DOM Token"
-                    className="h-32 w-32 rounded-full shadow-glow-gold"
-                  />
+                  <div className="coin-levitate-3d relative">
+                    <PlaceholderImage
+                      src={assets.logoDragonCoin}
+                      alt="Dungeon of Miners DOM token"
+                      label="DOM Token"
+                      className="h-32 w-32 rounded-full shadow-glow-gold"
+                    />
+                  </div>
                 </div>
                 <div className="flex-1">
                   <h3 className="heading-md text-xl">Dungeon of Miners (DOM)</h3>

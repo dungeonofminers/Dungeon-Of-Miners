@@ -126,30 +126,119 @@ export function Hero() {
             </motion.p>
           </div>
 
-          {/* Right: large floating logo */}
+          {/* Right: large floating & 3D spinning/flipping logo with dual mining pickaxes */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="relative mx-auto flex justify-center lg:justify-end"
+            className="relative mx-auto flex flex-col items-center justify-center"
           >
             <motion.div
               aria-hidden
               className="absolute inset-0 -z-10 rounded-full bg-gold/40 blur-3xl"
-              animate={{ opacity: [0.5, 0.85, 0.5], scale: [0.9, 1.15, 0.9] }}
-              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ opacity: [0.45, 0.9, 0.45], scale: [0.88, 1.18, 0.88] }}
+              transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
             />
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <PlaceholderImage
-                src={assets.logoDragonCoin}
-                alt="Dungeon of Miners DOM token"
-                label="DOM Token"
-                className="h-64 w-64 rounded-full shadow-glow-gold sm:h-80 sm:w-80 lg:h-96 lg:w-96"
+
+            <div className="relative flex items-center justify-center">
+              {/* Top-Right Pickaxe mining the coin */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-7 -top-8 z-20 sm:-right-10 sm:-top-11 lg:-right-12 lg:-top-12"
+              >
+                <motion.div
+                  style={{ transformOrigin: "70% 80%" }}
+                  animate={{
+                    rotate: [18, -32, 18],
+                    x: [6, -8, 6],
+                    y: [-6, 10, -6],
+                  }}
+                  transition={{
+                    duration: 1.35,
+                    repeat: Infinity,
+                    ease: [0.45, 0, 0.55, 1],
+                    times: [0, 0.38, 1],
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={assets.pickaxeLevel6}
+                    alt=""
+                    className="h-24 w-24 -scale-x-100 select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.55)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
+                  />
+                </motion.div>
+                {/* Impact spark at top-right rim */}
+                <motion.span
+                  className="absolute bottom-5 left-4 h-3.5 w-3.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)]"
+                  animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
+                  transition={{
+                    duration: 1.35,
+                    repeat: Infinity,
+                    times: [0.3, 0.39, 0.58],
+                  }}
+                />
+              </div>
+
+              {/* Bottom-Left Pickaxe mining the coin */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -bottom-7 -left-7 z-20 sm:-bottom-10 sm:-left-10 lg:-bottom-12 lg:-left-12"
+              >
+                <motion.div
+                  style={{ transformOrigin: "30% 85%" }}
+                  animate={{
+                    rotate: [-22, 28, -22],
+                    x: [-6, 8, -6],
+                    y: [6, -10, 6],
+                  }}
+                  transition={{
+                    duration: 1.35,
+                    delay: 0.67,
+                    repeat: Infinity,
+                    ease: [0.45, 0, 0.55, 1],
+                    times: [0, 0.38, 1],
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={assets.pickaxeLevel3}
+                    alt=""
+                    className="h-24 w-24 select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.5)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
+                  />
+                </motion.div>
+                {/* Impact spark at bottom-left rim */}
+                <motion.span
+                  className="absolute right-4 top-5 h-3.5 w-3.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)]"
+                  animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
+                  transition={{
+                    duration: 1.35,
+                    delay: 0.67,
+                    repeat: Infinity,
+                    times: [0.3, 0.39, 0.58],
+                  }}
+                />
+              </div>
+
+              <div className="coin-levitate-3d relative z-10">
+                <PlaceholderImage
+                  src={assets.logoDragonCoin}
+                  alt="Dungeon of Miners DOM token"
+                  label="DOM Token"
+                  className="h-64 w-64 rounded-full shadow-glow-gold sm:h-80 sm:w-80 lg:h-96 lg:w-96"
+                />
+              </div>
+            </div>
+
+            {/* Levitation ground shadow + Symmetrical Hologram Terminal Pedestal */}
+            <div className="relative mt-6 flex flex-col items-center">
+              <motion.div
+                aria-hidden
+                className="-top-3 absolute h-5 w-52 rounded-full bg-gold/30 blur-xl sm:w-64"
+                animate={{ scaleX: [1, 0.75, 1], opacity: [0.6, 0.28, 0.6] }}
+                transition={{ duration: 3.25, repeat: Infinity, ease: "easeInOut" }}
               />
-            </motion.div>
+              <GlitchTerminalTag />
+            </div>
           </motion.div>
         </div>
 
@@ -237,5 +326,78 @@ function FloatingCard({
         <p className="text-sm font-bold text-ink">{value}</p>
       </div>
     </motion.div>
+  );
+}
+
+const TERMINAL_PHRASES = [
+  "[ // MINE YOUR FIRST $DOM // ]",
+  "[ // COME JOIN THE $DOM FAMILY // ]",
+  "[ // 1,000,000,000 FIXED SUPPLY // ]",
+  "[ // ZERO FEE ON-CHAIN WITHDRAW // ]",
+];
+
+const GLITCH_CHARS = "01#$%&*@/\\<>[]_~=";
+
+function GlitchTerminalTag() {
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [display, setDisplay] = useState(TERMINAL_PHRASES[0]);
+  const [glitching, setGlitching] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const holdTimer = setTimeout(() => {
+      if (cancelled) return;
+      const nextIdx = (phraseIdx + 1) % TERMINAL_PHRASES.length;
+      const nextTarget = TERMINAL_PHRASES[nextIdx];
+      setGlitching(true);
+
+      let step = 0;
+      const totalSteps = 12;
+
+      const decodeTimer = setInterval(() => {
+        if (cancelled) return;
+        step++;
+        const revealRatio = step / totalSteps;
+
+        const out = nextTarget
+          .split("")
+          .map((ch, i) => {
+            if (ch === " " || ch === "[" || ch === "]" || ch === "/") return ch;
+            const charProgress = i / nextTarget.length;
+            if (revealRatio > charProgress + 0.25) return ch;
+            return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+          })
+          .join("");
+
+        setDisplay(out);
+
+        if (step >= totalSteps) {
+          clearInterval(decodeTimer);
+          setDisplay(nextTarget);
+          setGlitching(false);
+          setPhraseIdx(nextIdx);
+        }
+      }, 40);
+    }, 2800);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(holdTimer);
+    };
+  }, [phraseIdx]);
+
+  return (
+    <div
+      className={`relative inline-flex min-w-[295px] items-center justify-center gap-2.5 overflow-hidden rounded-full border px-4 py-2 font-mono text-[11px] font-bold tracking-wider backdrop-blur-md transition-all duration-200 sm:min-w-[330px] sm:text-xs ${
+        glitching
+          ? "glitch-terminal border-torch/60 bg-void-100/95 text-torch shadow-[0_0_28px_-4px_rgba(255,138,42,0.65)]"
+          : "border-gold/35 bg-void-200/85 text-gold-light shadow-[0_0_30px_-6px_rgba(244,181,68,0.45)]"
+      }`}
+    >
+      <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-emerald-glow" />
+      <span className="whitespace-nowrap">{display}</span>
+      <span className="inline-block h-3.5 w-1.5 shrink-0 animate-pulse bg-gold" />
+    </div>
   );
 }

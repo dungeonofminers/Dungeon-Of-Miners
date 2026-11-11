@@ -181,14 +181,17 @@ export function StakingPage() {
               </div>
             </div>
 
-            <div className="relative mx-auto flex justify-center">
+            <div className="relative mx-auto flex flex-col items-center justify-center">
               <div aria-hidden className="absolute inset-0 -z-10 rounded-full bg-gold/30 blur-3xl" />
-              <PlaceholderImage
-                src={assets.logoDragonCoin}
-                alt="DOM token"
-                label="DOM Token"
-                className="h-56 w-56 rounded-full shadow-glow-gold sm:h-72 sm:w-72"
-              />
+              <div className="coin-levitate-3d relative">
+                <PlaceholderImage
+                  src={assets.logoDragonCoin}
+                  alt="DOM token"
+                  label="DOM Token"
+                  className="h-56 w-56 rounded-full shadow-glow-gold sm:h-72 sm:w-72"
+                />
+              </div>
+              <div aria-hidden className="mt-4 h-3.5 w-36 rounded-full bg-gold/25 blur-xl sm:w-44" />
             </div>
           </div>
         </div>
