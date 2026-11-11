@@ -33,10 +33,10 @@ export function RecentWithdrawals() {
             ) : (
               <ul className="divide-y divide-white/[0.06]">
                 {items.map((w, i) => (
-                  <li key={i} className="flex items-center justify-between gap-4 px-6 py-4">
-                    <span className="font-mono text-sm text-ink-muted">{shortAddress(w.address)}</span>
-                    <span className="font-display text-sm text-gold">{formatDom(w.amount)}</span>
-                    <span className="rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-glow">
+                  <li key={i} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3.5 sm:gap-4 sm:px-6 sm:py-4">
+                    <span className="font-mono text-xs text-ink-muted sm:text-sm">{shortAddress(w.address)}</span>
+                    <span className="font-display text-xs text-gold sm:text-sm">{formatDom(w.amount)}</span>
+                    <span className="rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-glow sm:px-2.5 sm:py-1 sm:text-[10px]">
                       Confirmed
                     </span>
                     <a

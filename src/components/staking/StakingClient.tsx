@@ -96,9 +96,9 @@ export default function StakingClient() {
   return (
     <Web3Provider>
       {isPreviewMode && (
-        <div className="fixed bottom-4 right-4 z-[90] flex items-center gap-2.5 rounded-full border border-gold/40 bg-void-100/95 px-4 py-2 text-xs font-semibold text-gold shadow-lg backdrop-blur-md">
+        <div className="fixed bottom-3 right-3 z-[90] flex items-center gap-2 rounded-full border border-gold/40 bg-void-100/95 px-3 py-1.5 text-[11px] font-semibold text-gold shadow-lg backdrop-blur-md sm:bottom-4 sm:right-4 sm:gap-2.5 sm:px-4 sm:py-2 sm:text-xs">
           <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-glow" />
-          <span>Team Preview Mode</span>
+          <span>Team Preview</span>
           <a
             href="/staking?preview=off"
             className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-ink-muted transition-colors hover:border-torch/40 hover:text-torch"

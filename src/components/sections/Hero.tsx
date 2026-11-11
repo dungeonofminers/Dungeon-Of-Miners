@@ -88,13 +88,13 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="mt-8 flex flex-col gap-4 sm:flex-row"
+              className="mt-7 flex w-full max-w-xs flex-col gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:gap-4"
             >
-              <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <a href={links.miniApp} target="_blank" rel="noopener noreferrer" className="btn-primary w-full sm:w-auto">
                 <Zap className="h-4 w-4" />
                 Start Mining
               </a>
-              <a href="/economy" className="btn-secondary">
+              <a href="/economy" className="btn-secondary w-full sm:w-auto">
                 View Economy
               </a>
             </motion.div>
@@ -144,7 +144,7 @@ export function Hero() {
               {/* Top-Right Pickaxe mining the coin */}
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-7 -top-8 z-20 sm:-right-10 sm:-top-11 lg:-right-12 lg:-top-12"
+                className="pointer-events-none absolute -right-4 -top-5 z-20 sm:-right-10 sm:-top-11 lg:-right-12 lg:-top-12"
               >
                 <motion.div
                   style={{ transformOrigin: "70% 80%" }}
@@ -164,12 +164,12 @@ export function Hero() {
                   <img
                     src={assets.pickaxeLevel6}
                     alt=""
-                    className="h-24 w-24 -scale-x-100 select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.55)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
+                    className="h-[4.25rem] w-[4.25rem] -scale-x-100 select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.55)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
                   />
                 </motion.div>
                 {/* Impact spark at top-right rim */}
                 <motion.span
-                  className="absolute bottom-5 left-4 h-3.5 w-3.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)]"
+                  className="absolute bottom-3 left-3 h-2.5 w-2.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)] sm:bottom-5 sm:left-4 sm:h-3.5 sm:w-3.5"
                   animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
                   transition={{
                     duration: 1.35,
@@ -182,7 +182,7 @@ export function Hero() {
               {/* Bottom-Left Pickaxe mining the coin */}
               <div
                 aria-hidden
-                className="pointer-events-none absolute -bottom-7 -left-7 z-20 sm:-bottom-10 sm:-left-10 lg:-bottom-12 lg:-left-12"
+                className="pointer-events-none absolute -bottom-5 -left-4 z-20 sm:-bottom-10 sm:-left-10 lg:-bottom-12 lg:-left-12"
               >
                 <motion.div
                   style={{ transformOrigin: "30% 85%" }}
@@ -203,12 +203,12 @@ export function Hero() {
                   <img
                     src={assets.pickaxeLevel3}
                     alt=""
-                    className="h-24 w-24 select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.5)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
+                    className="h-[4.25rem] w-[4.25rem] select-none object-contain drop-shadow-[0_10px_22px_rgba(244,181,68,0.5)] sm:h-32 sm:w-32 lg:h-36 lg:w-36"
                   />
                 </motion.div>
                 {/* Impact spark at bottom-left rim */}
                 <motion.span
-                  className="absolute right-4 top-5 h-3.5 w-3.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)]"
+                  className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-gold-light blur-[2px] shadow-[0_0_18px_6px_rgba(252,217,138,0.95)] sm:right-4 sm:top-5 sm:h-3.5 sm:w-3.5"
                   animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
                   transition={{
                     duration: 1.35,
@@ -224,16 +224,16 @@ export function Hero() {
                   src={assets.logoDragonCoin}
                   alt="Dungeon of Miners DOM token"
                   label="DOM Token"
-                  className="h-64 w-64 rounded-full shadow-glow-gold sm:h-80 sm:w-80 lg:h-96 lg:w-96"
+                  className="h-48 w-48 rounded-full shadow-glow-gold sm:h-80 sm:w-80 lg:h-96 lg:w-96"
                 />
               </div>
             </div>
 
             {/* Levitation ground shadow + Symmetrical Hologram Terminal Pedestal */}
-            <div className="relative mt-6 flex flex-col items-center">
+            <div className="relative mt-5 flex w-full flex-col items-center sm:mt-6">
               <motion.div
                 aria-hidden
-                className="-top-3 absolute h-5 w-52 rounded-full bg-gold/30 blur-xl sm:w-64"
+                className="-top-3 absolute h-5 w-40 rounded-full bg-gold/30 blur-xl sm:w-64"
                 animate={{ scaleX: [1, 0.75, 1], opacity: [0.6, 0.28, 0.6] }}
                 transition={{ duration: 3.25, repeat: Infinity, ease: "easeInOut" }}
               />
@@ -389,15 +389,15 @@ function GlitchTerminalTag() {
 
   return (
     <div
-      className={`relative inline-flex min-w-[295px] items-center justify-center gap-2.5 overflow-hidden rounded-full border px-4 py-2 font-mono text-[11px] font-bold tracking-wider backdrop-blur-md transition-all duration-200 sm:min-w-[330px] sm:text-xs ${
+      className={`relative inline-flex w-full max-w-[275px] items-center justify-center gap-2 overflow-hidden rounded-full border px-3 py-1.5 font-mono text-[10px] font-bold tracking-wide backdrop-blur-md transition-all duration-200 sm:w-auto sm:max-w-none sm:min-w-[330px] sm:gap-2.5 sm:px-4 sm:py-2 sm:text-xs sm:tracking-wider ${
         glitching
           ? "glitch-terminal border-torch/60 bg-void-100/95 text-torch shadow-[0_0_28px_-4px_rgba(255,138,42,0.65)]"
           : "border-gold/35 bg-void-200/85 text-gold-light shadow-[0_0_30px_-6px_rgba(244,181,68,0.45)]"
       }`}
     >
       <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-emerald-glow" />
-      <span className="whitespace-nowrap">{display}</span>
-      <span className="inline-block h-3.5 w-1.5 shrink-0 animate-pulse bg-gold" />
+      <span className="truncate whitespace-nowrap">{display}</span>
+      <span className="inline-block h-3 w-1 shrink-0 animate-pulse bg-gold sm:h-3.5 sm:w-1.5" />
     </div>
   );
 }

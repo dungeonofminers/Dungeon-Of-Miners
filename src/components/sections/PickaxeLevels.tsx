@@ -32,31 +32,31 @@ export function PickaxeLevels() {
           description="Pickaxe Level 1–6 is your core mining progression. Keep a minimum Available DOM Balance to unlock each level — Level 1 is free, Level 6 needs 50,000 DOM. Tap a pickaxe for full details."
         />
 
-        <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
           {pickaxeLevels.map((pickaxe, i) => (
             <Reveal key={pickaxe.level} delay={i * 0.06}>
               <button
                 type="button"
                 onClick={() => setActive(pickaxe)}
-                className={`surface-panel group relative flex h-full w-full flex-col items-center gap-4 overflow-hidden p-5 text-center transition-transform hover:-translate-y-1 ${
+                className={`surface-panel group relative flex h-full w-full flex-col items-center gap-3 overflow-hidden p-3.5 text-center transition-transform hover:-translate-y-1 sm:gap-4 sm:p-5 ${
                   pickaxe.level === 1 ? "ring-1 ring-gold/30" : ""
                 }`}
               >
                 <div className={`absolute inset-x-0 top-0 h-24 bg-gradient-to-b ${pickaxe.accent} opacity-20 blur-2xl`} />
-                <div className="relative h-28 w-28 sm:h-32 sm:w-32">
+                <div className="relative h-24 w-24 sm:h-32 sm:w-32">
                   <div className={`absolute inset-0 -z-10 rounded-full bg-gradient-to-br ${pickaxe.accent} opacity-40 blur-xl`} />
                   <PlaceholderImage
                     src={pickaxe.image}
                     alt={`Pickaxe Level ${pickaxe.level}`}
                     label={`Level ${pickaxe.level}`}
-                    className="h-28 w-28 rounded-xl sm:h-32 sm:w-32"
+                    className="h-24 w-24 rounded-xl sm:h-32 sm:w-32"
                     imgClassName="object-contain"
                   />
                 </div>
                 <div className="relative">
-                  <h3 className="font-display text-lg text-ink">Level {pickaxe.level}</h3>
-                  <p className="mt-1 text-[11px] uppercase tracking-wider text-ink-faint">{pickaxe.cosmeticName}</p>
-                  <p className="mt-2 text-sm font-semibold text-gold">Base Mining Power {pickaxe.basePower}</p>
+                  <h3 className="font-display text-base text-ink sm:text-lg">Level {pickaxe.level}</h3>
+                  <p className="mt-0.5 text-[10px] uppercase tracking-wider text-ink-faint sm:mt-1 sm:text-[11px]">{pickaxe.cosmeticName}</p>
+                  <p className="mt-1.5 text-xs font-semibold text-gold sm:mt-2 sm:text-sm">Base Power {pickaxe.basePower}</p>
                   <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-torch">
                     {pickaxe.minHold === 0 ? "Free · Hold 0 DOM" : `Hold ${pickaxe.minHold.toLocaleString("en-US")} DOM`}
                   </p>
@@ -127,7 +127,7 @@ export function PickaxeLevels() {
         <div role="dialog" aria-modal="true" aria-label={`Pickaxe Level ${active.level} details`} className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setActive(null)} aria-hidden />
 
-          <div className="surface-panel relative z-10 w-full max-w-md overflow-hidden p-6 sm:p-8">
+          <div className="surface-panel relative z-10 max-h-[85vh] w-full max-w-md overflow-y-auto p-5 sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="relative h-16 w-16 shrink-0">

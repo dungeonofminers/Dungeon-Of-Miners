@@ -142,31 +142,31 @@ export function StakePanel({
   else if (amount && amount > 0n) buttonLabel = `Stake ${fmtDom(amount)} DOM`;
 
   return (
-    <div id="stake-panel" className="surface-panel flex h-full flex-col p-6 sm:p-8">
-      <div className="flex items-center justify-between gap-2">
+    <div id="stake-panel" className="surface-panel flex h-full flex-col p-5 sm:p-8">
+      <div className="flex items-start justify-between gap-2 sm:items-center">
         <div>
           <h2 className="heading-md">Stake DOM</h2>
           <p className="mt-0.5 text-xs text-ink-faint">
             Select a lock period & calculate your guaranteed maturity reward
           </p>
         </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold">
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-1 text-[11px] font-semibold text-gold sm:px-3 sm:text-xs">
           <Lock className="h-3.5 w-3.5" />
           Fixed-term
         </span>
       </div>
 
       {/* Plan selector */}
-      <div className="mt-6 flex items-center justify-between">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-1">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-faint">1. Choose a term</p>
         {plan && (
           <span className="text-[11px] font-medium text-emerald-glow">
-            +{termReturnPct.toFixed(2)}% total return over {fmtDays(plan.durationSec)}
+            +{termReturnPct.toFixed(2)}% over {fmtDays(plan.durationSec)}
           </span>
         )}
       </div>
 
-      <div className="mt-2.5 grid grid-cols-3 gap-2.5">
+      <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-2.5">
         {s.plans.map((p) => {
           const isSelected = p.id === planId;
           const badge = p.id === 1 ? "Popular" : p.id === 2 ? "Best APR" : null;
@@ -177,7 +177,7 @@ export function StakePanel({
               disabled={!p.active}
               onClick={() => setPlanId(p.id)}
               className={cn(
-                "relative flex flex-col items-center gap-0.5 rounded-xl border px-2 py-3.5 text-center transition-all disabled:cursor-not-allowed disabled:opacity-40",
+                "relative flex flex-col items-center gap-0.5 rounded-xl border px-1.5 py-3 text-center transition-all disabled:cursor-not-allowed disabled:opacity-40 sm:px-2 sm:py-3.5",
                 isSelected
                   ? "border-gold/70 bg-gradient-to-b from-gold/15 to-gold/5 shadow-glow-gold"
                   : "border-white/[0.08] bg-white/[0.02] hover:border-gold/30 hover:bg-white/[0.04]"
@@ -186,7 +186,7 @@ export function StakePanel({
               {badge && (
                 <span
                   className={cn(
-                    " -top-2.5 absolute inline-flex items-center gap-0.5 rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider",
+                    "-top-2.5 absolute inline-flex items-center gap-0.5 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider sm:px-2 sm:text-[9px]",
                     p.id === 2
                       ? "border-emerald-glow/40 bg-void-100 text-emerald-glow"
                       : "border-gold/40 bg-void-100 text-gold"
@@ -196,9 +196,9 @@ export function StakePanel({
                   {badge}
                 </span>
               )}
-              <span className="mt-0.5 font-display text-lg text-gold sm:text-xl">{fmtApr(p.aprBps)}</span>
-              <span className="text-[10px] uppercase tracking-wider text-ink-faint">APR</span>
-              <span className="mt-1 rounded-md bg-white/[0.05] px-2 py-0.5 text-xs font-semibold text-ink">
+              <span className="mt-0.5 font-display text-base text-gold sm:text-xl">{fmtApr(p.aprBps)}</span>
+              <span className="text-[9px] uppercase tracking-wider text-ink-faint sm:text-[10px]">APR</span>
+              <span className="mt-1 rounded-md bg-white/[0.05] px-1.5 py-0.5 text-[11px] font-semibold text-ink sm:px-2 sm:text-xs">
                 {fmtDays(p.durationSec)}
               </span>
               <span className="mt-0.5 hidden text-[10px] text-ink-faint sm:block">{p.name}</span>

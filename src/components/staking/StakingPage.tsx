@@ -158,22 +158,22 @@ export function StakingPage() {
                 {stakingRules.earlyPenaltyPct}% principal penalty applies.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-                <ConnectWallet />
-                <AddDomToWalletButton />
+              <div className="mt-8 flex w-full max-w-xs flex-col items-stretch justify-center gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center lg:justify-start">
+                <ConnectWallet className="w-full sm:w-auto" />
+                <AddDomToWalletButton className="w-full justify-center sm:w-auto" />
                 {s.live ? (
                   <a
                     href={`${EXPLORER_URL}/address/${STAKING_CONTRACT_ADDRESS}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-glow/30 bg-emerald-glow/[0.06] px-4 py-3 text-xs font-semibold text-emerald-glow transition-colors hover:border-emerald-glow/50 hover:bg-emerald-glow/10"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-glow/30 bg-emerald-glow/[0.06] px-4 py-3 text-xs font-semibold text-emerald-glow transition-colors hover:border-emerald-glow/50 hover:bg-emerald-glow/10"
                   >
                     <ShieldCheck className="h-4 w-4" />
                     Verified Contract ({shortAddr(STAKING_CONTRACT_ADDRESS)})
                     <ExternalLink className="h-3 w-3 opacity-80" />
                   </a>
                 ) : (
-                  <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs font-semibold text-ink-muted">
+                  <span className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs font-semibold text-ink-muted">
                     <ShieldCheck className="h-4 w-4 text-gold" />
                     Contract audited in progress · Preview rates below
                   </span>
@@ -188,10 +188,10 @@ export function StakingPage() {
                   src={assets.logoDragonCoin}
                   alt="DOM token"
                   label="DOM Token"
-                  className="h-56 w-56 rounded-full shadow-glow-gold sm:h-72 sm:w-72"
+                  className="h-44 w-44 rounded-full shadow-glow-gold sm:h-72 sm:w-72"
                 />
               </div>
-              <div aria-hidden className="mt-4 h-3.5 w-36 rounded-full bg-gold/25 blur-xl sm:w-44" />
+              <div aria-hidden className="mt-4 h-3.5 w-32 rounded-full bg-gold/25 blur-xl sm:w-44" />
             </div>
           </div>
         </div>
@@ -437,10 +437,10 @@ function ParamRow({
   badge?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] py-2.5 last:border-0">
-      <span className="text-sm text-ink-muted">{label}</span>
+    <div className="flex flex-col gap-1 border-b border-white/[0.06] py-2.5 last:border-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <span className="text-xs text-ink-muted sm:text-sm">{label}</span>
       {badge ? (
-        <span className="rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-0.5 text-xs font-semibold text-ink-faint">
+        <span className="w-fit rounded-full border border-white/15 bg-white/[0.06] px-2.5 py-0.5 text-xs font-semibold text-ink-faint">
           {value}
         </span>
       ) : href ? (
@@ -448,13 +448,13 @@ function ParamRow({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-mono text-sm font-semibold text-gold underline-offset-4 hover:underline"
+          className="inline-flex w-fit items-center gap-1 font-mono text-sm font-semibold text-gold underline-offset-4 hover:underline"
         >
           {value}
           <ExternalLink className="h-3 w-3" />
         </a>
       ) : (
-        <span className="text-right text-sm font-semibold text-ink">{value}</span>
+        <span className="text-left text-sm font-semibold text-ink sm:text-right">{value}</span>
       )}
     </div>
   );

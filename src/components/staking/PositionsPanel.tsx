@@ -73,8 +73,8 @@ export function PositionsPanel({ s }: { s: S }) {
   };
 
   return (
-    <div className="surface-panel flex h-full flex-col p-6 sm:p-8">
-      <div className="flex items-center justify-between gap-2">
+    <div className="surface-panel flex h-full flex-col p-5 sm:p-8">
+      <div className="flex items-start justify-between gap-2 sm:items-center">
         <div>
           <h2 className="heading-md">Your Positions</h2>
           <p className="mt-0.5 text-xs text-ink-faint">
@@ -82,7 +82,7 @@ export function PositionsPanel({ s }: { s: S }) {
           </p>
         </div>
         {s.live && s.isConnected && (
-          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-glow">
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-glow/30 bg-emerald-glow/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-glow sm:px-3">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-glow" />
             On-Chain
           </span>
@@ -90,7 +90,7 @@ export function PositionsPanel({ s }: { s: S }) {
       </div>
 
       {/* Summary stats always shown for visual balance */}
-      <div className="mt-6 grid grid-cols-3 gap-3">
+      <div className="mt-6 grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
         <Stat
           label="Active Staked"
           value={s.isConnected ? `${fmtDom(totals.staked)} DOM` : "0 DOM"}
@@ -378,9 +378,9 @@ function EarlyUnlockModal({
 
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+    <div className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-3.5 py-2.5 sm:block sm:p-3">
       <p className="text-[10px] uppercase leading-tight tracking-wider text-ink-faint">{label}</p>
-      <p className={cn("mt-1 truncate font-display text-sm sm:text-base", accent ? "text-emerald-glow" : "text-gold")}>
+      <p className={cn(" truncate font-display text-sm sm:mt-1 sm:text-base", accent ? "text-emerald-glow" : "text-gold")}>
         {value}
       </p>
     </div>

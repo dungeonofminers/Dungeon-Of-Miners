@@ -82,13 +82,13 @@ export function LiveEconomyDashboard() {
           </div>
         </Reveal>
 
-        <div className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {metrics.map((metric, i) => (
             <Reveal key={metric.label} delay={0.05 + (i % 8) * 0.03}>
-              <div className="surface-panel flex h-full flex-col items-center gap-1.5 p-5 text-center">
-                <p className="text-[10px] uppercase tracking-wider text-ink-faint">{metric.label}</p>
+              <div className="surface-panel flex h-full flex-col items-center justify-center gap-1.5 p-3.5 text-center sm:p-5">
+                <p className="text-[10px] uppercase leading-tight tracking-wider text-ink-faint">{metric.label}</p>
                 <p
-                  className={`font-display text-base sm:text-lg ${
+                  className={`break-words font-display text-sm sm:text-lg ${
                     metric.value === AWAITING ? "text-ink-faint" : "text-gold"
                   }`}
                 >

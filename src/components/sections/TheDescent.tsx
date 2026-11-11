@@ -47,7 +47,7 @@ export function TheDescent() {
 
         {/* Current Halving status */}
         <Reveal delay={0.2}>
-          <div className="surface-panel mx-auto mt-6 max-w-4xl overflow-hidden p-8 sm:p-10">
+          <div className="surface-panel mx-auto mt-6 max-w-4xl overflow-hidden p-5 sm:p-10">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-widest text-torch">Current Halving</p>
@@ -58,7 +58,7 @@ export function TheDescent() {
               <GenesisStatusBadge />
             </div>
 
-            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-8 sm:grid-cols-3">
+            <div className="mt-6 grid grid-cols-2 gap-3.5 border-t border-white/[0.06] pt-6 sm:mt-8 sm:grid-cols-3 sm:gap-4 sm:pt-8">
               <Stat label="Era Allocation" value={current.allocation} accent />
               <Stat label="Distributed" value={current.distributed} muted />
               <Stat label="Remaining" value={current.remaining} muted />
@@ -187,8 +187,8 @@ export function TheDescent() {
 function Stat({ label, value, accent, muted }: { label: string; value: string; accent?: boolean; muted?: boolean }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wider text-ink-faint">{label}</p>
-      <p className={`mt-1 font-display text-lg ${accent ? "text-torch" : muted ? "text-ink-faint" : "text-ink"}`}>{value}</p>
+      <p className="text-[11px] uppercase leading-tight tracking-wider text-ink-faint sm:text-xs">{label}</p>
+      <p className={`mt-1 break-words font-display text-sm sm:text-lg ${accent ? "text-torch" : muted ? "text-ink-faint" : "text-ink"}`}>{value}</p>
     </div>
   );
 }
