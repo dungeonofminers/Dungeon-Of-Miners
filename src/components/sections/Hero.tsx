@@ -177,6 +177,12 @@ export function Hero() {
                     times: [0.3, 0.39, 0.58],
                   }}
                 />
+                <MiningRewardPopups
+                  initialDelayMs={510}
+                  intervalMs={1350}
+                  positionClass="bottom-7 left-0 sm:bottom-11 sm:left-1"
+                  driftX={10}
+                />
               </div>
 
               {/* Bottom-Left Pickaxe mining the coin */}
@@ -216,6 +222,12 @@ export function Hero() {
                     repeat: Infinity,
                     times: [0.3, 0.39, 0.58],
                   }}
+                />
+                <MiningRewardPopups
+                  initialDelayMs={1180}
+                  intervalMs={1350}
+                  positionClass="right-0 top-1 sm:right-1 sm:top-2"
+                  driftX={-10}
                 />
               </div>
 
@@ -326,6 +338,83 @@ function FloatingCard({
         <p className="text-sm font-bold text-ink">{value}</p>
       </div>
     </motion.div>
+  );
+}
+
+const MINING_REWARD_AMOUNTS = [5, 8, 10, 12, 15, 18, 20, 25, 30, 50];
+
+type RewardPop = {
+  id: number;
+  amount: number;
+  jitterX: number;
+  crit: boolean;
+};
+
+function MiningRewardPopups({
+  initialDelayMs,
+  intervalMs,
+  positionClass,
+  driftX,
+}: {
+  initialDelayMs: number;
+  intervalMs: number;
+  positionClass: string;
+  driftX: number;
+}) {
+  const [pops, setPops] = useState<RewardPop[]>([]);
+
+  useEffect(() => {
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let seq = 0;
+
+    const spawn = () => {
+      if (typeof document !== "undefined" && document.hidden) return;
+      seq += 1;
+      const amount =
+        MINING_REWARD_AMOUNTS[Math.floor(Math.random() * MINING_REWARD_AMOUNTS.length)];
+      const jitterX = Math.floor(Math.random() * 18) - 9;
+      const crit = amount >= 25;
+      setPops((prev) => [...prev.slice(-2), { id: seq, amount, jitterX, crit }]);
+    };
+
+    const startTimer = setTimeout(() => {
+      spawn();
+      intervalId = setInterval(spawn, intervalMs);
+    }, initialDelayMs);
+
+    return () => {
+      clearTimeout(startTimer);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [initialDelayMs, intervalMs]);
+
+  return (
+    <div aria-hidden className={`pointer-events-none absolute z-30 ${positionClass}`}>
+      {pops.map((p) => (
+        <motion.span
+          key={p.id}
+          initial={{ opacity: 0, y: 4, x: p.jitterX, scale: 0.65 }}
+          animate={{
+            opacity: [0, 1, 1, 0],
+            y: [4, -18, -42, -62],
+            x: [p.jitterX, p.jitterX + driftX * 0.6, p.jitterX + driftX],
+            scale: p.crit ? [0.65, 1.22, 1.06, 0.92] : [0.65, 1.08, 1, 0.9],
+          }}
+          transition={{
+            duration: 1.15,
+            ease: "easeOut",
+            times: [0, 0.18, 0.72, 1],
+          }}
+          className={`absolute left-0 top-0 select-none whitespace-nowrap rounded-full border px-2 py-0.5 font-mono text-[10px] font-extrabold tracking-tight backdrop-blur-sm sm:px-2.5 sm:text-xs ${
+            p.crit
+              ? "border-emerald-glow/60 bg-void-200/90 text-emerald-glow shadow-[0_0_16px_rgba(63,169,122,0.55)]"
+              : "border-gold/60 bg-void-200/90 text-gold-light shadow-[0_0_16px_rgba(244,181,68,0.55)]"
+          }`}
+        >
+          +{p.amount} $DOM
+        </motion.span>
+      ))}
+    </div>
   );
 }
 
