@@ -89,11 +89,7 @@ body {
   .coin-levitate-3d {
     transform-style: preserve-3d;
     animation: coinLevitate3D 6.5s ease-in-out infinite;
-    will-change: transform, filter;
-  }
-
-  .coin-levitate-3d:hover {
-    animation-duration: 3s;
+    will-change: transform;
   }
 
   .glitch-terminal {
@@ -128,22 +124,17 @@ body {
 @keyframes coinLevitate3D {
   0% {
     transform: perspective(1000px) translateY(0px) rotateY(0deg) rotateX(4deg) rotateZ(-2deg);
-    filter: drop-shadow(0 18px 28px rgba(244, 181, 68, 0.35));
   }
   25% {
     transform: perspective(1000px) translateY(-16px) rotateY(22deg) rotateX(-5deg) rotateZ(2deg);
-    filter: drop-shadow(0 30px 42px rgba(244, 181, 68, 0.55));
   }
   50% {
     transform: perspective(1000px) translateY(-6px) rotateY(180deg) rotateX(5deg) rotateZ(0deg) scale(1.03);
-    filter: drop-shadow(0 24px 36px rgba(255, 138, 42, 0.5));
   }
   75% {
     transform: perspective(1000px) translateY(-18px) rotateY(338deg) rotateX(-4deg) rotateZ(-2deg);
-    filter: drop-shadow(0 32px 44px rgba(244, 181, 68, 0.55));
   }
   100% {
     transform: perspective(1000px) translateY(0px) rotateY(360deg) rotateX(4deg) rotateZ(-2deg);
-    filter: drop-shadow(0 18px 28px rgba(244, 181, 68, 0.35));
   }
 }
