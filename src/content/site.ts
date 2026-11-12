@@ -1287,8 +1287,7 @@ export const faqs = [
 
 // ---------------------------------------------------------------------------
 // Roadmap — qualitative phases, not fixed dates. Update `status` as each
-// phase actually ships. No governance/staking/DAO/swap/NFT/launchpad items
-// — none of those are approved features.
+// phase actually ships.
 // ---------------------------------------------------------------------------
 export type RoadmapStatus = "done" | "active" | "comingSoon" | "planned" | "future";
 
@@ -1296,38 +1295,75 @@ export const roadmap: { phase: string; title: string; status: RoadmapStatus; ite
   {
     phase: "Phase 1",
     title: "Foundation",
-    status: "active",
-    items: ["Website", "Mining engine", "Fixed Supply Economy", "BSC architecture", "Mining Storage", "Claim"],
+    status: "done",
+    items: [
+      "Website & documentation",
+      "Telegram Mini App & mining engine",
+      "Fixed 1B supply economy (Economy v4)",
+      "BNB Smart Chain (BEP-20) architecture",
+      "Mining Storage & 100% Claim flow",
+    ],
   },
   {
     phase: "Phase 2",
     title: "Mining Network V2",
-    status: "active",
-    items: ["Six Halvings", "Global Emission", "Pickaxe Level 1–6", "Storage progression", "Referral rewards (DOM)", "Daily Check-In & Earn quests"],
+    status: "done",
+    items: [
+      "Six Halvings (Halving 1 · Starting Era live)",
+      "Global Emission epoch engine",
+      "Pickaxe Level 1–6 (Novice → Legend)",
+      "Storage capacity progression",
+      "Referral rewards (DOM)",
+      "Daily Check-In, Earn quests & ad rewards",
+    ],
   },
   {
     phase: "Phase 3",
-    title: "Social Mining",
-    status: "planned",
-    items: ["Guild system", "Guild XP", "Guild Levels", "Guild Expeditions", "Guild Seasons", "Leaderboards"],
+    title: "On-Chain Economy",
+    status: "done",
+    items: [
+      "DOM BEP-20 contract deployed & verified",
+      "Multi-signature (Safe) treasury wallets",
+      "Automated zero-fee BSC withdrawals",
+      "Live Economy & Halving Ledger dashboard",
+      "BscScan verification & live withdrawal feed",
+    ],
   },
   {
     phase: "Phase 4",
-    title: "On-Chain Economy",
+    title: "Staking & Token Utility",
     status: "active",
-    items: ["DOM BEP-20", "Supply verification", "BSC withdrawal", "Treasury transparency", "Vesting", "Explorer integration"],
+    items: [
+      "Fixed-term DOM Staking contract (30d / 90d / 180d)",
+      "Upfront on-chain reward pool reservation",
+      "Web3 staking portal (MetaMask & WalletConnect)",
+      "Token unlock & vesting schedule finalization",
+      "Android App development",
+    ],
   },
   {
     phase: "Phase 5",
-    title: "Public Market Launch",
-    status: "comingSoon",
-    items: ["TGE / public market launch", "Liquidity", "Contract information", "Exchange listing announcements"],
+    title: "Social Mining & Engagement",
+    status: "planned",
+    items: [
+      "Player Leaderboards (Daily / Weekly / Halving / All-Time)",
+      "Miner Profile, Delver Badges & Miner Card",
+      "Daily Tasks & Stone Breaker mini-game",
+      "Referral Booster V2 (capped mining-weight boost)",
+      "Guild system, Expeditions & Seasons",
+    ],
   },
   {
     phase: "Phase 6",
-    title: "Long-Term Dungeon",
-    status: "future",
-    items: ["Halving progression", "Advanced Guild content", "New activities", "Ecosystem expansion"],
+    title: "Public Market & Long-Term Dungeon",
+    status: "comingSoon",
+    items: [
+      "TGE / public market launch",
+      "DEX & CEX liquidity provisioning",
+      "Exchange listing announcements",
+      "Subsequent Halving era transitions (H2 → H6)",
+      "Long-term ecosystem expansion",
+    ],
   },
 ];
 
@@ -1482,7 +1518,7 @@ export const domEcosystem = {
       id: "mining",
       x: 27.5,
       y: 27,
-      status: "COMING SOON",
+      status: "LIVE",
       narrative: {
         primary: "Mine DOM through the mining economy.",
         secondary: "Level up your Pickaxe and increase your mining weight before the next Halving.",
